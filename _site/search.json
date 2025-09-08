@@ -404,5 +404,26 @@
     "title": "ISSS626-GAA",
     "section": "",
     "text": "Welcome to ISSS626 Geospatial Analytics and Applications. In this website, you will find my coursework prepared from this course."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html",
+    "title": "Hands-on Exercise 3",
+    "section": "",
+    "text": "Spatio-temporal point processes model the occurrence of events across both space and time, capturing phenomena such as disease outbreaks, natural disasters, or species sightings. With the growing availability of geographically and temporally tagged data, analyzing these patterns has become essential across disciplines. This chapter introduces a practical approach to spatio-temporal point pattern analysis using R, showcasing how multiple packages can be integrated to perform robust and intuitive analyses. To illustrate the methodology, it applies these tools to forest fire events recorded in Kepulauan Bangka Belitung, Indonesia, throughout 2023, highlighting key techniques, workflows, and interpretations.\n\n\n\n\nAnalyze spatio-temporal patterns of forest fires in Kepulauan Bangka Belitung, Indonesia.\nBoth datasets are filtered to include only data within Kepulauan Bangka Belitung.\nEnables spatial overlay and temporal analysis of fire activity within administrative boundaries.\nUse two datasets:\n\nforestfires.csv: Contains geolocated fire events detected by the MODIS satellite sensor.\nKepulauan_Bangka_Belitung shapefile: Defines sub-district (kelurahan) boundaries of the region."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#overview",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#overview",
+    "title": "Hands-on Exercise 3",
+    "section": "",
+    "text": "Spatio-temporal point processes model the occurrence of events across both space and time, capturing phenomena such as disease outbreaks, natural disasters, or species sightings. With the growing availability of geographically and temporally tagged data, analyzing these patterns has become essential across disciplines. This chapter introduces a practical approach to spatio-temporal point pattern analysis using R, showcasing how multiple packages can be integrated to perform robust and intuitive analyses. To illustrate the methodology, it applies these tools to forest fire events recorded in Kepulauan Bangka Belitung, Indonesia, throughout 2023, highlighting key techniques, workflows, and interpretations."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#data",
+    "href": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html#data",
+    "title": "Hands-on Exercise 3",
+    "section": "",
+    "text": "Analyze spatio-temporal patterns of forest fires in Kepulauan Bangka Belitung, Indonesia.\nBoth datasets are filtered to include only data within Kepulauan Bangka Belitung.\nEnables spatial overlay and temporal analysis of fire activity within administrative boundaries.\nUse two datasets:\n\nforestfires.csv: Contains geolocated fire events detected by the MODIS satellite sensor.\nKepulauan_Bangka_Belitung shapefile: Defines sub-district (kelurahan) boundaries of the region."
   }
 ]
