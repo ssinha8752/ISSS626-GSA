@@ -341,5 +341,47 @@
     "title": "Hands-on Exercise 3",
     "section": "",
     "text": "One of the nice function provides in sparr package is BOOT.spattemp(). It support bandwidth selection for standalone spatiotemporal density/intensity based on bootstrap estimation of the MISE, providing an isotropic scalar spatial bandwidth and a scalar temporal bandwidth.\nCode chunk below uses BOOT.spattemp() to determine both the spatial bandwidth and the scalar temporal bandwidth.\n\nset.seed(1234)\nBOOT.spattemp(fire_yday_owin) \n\nInitialising...Done.\nOptimising...\nh = 15102.47 \b; lambda = 16.84806 \nh = 16612.72 \b; lambda = 16.84806 \nh = 15102.47 \b; lambda = 1527.095 \nh = 15480.03 \b; lambda = 771.9715 \nh = 15668.81 \b; lambda = 394.4098 \nh = 15763.2 \b; lambda = 205.6289 \nh = 15810.4 \b; lambda = 111.2385 \nh = 15833.99 \b; lambda = 64.04328 \nh = 15845.79 \b; lambda = 40.44567 \nh = 15851.69 \b; lambda = 28.64687 \nh = 15863.49 \b; lambda = 5.049258 \nh = 15854.64 \b; lambda = 22.74746 \nh = 15860.54 \b; lambda = 10.94866 \nh = 15859.07 \b; lambda = 13.89836 \nh = 14348.82 \b; lambda = 13.89836 \nh = 13216.87 \b; lambda = 12.42351 \nh = 12460.27 \b; lambda = 15.37321 \nh = 10760.88 \b; lambda = 16.11064 \nh = 8875.282 \b; lambda = 11.68608 \nh = 10432.08 \b; lambda = 12.97658 \nh = 7976.084 \b; lambda = 16.66371 \nh = 9286.281 \b; lambda = 15.60366 \nh = 9615.08 \b; lambda = 18.73771 \nh = 9206.581 \b; lambda = 21.61828 \nh = 8140.483 \b; lambda = 18.23073 \nh = 8795.582 \b; lambda = 17.70071 \nh = 9124.381 \b; lambda = 20.83477 \nh = 9164.856 \b; lambda = 19.52699 \nh = 8345.358 \b; lambda = 18.48998 \nh = 9297.65 \b; lambda = 18.67578 \nh = 8928.375 \b; lambda = 16.8495 \nh = 9105.736 \b; lambda = 18.85762 \nDone.\n\n\n         h     lambda \n9105.73611   18.85762 \n\n\n\n\nThe STKDE will be derived by using h and lambda values derive in previous step.\n\nkde_yday &lt;- spattemp.density(fire_yday_owin,\n                             h = 9000,\n                             lambda = 19)\n\nCalculating trivariate smooth...Done.\nEdge-correcting...Done.\nConditioning on time...Done.\n\nsummary(kde_yday)\n\nSpatiotemporal Kernel Density Estimate\n\nBandwidths\n  h = 9000 (spatial)\n  lambda = 19 (temporal)\n\nNo. of observations\n  741 \n\nSpatial bound\n  Type: polygonal\n  2D enclosure: [512066.8, 705559.4] x [9655398, 9834006]\n\nTemporal bound\n  [10, 352]\n\nEvaluation\n  128 x 128 x 343 trivariate lattice\n  Density range: [2.001642e-19, 2.445724e-12]\n\n\n\n\n\n\nplot(kde_yday)"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to ISSS626 Geospatial Analytics and Applications",
+    "section": "",
+    "text": "1 Welcome to my Geospatial Analytics Learning Journey Hi! I am Shubham. Welcome to my ISSS626 Geospatial Analysis and Application homepage. This course is taught by Prof KAM Tin Seong as part of my Master of IT in Business program at Singapore Management University.\nIn this website, you will find my coursework prepared for this course, encompassing practical application of different techniques to transform and analyze spatial data.\n2 Website Sections The coursework is divided into 3 main sections:\nHands-on Exercise: Hands-on practice under the guidance given by Prof Kam, using relevant R packages to perform geospatial analysis using public data sources.\nIn-class Exercise: Extend from the methods learned through Hands-on Exercise and include analysis result communication through data visualization.\nTake-home Exercise: Synthesize learning from course materials and above exercises to analyze real-world geospatial cases."
+  },
+  {
+    "objectID": "index.html#hands-on-exercise",
+    "href": "index.html#hands-on-exercise",
+    "title": "Welcome to ISSS626 Geospatial Analytics and Applications",
+    "section": "Hands-on Exercise",
+    "text": "Hands-on Exercise"
+  },
+  {
+    "objectID": "index.html#in-class-exercise",
+    "href": "index.html#in-class-exercise",
+    "title": "Welcome to ISSS626 Geospatial Analytics and Applications",
+    "section": "In-class Exercise",
+    "text": "In-class Exercise"
+  },
+  {
+    "objectID": "index.html#take-home-exercise",
+    "href": "index.html#take-home-exercise",
+    "title": "Welcome to ISSS626 Geospatial Analytics and Applications",
+    "section": "Take-home Exercise",
+    "text": "Take-home Exercise"
+  },
+  {
+    "objectID": "index.html#welcome-to-my-geospatial-analytics",
+    "href": "index.html#welcome-to-my-geospatial-analytics",
+    "title": "Welcome to ISSS626 Geospatial Analytics and Applications",
+    "section": "1 Welcome to my Geospatial Analytics",
+    "text": "1 Welcome to my Geospatial Analytics\nHello there! I am Shubham and this is my homepage for ISSS626: Geospatial Analysis and Application, a course taught by Prof KAM Tin Seong at Singapore Management University as part of my Master of IT in Business program (Data Science & Analytics). This site showcases my coursework, where I apply a range of geospatial techniques to transform, visualize, and analyze spatial data in meaningful ways."
+  },
+  {
+    "objectID": "index.html#course-overview",
+    "href": "index.html#course-overview",
+    "title": "Welcome to ISSS626 Geospatial Analytics and Applications",
+    "section": "2 Course Overview",
+    "text": "2 Course Overview\n\nHands-on Exercise: Guided practice using R and public datasets to perform geospatial analysis.\nIn-class Exercise: Builds on hands-on methods, focusing on data visualization and communication.\nTake-home Exercise: Integrates course concepts to tackle real-world spatial analysis challenges."
   }
 ]

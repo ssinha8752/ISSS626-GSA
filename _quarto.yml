@@ -6,7 +6,7 @@ website:
   title: "ISSS626-GAA"
   navbar:
     left:
-      - text: "Hands-on Exercise"
+      - text: "Hands-on Exercises"
         menu:
         - text: "Exercise 1 - Geospatial Data Wrangling"
           href: "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01a.html"
@@ -18,14 +18,20 @@ website:
           href: "Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02b.html"
         - text: "Exercise 3 - Spatio-Temporal Point Patterns Analysis"
           href: "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html"
-      - text: "Take-Home Exercise"
+      - text: "Take-Home Exercises"
         menu:
         - text: "Exercise 1 - Geospatial Analytics for Public Good"
           href: "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html"
+
     right:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - icon: linkedin
+        href: https://www.linkedin.com/in/am-shubh-am/
+        aria-label: Linkedin
+      - icon: github
+        href: https://github.com/ssinha8752
+        aria-label: Github
 
 format:
   html:
