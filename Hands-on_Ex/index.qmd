@@ -1,0 +1,21 @@
+---
+title: "Hands-on Exercise"
+listing:
+  - id: posts
+    contents: "**/*/Hands-on_*.qmd"
+    type: grid
+    fields: [image, date, title, subtitle]
+    sort:
+      - "date desc"
+      - "title desc"
+    sort-ui: true
+    filter-ui: true
+    page-size: 36
+page-layout: full
+title-block-banner: false
+comments: false
+toc: true
+---
+
+::: {#posts}
+:::

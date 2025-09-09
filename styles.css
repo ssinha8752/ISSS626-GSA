@@ -1,0 +1,9 @@
+/* Font Awesome icon */
+.navbar .fa-user-circle {
+  color: white !important;
+}
+
+/* SVG fallback */
+.navbar a[aria-label="Profile"] svg {
+  fill: white !important;
+}

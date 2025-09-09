@@ -9,5 +9,21 @@
       "/Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01b.html",
       "/Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html"
     ]
+  },
+  {
+    "listing": "/Take-home_Ex/index.html",
+    "items": [
+      "/Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html"
+    ]
+  },
+  {
+    "listing": "/Hands-on_Ex/index.html",
+    "items": [
+      "/Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html",
+      "/Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02a.html",
+      "/Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02b.html",
+      "/Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01a.html",
+      "/Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01b.html"
+    ]
   }
 ]

@@ -48,15 +48,15 @@ Hello there! I am Shubham and this is my homepage for [*ISSS626: Geospatial Anal
 
 ## [Hands-on Exercise](/Hands-on_Ex/)
 
-::: {#Hands_on}
+::: {.listing id="hands_on"}
 :::
 
 ## [In-class Exercise](/In-class_Ex/)
 
-::: {#In_class}
+::: {.listing id="in_class"}
 :::
 
 ## [Take-home Exercise](/Take-home_Ex/)
 
-::: {#Take-home}
+::: {.listing id="take-home"}
 :::

@@ -25,7 +25,9 @@ website:
 
     right:
       - href: index.qmd
-        text: Home
+        text: "Home"
+      - href: http://ssinha8752.github.io/Shubham/
+        text: "ABOUT ME"
       - icon: linkedin
         href: https://www.linkedin.com/in/am-shubh-am/
         aria-label: Linkedin
