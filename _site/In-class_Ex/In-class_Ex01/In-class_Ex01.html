@@ -9,7 +9,7 @@
 <meta name="author" content="Shubham Sinha">
 <meta name="dcterms.date" content="2024-08-30">
 
-<title>In-class Exercise 1: Geospatial Analytics</title>
+<title>In-class Exercise 1: Geospatial Analytics – ISSS626-GAA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,24 +59,195 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="In_class_Ex01_files/libs/clipboard/clipboard.min.js"></script>
-<script src="In_class_Ex01_files/libs/quarto-html/quarto.js"></script>
-<script src="In_class_Ex01_files/libs/quarto-html/popper.min.js"></script>
-<script src="In_class_Ex01_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="In_class_Ex01_files/libs/quarto-html/anchor.min.js"></script>
-<link href="In_class_Ex01_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="In_class_Ex01_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="In_class_Ex01_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="In_class_Ex01_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="In_class_Ex01_files/libs/bootstrap/bootstrap-1bc8a17f135ab3d594c857e9f48e611b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-df479d6c4d77d0e0dfbcb5361179d7fd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
 
 
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="fullcontent">
+<body class="nav-fixed">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ISSS626-GAA</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercises" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Hands-on Exercises</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">    
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01a.html">
+ <span class="dropdown-text">Exercise 1 - Geospatial Data Wrangling</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01b.html">
+ <span class="dropdown-text">Exercise 1 - Choropleth Mapping</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02a.html">
+ <span class="dropdown-text">Exercise 2 - 1st Order spatial point pattern analysis methods</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02b.html">
+ <span class="dropdown-text">Exercise 2 - 2nd Order spatial point pattern analysis methods</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html">
+ <span class="dropdown-text">Exercise 3 - Spatio-Temporal Point Patterns Analysis</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercises" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">In-Class Exercises</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercises">    
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex01/In-class_Ex01.html">
+ <span class="dropdown-text">In-Class : Exercise 1</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercises" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Take-Home Exercises</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercises">    
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html">
+ <span class="dropdown-text">Exercise 1 - Geospatial Analytics for Public Good</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="http://ssinha8752.github.io/Shubham/"> 
+<span class="menu-text">ABOUT ME</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/am-shubh-am/"> <i class="bi bi-linkedin" role="img" aria-label="Linkedin">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/ssinha8752"> <i class="bi bi-github" role="img" aria-label="Github">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#loading-the-r-packages" id="toc-loading-the-r-packages" class="nav-link active" data-scroll-target="#loading-the-r-packages"><span class="header-section-number">1</span> Loading the R packages</a></li>
+  <li><a href="#loading-master-plan-planning-sub-zone-data" id="toc-loading-master-plan-planning-sub-zone-data" class="nav-link" data-scroll-target="#loading-master-plan-planning-sub-zone-data"><span class="header-section-number">2</span> Loading Master Plan Planning Sub-zone Data</a></li>
+  <li><a href="#loading-pre-school-location-data" id="toc-loading-pre-school-location-data" class="nav-link" data-scroll-target="#loading-pre-school-location-data"><span class="header-section-number">3</span> Loading Pre-school Location data</a>
+  <ul class="collapse">
+  <li><a href="#loading-the-kml-file" id="toc-loading-the-kml-file" class="nav-link" data-scroll-target="#loading-the-kml-file"><span class="header-section-number">3.1</span> Loading the kml file</a></li>
+  <li><a href="#loading-the-geojson-file" id="toc-loading-the-geojson-file" class="nav-link" data-scroll-target="#loading-the-geojson-file"><span class="header-section-number">3.2</span> Loading the geojson file</a></li>
+  </ul></li>
+  <li><a href="#loading-master-plan-2014-subzone-boundary-data" id="toc-loading-master-plan-2014-subzone-boundary-data" class="nav-link" data-scroll-target="#loading-master-plan-2014-subzone-boundary-data"><span class="header-section-number">4</span> Loading Master Plan 2014 Subzone Boundary Data</a>
+  <ul class="collapse">
+  <li><a href="#to-import-shapefile" id="toc-to-import-shapefile" class="nav-link" data-scroll-target="#to-import-shapefile"><span class="header-section-number">4.0.1</span> To import shapefile</a></li>
+  <li><a href="#to-import-kml-file" id="toc-to-import-kml-file" class="nav-link" data-scroll-target="#to-import-kml-file"><span class="header-section-number">4.0.2</span> To import kml file</a></li>
+  <li><a href="#handling-coordinate-systems" id="toc-handling-coordinate-systems" class="nav-link" data-scroll-target="#handling-coordinate-systems"><span class="header-section-number">4.1</span> Handling coordinate systems</a></li>
+  <li><a href="#geospatial-data-wrangling" id="toc-geospatial-data-wrangling" class="nav-link" data-scroll-target="#geospatial-data-wrangling"><span class="header-section-number">4.2</span> Geospatial Data Wrangling</a>
+  <ul class="collapse">
+  <li><a href="#point-in-polygon-count" id="toc-point-in-polygon-count" class="nav-link" data-scroll-target="#point-in-polygon-count"><span class="header-section-number">4.2.1</span> Point-in-polygon count</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#statistical-analysis" id="toc-statistical-analysis" class="nav-link" data-scroll-target="#statistical-analysis"><span class="header-section-number">5</span> Statistical Analysis</a></li>
+  <li><a href="#working-with-population-data" id="toc-working-with-population-data" class="nav-link" data-scroll-target="#working-with-population-data"><span class="header-section-number">6</span> Working with population data</a></li>
+  <li><a href="#joining-popdata2024-and-mpsz14_shp" id="toc-joining-popdata2024-and-mpsz14_shp" class="nav-link" data-scroll-target="#joining-popdata2024-and-mpsz14_shp"><span class="header-section-number">7</span> Joining popdata2024 and mpsz14_shp</a></li>
+  <li><a href="#plot-choropleth-map-of-dependency-ratio-by-planning-subzone" id="toc-plot-choropleth-map-of-dependency-ratio-by-planning-subzone" class="nav-link" data-scroll-target="#plot-choropleth-map-of-dependency-ratio-by-planning-subzone"><span class="header-section-number">8</span> Plot Choropleth map of dependency ratio by planning subzone</a></li>
+  <li><a href="#plot-analytical-map-percentile-map" id="toc-plot-analytical-map-percentile-map" class="nav-link" data-scroll-target="#plot-analytical-map-percentile-map"><span class="header-section-number">9</span> Plot Analytical Map: Percentile Map</a>
+  <ul class="collapse">
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation"><span class="header-section-number">9.1</span> Data preparation</a></li>
+  <li><a href="#define-get-function" id="toc-define-get-function" class="nav-link" data-scroll-target="#define-get-function"><span class="header-section-number">9.2</span> Define get function</a></li>
+  <li><a href="#define-percentile-mapping-function" id="toc-define-percentile-mapping-function" class="nav-link" data-scroll-target="#define-percentile-mapping-function"><span class="header-section-number">9.3</span> Define percentile mapping function</a></li>
+  <li><a href="#use-the-functions" id="toc-use-the-functions" class="nav-link" data-scroll-target="#use-the-functions"><span class="header-section-number">9.4</span> Use the functions</a></li>
+  </ul></li>
+  <li><a href="#plot-analytical-map-box-map" id="toc-plot-analytical-map-box-map" class="nav-link" data-scroll-target="#plot-analytical-map-box-map"><span class="header-section-number">10</span> Plot Analytical Map: Box Map</a>
+  <ul class="collapse">
+  <li><a href="#define-the-boxbreaks-function" id="toc-define-the-boxbreaks-function" class="nav-link" data-scroll-target="#define-the-boxbreaks-function"><span class="header-section-number">10.1</span> Define the boxbreaks function</a></li>
+  <li><a href="#define-the-boxmap-function" id="toc-define-the-boxmap-function" class="nav-link" data-scroll-target="#define-the-boxmap-function"><span class="header-section-number">10.2</span> Define the boxmap function</a></li>
+  <li><a href="#plotting-box-map" id="toc-plotting-box-map" class="nav-link" data-scroll-target="#plotting-box-map"><span class="header-section-number">10.3</span> Plotting box map</a></li>
+  </ul></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference"><span class="header-section-number">11</span> Reference</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -386,7 +557,7 @@ Geodetic CRS:  WGS 84</code></pre>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="In_class_Ex01_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="In-class_Ex01_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -524,7 +695,7 @@ Multiple palettes called "blues" found: "brewer.blues", "matplotlib.blues". The 
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="In_class_Ex01_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="In-class_Ex01_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -614,7 +785,7 @@ Multiple palettes called "blues" found: "brewer.blues", "matplotlib.blues". The 
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="In_class_Ex01_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="In-class_Ex01_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -635,7 +806,7 @@ Multiple palettes called "blues" found: "brewer.blues", "matplotlib.blues". The 
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="In_class_Ex01_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="In-class_Ex01_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -764,7 +935,7 @@ Multiple palettes called "blues" found: "brewer.blues", "matplotlib.blues". The 
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="In_class_Ex01_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="In-class_Ex01_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -774,10 +945,11 @@ Multiple palettes called "blues" found: "brewer.blues", "matplotlib.blues". The 
 <section id="reference" class="level1" data-number="11">
 <h1 data-number="11"><span class="header-section-number">11</span> Reference</h1>
 <p>Kam, T. S. In-class Exercise 1: Geospatial Data Science with R. ISSS626 Geospatial Analytics and Applications. https://isss626-ay2024-25aug.netlify.app/in-class_ex/in-class_ex01/in-class_ex01</p>
+
+
 </section>
 
-</main>
-<!-- /main column -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
