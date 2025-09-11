@@ -23,7 +23,7 @@ website:
         - text: "In-Class : Exercise 1"
           href: "In-class_Ex/In-class_Ex01/In-class_Ex01.html"
         - text: "In-Class : Exercise 2"
-          href: "In-class_Ex/In-class_Ex02/In-class_Ex02.html"
+          href: "In-class_ex/in-class_ex02/in-class_ex02.html"
       - text: "Take-Home Exercises"
         menu:
         - text: "Exercise 1 - Geospatial Analytics for Public Good"
