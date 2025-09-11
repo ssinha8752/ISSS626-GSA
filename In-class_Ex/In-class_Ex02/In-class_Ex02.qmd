@@ -1,0 +1,243 @@
+---
+title: "In-class Exercise 2: Spatial Point Patterns Analysis"
+author: "Shubham Sinha"
+date: "2024-09-06"
+execute: 
+  eval: true
+  echo: true
+  message: false
+  freeze: true
+format: 
+  html:
+    code-fold: true
+    code-summary: "code chunk"
+    number-sections: true
+    number-depth: 4
+---
+
+# Installing and loading R packages
+
+## Install **maptools** package
+
+**maptools** is retired and its binary is removed from CRAN. However, we can download it from [Posit Public Package Manager](https://packagemanager.posit.co/client/#/repos/cran/setup?snapshot=2023-10-13&distribution=windows&r_environment=ide) snapshots by using following code
+
+```{r}
+#| eval: false
+install.packages("maptools",
+                 repos = "https://packagemanager.posit.co/cran/2023-10-13")
+```
+
+> Include `#| eval: false` in the code chunk to avoid **maptools** being downloaded and installed repetitively every time the Quarto document is rendered.
+
+## Install remaining packages
+
+The code chunk below install and load following packages into R environment:
+
+-   [**sf**](https://r-spatial.github.io/sf/), a relatively new R package specially designed to import, manage and process vector-based geospatial data in R.
+-   [**spatstat**](https://spatstat.org/), which has a wide range of useful functions for point pattern analysis. In this hands-on exercise, it will be used to perform 1st- and 2nd-order spatial point patterns analysis and derive kernel density estimation (KDE) layer.
+-   [**raster**](https://cran.r-project.org/web/packages/raster/) which reads, writes, manipulates, analyses and model of gridded spatial data (i.e. raster). In this hands-on exercise, it will be used to convert image output generate by spatstat into raster format.
+-   [**maptools**](https://cran.r-project.org/web/packages/maptools/index.html) which provides a set of tools for manipulating geographic data. In this hands-on exercise, we mainly use it to convert *Spatial* objects into *ppp* format of **spatstat**.
+-   [**tmap**](https://cran.r-project.org/web/packages/tmap/index.html) which provides functions for plotting cartographic quality static point patterns maps or interactive maps by using [leaflet](https://leafletjs.com/) API.
+
+```{r}
+pacman::p_load(sf, raster, spatstat, tmap, tidyverse)
+```
+
+# The data
+
+Data sets in this exercise are as follows:
+
+-   `CHILDCARE` (Point Feature Data)
+    -   This dataset provides both location and attribute information of childcare centres across Singapore.
+    -   Format: GeoJSON
+    -   Source: [data.gov.sg](https://data.gov.sg/)
+-   `MP14_SUBZONE_WEB_PL` (Polygon Feature Data)
+    -   This dataset provide information of URA 2014 Master Plan Planning Subzone boundary data.
+    -   Format: ESRI Shapefile.
+    -   Source: [data.gov.sg](https://data.gov.sg/)
+-   `CostalOutline` (Polygon Feature Data)
+    -   This dataset shows the national boundary of Singapore.
+    -   Format: ESRI Shapefile
+    -   Source: [Singapore Land Authority](https://www.sla.gov.sg/)
+
+We will use [st_read()](https://r-spatial.github.io/sf/reference/st_read.html) of **sf** package will be used to import these three geospatial data sets into R.
+
+::: panel-tabset
+## Childcare data
+
+Since the `childcare_sf` simple feature data frame is in the WGS84 geodetic CRS, which is not ideal for geospatial analysis, the `st_transform()` function from the **sf** package is used to reproject the data to the SVY21 coordinate system during import.
+
+```{r}
+childcare_sf <- st_read("data/ChildCareServices.geojson") %>%
+  st_transform(crs = 3414)
+```
+
+Let's verify the crs of the data frame to ensure we're using EPSG 3414.
+
+```{r}
+st_crs(childcare_sf)
+```
+
+## Master Plan 2014 data
+
+Let's load the Master Plan Planning data using `st_read()` function
+
+```{r}
+mpsz_sf <- st_read(dsn = "data", 
+                layer = "MP14_SUBZONE_WEB_PL")
+```
+
+Let's check coordinate system of this data frame
+
+```{r}
+st_crs(mpsz_sf)
+```
+
+`mpsz_sf` is also using EPSG 9001 instead of 3414 which is suitable for CRS SVY21. Let's assign correct EPSG code using `st_set_crs()` then verify the output.
+
+```{r}
+mpsz_sf <- st_set_crs(mpsz_sf,3414)
+st_crs(mpsz_sf)
+```
+:::
+
+## working with `st_union()`
+
+is used to derive the coastal outline sf tibble data.frame
+
+```{r}
+sg_sf <- mpsz_sf %>%
+  st_union()
+```
+
+*sg_sf* will look similar to the figure below.
+
+```{r}
+plot(sg_sf)
+```
+
+# Creating ppp objects from sf data.frame
+
+We can use `as.ppp()` of [**spatstat.geom**](https://cran.r-project.org/web/packages/spatstat.geom/spatstat.geom.pdf) package to derive an **ppp** object layer directly from a sf tibble data.frame.
+
+```{r}
+# Check geometry
+print(st_geometry(childcare_sf))
+
+# Check CRS
+print(st_crs(childcare_sf))
+
+# Convert manually if needed
+childcare_ppp <- as.ppp(st_coordinates(childcare_sf), W = as.owin(sg_sf))
+plot(childcare_ppp)
+```
+
+Let's reveal the properties of the newly created ppp objects using `summary()`.
+
+```{r}
+summary(childcare_ppp)
+```
+
+# Creating *owin* object from sf data.frame
+
+We can use `as.owin()` of [**spatstat.geom**](https://cran.r-project.org/web/packages/spatstat.geom/spatstat.geom.pdf) package to create an **owin** object layer directly from a sf tibble data.frame.
+
+```{r}
+sg_owin <- as.owin(sg_sf)
+plot(sg_owin)
+```
+
+Let's reveal the properties of the newly created owin objects using `summary()`.
+
+```{r}
+summary(sg_owin)
+```
+
+# Combining point events object and owin object
+
+Now we'll create an ppp object by combining childcare_ppp and sg_owin then plot the output.
+
+```{r}
+childcareSG_ppp = childcare_ppp[sg_owin]
+plot(childcareSG_ppp)
+```
+
+# Kernel Density Estimation of Spatial Point Event
+
+Before performing Kernel Density Estimation, we need to re-scale the unit of measurement from meter to kilometer.
+
+```{r}
+childcareSG_ppp.km <- rescale.ppp(childcareSG_ppp, 
+                                  1000, 
+                                  "km")
+
+kde_childcareSG_adaptive <- adaptive.density(
+  childcareSG_ppp.km, 
+  method="kernel")
+plot(kde_childcareSG_adaptive)
+```
+
+# Kernel Density Estimation
+
+There are two ways to convert KDE output into grid object
+
+::: panel-tabset
+## maptools method
+
+```{r}
+library(spatstat.geom)
+library(raster)
+library(sp)
+
+# Set background color
+par(bg = '#E4D5C9')
+
+# Convert spatstat image to raster
+r <- raster(kde_childcareSG_adaptive)
+
+# Convert raster to SpatialGridDataFrame
+gridded_kde_childcareSG_ad <- as(r, "SpatialGridDataFrame")
+
+# Plot using spplot
+spplot(gridded_kde_childcareSG_ad)
+
+```
+
+## spatstat.geom method
+
+```{r}
+gridded_kde_childcareSG_ad <- as(
+  kde_childcareSG_adaptive,
+  "SpatialGridDataFrame")
+spplot(gridded_kde_childcareSG_ad)
+```
+:::
+
+## Visualising KDE using `tmap`
+
+We can plot the output raster by using tmap functions.
+
+```{r}
+kde_childcareSG_ad_raster <- raster(gridded_kde_childcareSG_ad)
+projection(kde_childcareSG_ad_raster) <- CRS("+init=EPSG:3414")
+```
+
+```{r}
+tm_shape(kde_childcareSG_ad_raster) + 
+  tm_raster(palette = "viridis") +
+  tm_layout(legend.position = c("right", "bottom"), 
+            frame = FALSE,
+            bg.color = "#E4D5C9")
+```
+
+# Monte Carlo Simulation
+
+In order to ensure reproducibility, it is important to include the code chunk below before using **spatstat** functions involve Monte Carlo simulation
+
+```{r}
+set.seed(2024)
+```
+
+# Reference
+
+Kam, T. S. In-class Exercise 2: Spatial Point Patterns Analysis: spatstat methods. ISSS626 Geospatial Analytics and Applications. https://isss626-ay2024-25aug.netlify.app/in-class_ex/in-class_ex02/in-class_ex02-sppa
