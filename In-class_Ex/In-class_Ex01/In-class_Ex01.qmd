@@ -362,7 +362,12 @@ Let's use the functions to plot boxmap
 boxmap("DEPENDENCY", mpsz_pop2024)
 ```
 
-
 # Reference
 
-Kam, T. S. In-class Exercise 1: Geospatial Data Science with R. ISSS626 Geospatial Analytics and Applications. https://isss626-ay2024-25aug.netlify.app/in-class_ex/in-class_ex01/in-class_ex01
+Kam, T. S. In-class Exercise 1: Geospatial Data Science with R. ISSS626 Geospatial Analytics and Applications.
+
+-   https://isss626-ay2025-26aug.netlify.app/lesson/lesson01/lesson01-introduction_to_gaa
+
+-   https://isss626-ay2025-26aug.netlify.app/lesson/lesson01/lesson01-geospatial_data
+
+-   https://isss626-ay2025-26aug.netlify.app/lesson/lesson01/lesson01-geovis

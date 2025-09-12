@@ -240,4 +240,6 @@ set.seed(2024)
 
 # Reference
 
-Kam, T. S. In-class Exercise 2: Spatial Point Patterns Analysis: spatstat methods. ISSS626 Geospatial Analytics and Applications. https://isss626-ay2024-25aug.netlify.app/in-class_ex/in-class_ex02/in-class_ex02-sppa
+Kam, T. S. In-class Exercise 2: Spatial Point Patterns Analysis: spatstat methods. ISSS626 Geospatial Analytics and Applications.
+
+-   <https://isss626-ay2025-26aug.netlify.app/lesson/lesson02/lesson02-sppa>
