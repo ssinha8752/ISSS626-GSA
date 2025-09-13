@@ -1,5 +1,75 @@
 [
   {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html",
+    "title": "Take-Home Exercise 01",
+    "section": "",
+    "text": "This is the TAKE HOME Ex01"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#loading-the-r-package",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#loading-the-r-package",
+    "title": "Take-Home Exercise 01",
+    "section": "Loading the R Package",
+    "text": "Loading the R Package\n\npacman::p_load(sf,tmap,tidyverse,httr)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#importing-the-acra-data",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#importing-the-acra-data",
+    "title": "Take-Home Exercise 01",
+    "section": "Importing the ACRA Data",
+    "text": "Importing the ACRA Data\n\nfolder_path &lt;- \"data/aspatial/acra\" \nfile_list &lt;- list.files(path=folder_path,\n                        pattern =\"^ACRA*.*\\\\.csv$\",\n                        full.names = TRUE)\nacra_data &lt;- file_list %&gt;%\n  map_dfr(read_csv)\n\nRows: 166348 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 90920 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 135478 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 70351 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 83190 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 66990 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 81783 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 90798 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 58738 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 65251 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 73983 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 89064 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 118925 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 57432 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 39336 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 21124 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 95595 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 11790 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 67792 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 224176 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 136758 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 23592 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 35777 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 55774 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 12396 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 36391 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\nRows: 17183 Columns: 53\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...\ndbl   (2): primary_ssic_code, no_of_officers\ndate  (2): registration_incorporation_date, uen_issue_date\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#saving-acra-data",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#saving-acra-data",
+    "title": "Take-Home Exercise 01",
+    "section": "Saving ACRA data",
+    "text": "Saving ACRA data\n\nwrite_rds(acra_data,\"data/rds/acra_data.rds\")"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#tidying-acra-data",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#tidying-acra-data",
+    "title": "Take-Home Exercise 01",
+    "section": "Tidying ACRA Data",
+    "text": "Tidying ACRA Data\nwrite the code to do the following - 1. Select target data using SSIC code 2. Derive the year and month fields from the registeration_incorporation_date field 3. tidy postal code values ensure avoid 5-digit postal code mistakes 4. select businesses registered in 2025\nCODE HERE bix_56111 &lt;- acra_data %&gt;% select (1:24) %&gt;% filter (primary_ssic_code == 56111) %&gt;% rename (date=registeration_incorporation_date) %&gt;% mutate (date = as.Date(date), YEAR = year(date), MOTH_NUM = month(date), MONTH_ABBR = month(date, label=TRUE, abbr = TRUE)) %&gt;% mutate( postal_code = str_pad(postal_code, width=6, side=“left”, pad=“0”)) %&gt;% filter(YEAR==2025)"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#geocoding",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#geocoding",
+    "title": "Take-Home Exercise 01",
+    "section": "Geocoding",
+    "text": "Geocoding\ncode in picture\nrun the code and will take really long time"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#tidying-the-geocoded-data",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#tidying-the-geocoded-data",
+    "title": "Take-Home Exercise 01",
+    "section": "Tidying the geocoded data",
+    "text": "Tidying the geocoded data"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#appending-the-location-information",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#appending-the-location-information",
+    "title": "Take-Home Exercise 01",
+    "section": "Appending the location information",
+    "text": "Appending the location information\nbiz_56111 = biz56111 %&gt;% left_join (found, by = c(‘postal_code’=‘POSTAL’))"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#saving-the-data",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#saving-the-data",
+    "title": "Take-Home Exercise 01",
+    "section": "Saving the data",
+    "text": "Saving the data"
+  },
+  {
+    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#converting-into-sf-data-frame",
+    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#converting-into-sf-data-frame",
+    "title": "Take-Home Exercise 01",
+    "section": "Converting into SF data frame",
+    "text": "Converting into SF data frame\nbiz_56111_sf &lt;- st_as_sf(biz_56111, coords = c(“X”,“Y”), crs=3414)\n)"
+  },
+  {
     "objectID": "index.html#welcome-to-my-geospatial-analytics",
     "href": "index.html#welcome-to-my-geospatial-analytics",
     "title": "Welcome to ISSS626 Geospatial Analytics and Applications",
@@ -25,7 +95,7 @@
     "href": "index.html#in-class-exercise",
     "title": "Welcome to ISSS626 Geospatial Analytics and Applications",
     "section": "In-class Exercise",
-    "text": "In-class Exercise\n\n\n\n\n\n\n\n\nIn-class Exercise 3: Interactive K-function\n\n\n5 min\n\n\n\nSep 12, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nIn-class Exercise 2: Spatial Point Patterns Analysis\n\n\n5 min\n\n\n\nSep 6, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nIn-class Exercise 1: Geospatial Analytics\n\n\n11 min\n\n\n\nAug 30, 2025\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "In-class Exercise\n\n\n\n\n\n\n\n\nTake home Exercise 1 : Geospatial Analytics for Public Good\n\n\n3 min\n\n\n\n\n\n\n\n\n\n\n\nIn-class Exercise 3: Interactive K-function\n\n\n5 min\n\n\n\nSep 12, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nIn-class Exercise 2: Spatial Point Patterns Analysis\n\n\n5 min\n\n\n\nSep 6, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nIn-class Exercise 1: Geospatial Analytics\n\n\n11 min\n\n\n\nAug 30, 2025\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html#take-home-exercise",
@@ -35,11 +105,18 @@
     "text": "Take-home Exercise\n\n\n\n\n\n\n\n\nTake-Home Exercise 01\n\n\n1 min\n\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "Take-home_Ex/index.html",
-    "href": "Take-home_Ex/index.html",
-    "title": "Take-home Exercise",
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03a.html",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03a.html",
+    "title": "In-class Exercise 3: Interactive K-function",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nTake-Home Exercise 01\n\n\n\n\n\n\n\nNo matching items"
+    "text": "pacman::p_load(sf, terra, spatstat, \n               tmap, rvest, tidyverse,\n               ggthemes, plotly)\nchildcare_sf &lt;- read_rds(\"data/rds/childcare_sf.rds\")\nchildcare_ppp &lt;- as.ppp(childcare_sf) %&gt;%\n  rjitter(retry = TRUE,\n          nsim = 1,\n          drop = TRUE)\npg &lt;- mpsz_cl %&gt;%\n  filter(PLN_AREA_N == \"PUNGGOL\")\ntm &lt;- mpsz_cl %&gt;%\n  filter(PLN_AREA_N == \"TAMPINES\")\nck &lt;- mpsz_cl %&gt;%\n  filter(PLN_AREA_N == \"CHOA CHU KANG\")\njw &lt;- mpsz_cl %&gt;%\n  filter(PLN_AREA_N == \"JURONG WEST\")\npg_owin = as.owin(pg)\ntm_owin = as.owin(tm)\nck_owin = as.owin(ck)\njw_owin = as.owin(jw)\nchildcare_pg_ppp = childcare_ppp[pg_owin]\nchildcare_tm_ppp = childcare_ppp[tm_owin]\nchildcare_ck_ppp = childcare_ppp[ck_owin]\nchildcare_jw_ppp = childcare_ppp[jw_owin]"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03a.html#building-an-interative-plot-with-ggplotly",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03a.html#building-an-interative-plot-with-ggplotly",
+    "title": "In-class Exercise 3: Interactive K-function",
+    "section": "Building an interative plot with ggplotly",
+    "text": "Building an interative plot with ggplotly\nThe previous code chunks uses plot() to visualise the envelopes of the second-order summary statistics (such as L-function). The output is a static plot, therefore it can be difficult to make accurate guesstimates of the statistics and the corresponding distance, r.\nThe below code chunk converts the output (which is in a list form) into a dataframe, which can be used to generate a similar plot using appropriate aesthetic mappings from ggplot package. Finally, ggplotly() is used to convert the ggplot into an interactive plotly visualisation.\nThe codes were referenced from a R-blogger article. Further modifications were made to enhance the user experience by customizing the tooltips for greater clarity and intuition.\n\ntitle &lt;- \"Pairwise Distance: L function\"\n\nLcsr_df &lt;- as.data.frame(L_tm.csr)\n\ncolour=c(\"#0D657D\",\"#ee770d\",\"#D3D3D3\")\ncsr_plot &lt;- ggplot(Lcsr_df, aes(r, obs-r))+\n  # plot observed value\n  geom_line(colour=c(\"#4d4d4d\"))+\n  geom_line(aes(r,theo-r), colour=\"red\", linetype = \"dashed\")+\n  # plot simulation envelopes\n  geom_ribbon(aes(ymin=lo-r,ymax=hi-r),alpha=0.1, colour=c(\"#91bfdb\")) +\n  xlab(\"Distance r (m)\") +\n  ylab(\"L(r)-r\") +\n  geom_rug(data=Lcsr_df[Lcsr_df$obs &gt; Lcsr_df$hi,], sides=\"b\", colour=colour[1])  +\n  geom_rug(data=Lcsr_df[Lcsr_df$obs &lt; Lcsr_df$lo,], sides=\"b\", colour=colour[2]) +\n  geom_rug(data=Lcsr_df[Lcsr_df$obs &gt;= Lcsr_df$lo & Lcsr_df$obs &lt;= Lcsr_df$hi,], sides=\"b\", color=colour[3]) +\n  theme_tufte()+\n  ggtitle(title)\n\ntext1&lt;-\"Significant clustering\"\ntext2&lt;-\"Significant segregation\"\ntext3&lt;-\"Not significant clustering/segregation\"\n\n# the below conditional statement is required to ensure that the labels (text1/2/3) are assigned to the correct traces\nif (nrow(Lcsr_df[Lcsr_df$obs &gt; Lcsr_df$hi,])==0){ \n  if (nrow(Lcsr_df[Lcsr_df$obs &lt; Lcsr_df$lo,])==0){ \n    ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n      style(text = text3, traces = 4) %&gt;%\n      rangeslider() \n  }else if (nrow(Lcsr_df[Lcsr_df$obs &gt;= Lcsr_df$lo & Lcsr_df$obs &lt;= Lcsr_df$hi,])==0){ \n    ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n      style(text = text2, traces = 4) %&gt;%\n      rangeslider() \n  }else {\n    ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n      style(text = text2, traces = 4) %&gt;%\n      style(text = text3, traces = 5) %&gt;%\n      rangeslider() \n  }\n} else if (nrow(Lcsr_df[Lcsr_df$obs &lt; Lcsr_df$lo,])==0){\n  if (nrow(Lcsr_df[Lcsr_df$obs &gt;= Lcsr_df$lo & Lcsr_df$obs &lt;= Lcsr_df$hi,])==0){\n    ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n      style(text = text1, traces = 4) %&gt;%\n      rangeslider() \n  } else{\n    ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n      style(text = text1, traces = 4) %&gt;%\n      style(text = text3, traces = 5) %&gt;%\n      rangeslider()\n  }\n} else{\n  ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n    style(text = text1, traces = 4) %&gt;%\n    style(text = text2, traces = 5) %&gt;%\n    style(text = text3, traces = 6) %&gt;%\n    rangeslider()\n  }\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nThe main features of the above visualisation:\n\nThe observed and theoretical values of L(r)-r (including the upper and lower curves of the simulated envelope) can be found in the tooltip upon hovering the cursor over the geometry layers.\nThe range slider below the plot enables users to pan and zoom in to a specific range of distance.\nThe colored bands at the bottom of the line graph gives a clearer indication of significant or insignificant spatial segregation/ clustering at distance r. Dark green bands indicate significant clustering, orange indicate significant segregation, while grey indicates insignificant clustering/segregation.\nTooltips were added to provide color legend information."
   },
   {
     "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html",
@@ -504,31 +581,66 @@
     "text": "10.3 Plotting box map\nLet’s use the functions to plot boxmap\n\n\ncode chunk\nboxmap(\"DEPENDENCY\", mpsz_pop2024)\n\n\n\n\n\n── tmap v3 code detected ───────────────────────────────────────────────────────\n\n\n[v3-&gt;v4] `tm_tm_fill()`: migrate the argument(s) related to the scale of the\nvisual variable `fill` namely 'breaks', 'palette' (rename to 'values'),\n'labels' to fill.scale = tm_scale(&lt;HERE&gt;).\n[v3-&gt;v4] `tm_fill()`: migrate the argument(s) related to the legend of the\nvisual variable `fill` namely 'title' to 'fill.legend = tm_legend(&lt;HERE&gt;)'\n[v3-&gt;v4] `tm_layout()`: use `tm_title()` instead of `tm_layout(title = )`\n[v3-&gt;v4] `tm_layout()`: use `tm_title()` instead of `tm_layout(main.title = )`\n[cols4all] color palettes: use palettes from the R package cols4all. Run\n`cols4all::c4a_gui()` to explore them. The old palette name \"Blues\" is named\n\"brewer.blues\"\nMultiple palettes called \"blues\" found: \"brewer.blues\", \"matplotlib.blues\". The first one, \"brewer.blues\", is returned."
   },
   {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html",
+    "title": "Take home Exercise 1 : Geospatial Analytics for Public Good",
+    "section": "",
+    "text": "pacman::p_load(sf, tmap, tidyverse,httr)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#load-the-r-package",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#load-the-r-package",
+    "title": "Take home Exercise 1 : Geospatial Analytics for Public Good",
+    "section": "",
+    "text": "pacman::p_load(sf, tmap, tidyverse,httr)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#import-the-acra-data",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#import-the-acra-data",
+    "title": "Take home Exercise 1 : Geospatial Analytics for Public Good",
+    "section": "2 Import the ACRA data",
+    "text": "2 Import the ACRA data\n\nfolder_path &lt;- \"data/aspatial/ACRA\"\nfile_list &lt;- list.files(path = folder_path,\n                        pattern = \"^ACRA*.*\\\\.csv$\",\n                        full.names = TRUE)\n\n\nacra_data &lt;- file_list %&gt;%\n  map_dfr(read_csv)\n\nSave the data into rds folder\n\nwrite_rds(acra_data,\n          \"data/rds/acra_data.rds\")"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#tidying-the-acra-data",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#tidying-the-acra-data",
+    "title": "Take home Exercise 1 : Geospatial Analytics for Public Good",
+    "section": "3 Tidying the ACRA data",
+    "text": "3 Tidying the ACRA data\n\nbiz_56111 &lt;- acra_data %&gt;%\n  select(1:24) %&gt;%\n  filter(primary_ssic_code == 56111) %&gt;%\n  rename(date = registration_incorporation_date) %&gt;%\n  mutate(date = as.Date(date),\n         YEAR = year(date),\n         MONTH_NUM = month(date),\n         MONTH_ABBR = month(date,\n                            label = TRUE,\n                            abbr = TRUE)) %&gt;%\n  mutate(\n    postal_code = str_pad(postal_code,\n    width = 6, side = \"left\", pad = \"0\")) %&gt;%\n            filter(YEAR == 2025)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#geocoding",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#geocoding",
+    "title": "Take home Exercise 1 : Geospatial Analytics for Public Good",
+    "section": "4 Geocoding",
+    "text": "4 Geocoding\n\npostcodes &lt;- unique(biz_56111$postal_code)\n\nurl &lt;- \"https://onemap.gov.sg/api/common/elastic/search\"\n\n\nfound &lt;-data.frame()\nnot_found &lt;- data.frame(postcode = character())\n\nfor(pc in postcodes) {\n  query &lt;- list(\n    searchVal = pc,\n    returnGeom = \"Y\",\n    getAddrDetails = \"Y\",\n    pageNum = \"1\"\n  )\n  \n  res &lt;- GET(url,query = query)\n  json &lt;- content(res)\n  \n  if(json$found !=0) {\n    df &lt;- as.data.frame(json$results,stringAsFactors = FALSE)\n    df$input_postcode &lt;- pc\n    found &lt;- bind_rows(found,df)\n  } else {\n    not_found &lt;- bind_rows(not_found,data,frame(postcode = pc))\n  }\n}"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#appending-the-location-information",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#appending-the-location-information",
+    "title": "Take home Exercise 1 : Geospatial Analytics for Public Good",
+    "section": "5 Appending the location information",
+    "text": "5 Appending the location information\n\nbiz_56111 = biz_56111 %&gt;%\n  left_join(found,\n            by = c('postal_code' = 'POSTAL'))"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#converting-into-sf-data-frame",
+    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#converting-into-sf-data-frame",
+    "title": "Take home Exercise 1 : Geospatial Analytics for Public Good",
+    "section": "6 Converting into SF data frame",
+    "text": "6 Converting into SF data frame\n\nbiz_56111_sf &lt;- st_as_sf(biz_56111, \n                         coords = c(\"X\", \"Y\"),\n                         crs = 3414)"
+  },
+  {
     "objectID": "In-class_Ex/index.html",
     "href": "In-class_Ex/index.html",
     "title": "In-class Exercise",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nIn-class Exercise 3: Interactive K-function\n\n\n\nSep 12, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nIn-class Exercise 2: Spatial Point Patterns Analysis\n\n\n\nSep 6, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nIn-class Exercise 1: Geospatial Analytics\n\n\n\nAug 30, 2025\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nTake home Exercise 1 : Geospatial Analytics for Public Good\n\n\n\n\n\n\n\n\n\n\n\nIn-class Exercise 3: Interactive K-function\n\n\n\nSep 12, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nIn-class Exercise 2: Spatial Point Patterns Analysis\n\n\n\nSep 6, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nIn-class Exercise 1: Geospatial Analytics\n\n\n\nAug 30, 2025\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html",
-    "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html",
-    "title": "Take-Home Exercise 01",
+    "objectID": "Take-home_Ex/index.html",
+    "href": "Take-home_Ex/index.html",
+    "title": "Take-home Exercise",
     "section": "",
-    "text": "This is the TAKE HOME Ex01"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03a.html",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03a.html",
-    "title": "In-class Exercise 3: Interactive K-function",
-    "section": "",
-    "text": "pacman::p_load(sf, terra, spatstat, \n               tmap, rvest, tidyverse,\n               ggthemes, plotly)\nchildcare_sf &lt;- read_rds(\"data/rds/childcare_sf.rds\")\nchildcare_ppp &lt;- as.ppp(childcare_sf) %&gt;%\n  rjitter(retry = TRUE,\n          nsim = 1,\n          drop = TRUE)\npg &lt;- mpsz_cl %&gt;%\n  filter(PLN_AREA_N == \"PUNGGOL\")\ntm &lt;- mpsz_cl %&gt;%\n  filter(PLN_AREA_N == \"TAMPINES\")\nck &lt;- mpsz_cl %&gt;%\n  filter(PLN_AREA_N == \"CHOA CHU KANG\")\njw &lt;- mpsz_cl %&gt;%\n  filter(PLN_AREA_N == \"JURONG WEST\")\npg_owin = as.owin(pg)\ntm_owin = as.owin(tm)\nck_owin = as.owin(ck)\njw_owin = as.owin(jw)\nchildcare_pg_ppp = childcare_ppp[pg_owin]\nchildcare_tm_ppp = childcare_ppp[tm_owin]\nchildcare_ck_ppp = childcare_ppp[ck_owin]\nchildcare_jw_ppp = childcare_ppp[jw_owin]"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03a.html#building-an-interative-plot-with-ggplotly",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03a.html#building-an-interative-plot-with-ggplotly",
-    "title": "In-class Exercise 3: Interactive K-function",
-    "section": "Building an interative plot with ggplotly",
-    "text": "Building an interative plot with ggplotly\nThe previous code chunks uses plot() to visualise the envelopes of the second-order summary statistics (such as L-function). The output is a static plot, therefore it can be difficult to make accurate guesstimates of the statistics and the corresponding distance, r.\nThe below code chunk converts the output (which is in a list form) into a dataframe, which can be used to generate a similar plot using appropriate aesthetic mappings from ggplot package. Finally, ggplotly() is used to convert the ggplot into an interactive plotly visualisation.\nThe codes were referenced from a R-blogger article. Further modifications were made to enhance the user experience by customizing the tooltips for greater clarity and intuition.\n\ntitle &lt;- \"Pairwise Distance: L function\"\n\nLcsr_df &lt;- as.data.frame(L_tm.csr)\n\ncolour=c(\"#0D657D\",\"#ee770d\",\"#D3D3D3\")\ncsr_plot &lt;- ggplot(Lcsr_df, aes(r, obs-r))+\n  # plot observed value\n  geom_line(colour=c(\"#4d4d4d\"))+\n  geom_line(aes(r,theo-r), colour=\"red\", linetype = \"dashed\")+\n  # plot simulation envelopes\n  geom_ribbon(aes(ymin=lo-r,ymax=hi-r),alpha=0.1, colour=c(\"#91bfdb\")) +\n  xlab(\"Distance r (m)\") +\n  ylab(\"L(r)-r\") +\n  geom_rug(data=Lcsr_df[Lcsr_df$obs &gt; Lcsr_df$hi,], sides=\"b\", colour=colour[1])  +\n  geom_rug(data=Lcsr_df[Lcsr_df$obs &lt; Lcsr_df$lo,], sides=\"b\", colour=colour[2]) +\n  geom_rug(data=Lcsr_df[Lcsr_df$obs &gt;= Lcsr_df$lo & Lcsr_df$obs &lt;= Lcsr_df$hi,], sides=\"b\", color=colour[3]) +\n  theme_tufte()+\n  ggtitle(title)\n\ntext1&lt;-\"Significant clustering\"\ntext2&lt;-\"Significant segregation\"\ntext3&lt;-\"Not significant clustering/segregation\"\n\n# the below conditional statement is required to ensure that the labels (text1/2/3) are assigned to the correct traces\nif (nrow(Lcsr_df[Lcsr_df$obs &gt; Lcsr_df$hi,])==0){ \n  if (nrow(Lcsr_df[Lcsr_df$obs &lt; Lcsr_df$lo,])==0){ \n    ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n      style(text = text3, traces = 4) %&gt;%\n      rangeslider() \n  }else if (nrow(Lcsr_df[Lcsr_df$obs &gt;= Lcsr_df$lo & Lcsr_df$obs &lt;= Lcsr_df$hi,])==0){ \n    ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n      style(text = text2, traces = 4) %&gt;%\n      rangeslider() \n  }else {\n    ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n      style(text = text2, traces = 4) %&gt;%\n      style(text = text3, traces = 5) %&gt;%\n      rangeslider() \n  }\n} else if (nrow(Lcsr_df[Lcsr_df$obs &lt; Lcsr_df$lo,])==0){\n  if (nrow(Lcsr_df[Lcsr_df$obs &gt;= Lcsr_df$lo & Lcsr_df$obs &lt;= Lcsr_df$hi,])==0){\n    ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n      style(text = text1, traces = 4) %&gt;%\n      rangeslider() \n  } else{\n    ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n      style(text = text1, traces = 4) %&gt;%\n      style(text = text3, traces = 5) %&gt;%\n      rangeslider()\n  }\n} else{\n  ggplotly(csr_plot, dynamicTicks=T) %&gt;%\n    style(text = text1, traces = 4) %&gt;%\n    style(text = text2, traces = 5) %&gt;%\n    style(text = text3, traces = 6) %&gt;%\n    rangeslider()\n  }\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nThe main features of the above visualisation:\n\nThe observed and theoretical values of L(r)-r (including the upper and lower curves of the simulated envelope) can be found in the tooltip upon hovering the cursor over the geometry layers.\nThe range slider below the plot enables users to pan and zoom in to a specific range of distance.\nThe colored bands at the bottom of the line graph gives a clearer indication of significant or insignificant spatial segregation/ clustering at distance r. Dark green bands indicate significant clustering, orange indicate significant segregation, while grey indicates insignificant clustering/segregation.\nTooltips were added to provide color legend information."
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nTake-Home Exercise 01\n\n\n\n\n\n\n\nNo matching items"
   }
 ]

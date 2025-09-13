@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -129,6 +163,14 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex02/In-class_Ex02.html">
  <span class="dropdown-text">In-Class : Exercise 2</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex03/In-class_Ex03.html">
+ <span class="dropdown-text">In-Class : Exercise 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex03/In-class_Ex03a.html">
+ <span class="dropdown-text">In-Class : Exercise 3a</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -173,8 +215,22 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#loading-the-r-package" id="toc-loading-the-r-package" class="nav-link active" data-scroll-target="#loading-the-r-package">Loading the R Package</a></li>
+  <li><a href="#importing-the-acra-data" id="toc-importing-the-acra-data" class="nav-link" data-scroll-target="#importing-the-acra-data">Importing the ACRA Data</a></li>
+  <li><a href="#saving-acra-data" id="toc-saving-acra-data" class="nav-link" data-scroll-target="#saving-acra-data">Saving ACRA data</a></li>
+  <li><a href="#tidying-acra-data" id="toc-tidying-acra-data" class="nav-link" data-scroll-target="#tidying-acra-data">Tidying ACRA Data</a></li>
+  <li><a href="#geocoding" id="toc-geocoding" class="nav-link" data-scroll-target="#geocoding">Geocoding</a></li>
+  <li><a href="#tidying-the-geocoded-data" id="toc-tidying-the-geocoded-data" class="nav-link" data-scroll-target="#tidying-the-geocoded-data">Tidying the geocoded data</a></li>
+  <li><a href="#appending-the-location-information" id="toc-appending-the-location-information" class="nav-link" data-scroll-target="#appending-the-location-information">Appending the location information</a></li>
+  <li><a href="#saving-the-data" id="toc-saving-the-data" class="nav-link" data-scroll-target="#saving-the-data">Saving the data</a></li>
+  <li><a href="#converting-into-sf-data-frame" id="toc-converting-into-sf-data-frame" class="nav-link" data-scroll-target="#converting-into-sf-data-frame">Converting into SF data frame</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -205,8 +261,301 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>This is the TAKE HOME Ex01</p>
+<section id="loading-the-r-package" class="level2">
+<h2 class="anchored" data-anchor-id="loading-the-r-package">Loading the R Package</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf,tmap,tidyverse,httr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="importing-the-acra-data" class="level2">
+<h2 class="anchored" data-anchor-id="importing-the-acra-data">Importing the ACRA Data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>folder_path <span class="ot">&lt;-</span> <span class="st">"data/aspatial/acra"</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>file_list <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path=</span>folder_path,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">pattern =</span><span class="st">"^ACRA*.*</span><span class="sc">\\</span><span class="st">.csv$"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>acra_data <span class="ot">&lt;-</span> file_list <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(read_csv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 166348 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 90920 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 135478 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 70351 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 83190 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 66990 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 81783 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 90798 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 58738 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 65251 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 73983 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 89064 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 118925 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 57432 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 39336 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 21124 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 95595 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 11790 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 67792 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 224176 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 136758 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 23592 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 35777 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 55774 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 12396 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 36391 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
+Rows: 17183 Columns: 53
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
+dbl   (2): primary_ssic_code, no_of_officers
+date  (2): registration_incorporation_date, uen_issue_date
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+</section>
+<section id="saving-acra-data" class="level2">
+<h2 class="anchored" data-anchor-id="saving-acra-data">Saving ACRA data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(acra_data,<span class="st">"data/rds/acra_data.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="tidying-acra-data" class="level2">
+<h2 class="anchored" data-anchor-id="tidying-acra-data">Tidying ACRA Data</h2>
+<p>write the code to do the following - 1. Select target data using SSIC code 2. Derive the year and month fields from the registeration_incorporation_date field 3. tidy postal code values ensure avoid 5-digit postal code mistakes 4. select businesses registered in 2025</p>
+<p>CODE HERE bix_56111 &lt;- acra_data %&gt;% select (1:24) %&gt;% filter (primary_ssic_code == 56111) %&gt;% rename (date=registeration_incorporation_date) %&gt;% mutate (date = as.Date(date), YEAR = year(date), MOTH_NUM = month(date), MONTH_ABBR = month(date, label=TRUE, abbr = TRUE)) %&gt;% mutate( postal_code = str_pad(postal_code, width=6, side=“left”, pad=“0”)) %&gt;% filter(YEAR==2025)</p>
+</section>
+<section id="geocoding" class="level2">
+<h2 class="anchored" data-anchor-id="geocoding">Geocoding</h2>
+<p>code in picture</p>
+<p>run the code and will take really long time</p>
+</section>
+<section id="tidying-the-geocoded-data" class="level2">
+<h2 class="anchored" data-anchor-id="tidying-the-geocoded-data">Tidying the geocoded data</h2>
+</section>
+<section id="appending-the-location-information" class="level2">
+<h2 class="anchored" data-anchor-id="appending-the-location-information">Appending the location information</h2>
+<p>biz_56111 = biz56111 %&gt;% left_join (found, by = c(‘postal_code’=‘POSTAL’))</p>
+</section>
+<section id="saving-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="saving-the-data">Saving the data</h2>
+</section>
+<section id="converting-into-sf-data-frame" class="level2">
+<h2 class="anchored" data-anchor-id="converting-into-sf-data-frame">Converting into SF data frame</h2>
+<p>biz_56111_sf &lt;- st_as_sf(biz_56111, coords = c(“X”,“Y”), crs=3414)</p>
+<p>)</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

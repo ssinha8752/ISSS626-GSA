@@ -4,3 +4,78 @@ author: "Shubham Sinha"
 ---
 
 This is the TAKE HOME Ex01
+
+## Loading the R Package
+
+```{r}
+pacman::p_load(sf,tmap,tidyverse,httr)
+```
+
+## Importing the ACRA Data
+
+```{r} 
+folder_path <- "data/aspatial/acra" 
+file_list <- list.files(path=folder_path,
+                        pattern ="^ACRA*.*\\.csv$",
+                        full.names = TRUE)
+acra_data <- file_list %>%
+  map_dfr(read_csv)
+```
+
+## Saving ACRA data
+
+```{r}
+write_rds(acra_data,"data/rds/acra_data.rds")
+```
+
+## Tidying ACRA Data
+
+write the code to do the following - 
+1. Select target data using SSIC code
+2. Derive the year and month fields from the registeration_incorporation_date field
+3. tidy postal code values ensure avoid 5-digit postal code mistakes
+4. select businesses registered in 2025
+
+CODE HERE
+bix_56111 <- acra_data %>%
+select (1:24) %>%
+filter (primary_ssic_code == 56111) %>%
+rename (date=registeration_incorporation_date) %>%
+mutate (date = as.Date(date),
+YEAR = year(date),
+MOTH_NUM = month(date),
+MONTH_ABBR = month(date, label=TRUE, abbr = TRUE)) %>%
+mutate(
+postal_code = str_pad(postal_code,
+width=6, side="left", pad="0")) %>%
+filter(YEAR==2025)
+
+
+## Geocoding
+
+code in picture
+
+run the code and will take really long time
+
+## Tidying the geocoded data
+
+## Appending the location information
+
+biz_56111 = biz56111 %>%
+left_join (found, 
+by = c('postal_code'='POSTAL'))
+
+## Saving the data
+
+## Converting into SF data frame
+
+biz_56111_sf <- st_as_sf(biz_56111, coords = c("X","Y"), crs=3414)
+
+
+)
+
+
+
+
+
+
