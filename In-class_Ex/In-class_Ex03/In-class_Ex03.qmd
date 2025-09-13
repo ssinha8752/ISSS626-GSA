@@ -1,10 +1,10 @@
 ---
-title: "In-class Exercise 03b"
+title: "In-class Exercise 03"
 author: "Shubham Sinha"
 ---
 
 ---
-title: "Take home Exercise 1 : Geospatial Analytics for Public Good"
+title: "In-class Exercise 3 : Geospatial Analytics for Public Good"
 author: "Shubham Sinha"
 date: "September 13, 2025"
 date-modified: "last-modified"
