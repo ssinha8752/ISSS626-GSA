@@ -15,13 +15,28 @@ execute:
   freeze: true
 ---
 
-## 1 Load the R package
+## 1 Overview 
+
+This hands-on exercise guides learners through the end-to-end workflow of transforming corporate entity data into spatial features using Singapore’s open data infrastructure. Starting with raw ACRA datasets from data.gov.sg, participants will learn to prepare and tidy the data for geocoding, harness the SLA OneMap API to assign geographic coordinates, and convert the results into an  point feature data frame. The final step involves spatial wrangling techniques to resolve overlapping points—ensuring clean, interpretable maps for downstream analysis or visualization.
+By the end, you’ll have a reproducible pipeline for turning tabular business data into geospatial insights, ready for mapping, clustering, or integration into dashboards.
+
+## 2 Load the R package 
+
+- httr: Simplifies working with web APIs by wrapping the curl package. It provides intuitive functions for HTTP verbs like GET(), POST(), PUT(), and more—ideal for interacting with RESTful services.
+
+- dplyr: A core tool for data manipulation in R, offering a consistent grammar of verbs (filter(), mutate(), summarize(), etc.) to streamline data wrangling. Essential for modern data analysis workflows.
+
+- lubridate: Specializes in handling dates and date-times, making it easier to parse, manipulate, and extract components from temporal data.
+
+
 
 ```{r}
 pacman::p_load(sf, tmap, tidyverse,httr)
 ```
 
-## 2 Import the ACRA data 
+## 3 Import the ACRA data 
+
+The user begins by importing the ACRA dataset into RStudio and converting it into a tibble for streamlined data manipulation. Next, the user examines the dataset to identify and remove fields that contain excessive missing values or offer no analytical variation—such as columns with only a single unique entry. This cleaning process ensures that the remaining data is both relevant and ready for further geospatial processing or visualization.
 
 ```{r}
 folder_path <- "data/aspatial/ACRA"
@@ -37,12 +52,17 @@ acra_data <- file_list %>%
 
 ## 3 Saving the ACRA data 
 
+code chunk to save the consolidated ACRA data.
+
 ```{r}
 write_rds(acra_data,
           "data/rds/acra_data.rds")
 ```
 
 ## 4 Tidying the ACRA data
+
+This task involves tidying ACRA corporate entity data for targeted analysis. The code filters businesses based on specific SSIC codes to isolate relevant sectors. It then extracts year and month components from the `registration_incorporation_date` field to support temporal analysis. Postal codes are cleaned to ensure proper formatting, avoiding errors from truncated 5-digit entries. Finally, the dataset is narrowed to include only businesses registered in the year 2025. These steps prepare the data for accurate geospatial mapping, trend analysis, or policy evaluation, ensuring that only valid, timely, and sector-specific records are retained for further processing.
+
 
 ```{r}
 biz_56111 <- acra_data %>%
@@ -63,6 +83,9 @@ biz_56111 <- acra_data %>%
 
 
 ## 5 Geocoding 
+
+Creatign a function that extracts unique postal codes from a cleaned tibble, submits them to the SLA OneMap Reverse Geocode API, and stores the results in two data frames: one for successfully geocoded records (found) and another for unmatched postal codes (not_found). This enables efficient spatial data integration.
+
 
 ```{r}
 postcodes <- unique(biz_56111$postal_code)
@@ -96,6 +119,8 @@ for(pc in postcodes) {
 
 ## 6 Tidying the geocoded data
 
+The geocoded data frame (i.e. found) contained many redundant fields. We only need the first ten fields. Write a code chunk to tidy the geocoded data frame.
+
 ```{r}
 found <- found %>%
   select(1:10)
@@ -103,6 +128,7 @@ found <- found %>%
 
 ## 7 Appending the location information
 
+code chunk to append the location information (i.e. x- and y-coordinates) to biz_56111 sf data frame.
 
 ```{r}
 biz_56111 = biz_56111 %>%
@@ -112,11 +138,15 @@ biz_56111 = biz_56111 %>%
 
 ## 8 Saving the data
 
+code chunk to save the tidied data into rds format for future use.
+
 ```{r}
 write_rds(biz_56111, "data/rds/biz_56111.rds")
 ```
 
 ## 9 Converting into SF data frame
+
+code chunk to convert biz_56111 tibble data frame into sf data frame.
 
 ```{r}
 biz_56111_sf <- st_as_sf(biz_56111, 
@@ -125,6 +155,8 @@ biz_56111_sf <- st_as_sf(biz_56111,
 ```
 
 ## 10 Visualization of the distribution
+
+Reveal the distribution of newly registered businesses by month
 
 ```{r}
 ggplot(data = biz_56111,
