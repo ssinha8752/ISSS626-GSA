@@ -2,6 +2,7 @@
 title: "In-class Exercise 1: Geospatial Analytics"
 author: "Shubham Sinha"
 date: "2025-08-30"
+date-modified: "last-modified"
 execute: 
   eval: true
   echo: true
