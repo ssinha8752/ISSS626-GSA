@@ -4,7 +4,7 @@ author: "Shubham Sinha"
 ---
 
 ---
-title: "In-class Exercise 3 : Geospatial Analytics for Public Good"
+title: "In-class Exercise 3b : Working with Open Government Data"
 author: "Shubham Sinha"
 date: "September 13, 2025"
 date-modified: "last-modified"
@@ -34,14 +34,15 @@ file_list <- list.files(path = folder_path,
 acra_data <- file_list %>%
   map_dfr(read_csv)
 ```
-Save the data into rds folder 
+
+## 3 Saving the ACRA data 
 
 ```{r}
 write_rds(acra_data,
           "data/rds/acra_data.rds")
 ```
 
-## 3 Tidying the ACRA data
+## 4 Tidying the ACRA data
 
 ```{r}
 biz_56111 <- acra_data %>%
@@ -61,7 +62,7 @@ biz_56111 <- acra_data %>%
 ```
 
 
-## 4 Geocoding 
+## 5 Geocoding 
 
 ```{r}
 postcodes <- unique(biz_56111$postal_code)
@@ -93,7 +94,14 @@ for(pc in postcodes) {
 }
 ```
 
-## 5 Appending the location information
+## 6 Tidying the geocoded data
+
+```{r}
+found <- found %>%
+  select(1:10)
+```
+
+## 7 Appending the location information
 
 
 ```{r}
@@ -102,11 +110,32 @@ biz_56111 = biz_56111 %>%
             by = c('postal_code' = 'POSTAL'))
 ```
 
+## 8 Saving the data
 
-## 6 Converting into SF data frame
+```{r}
+write_rds(biz_56111, "data/rds/biz_56111.rds")
+```
+
+## 9 Converting into SF data frame
 
 ```{r}
 biz_56111_sf <- st_as_sf(biz_56111, 
                          coords = c("X", "Y"),
                          crs = 3414)
+```
+
+## 10 Visualization of the distribution
+
+```{r}
+ggplot(data = biz_56111,
+       aes(x = MONTH_ABBR)) +
+  geom_bar()
+```
+
+## 11 Visualizaing the business
+
+```{r}
+tmap_mode('view')
+tm_shape(biz_56111_sf)+
+  tm_dots()
 ```
