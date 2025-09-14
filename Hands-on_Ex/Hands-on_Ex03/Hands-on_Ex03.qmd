@@ -1,9 +1,9 @@
 ---
-title: "Hands-on Exercise 3"
+title: "Hands-on Exercise 3 - Spatio-Temporal Point Patterns Analysis"
 author: "Shubham Sinha"
+date: "2024-09-14"
+date-modified: "last-modified"
 ---
-
-# Spatio-Temporal Point Patterns Analysis
 
 ## 1.Overview
 

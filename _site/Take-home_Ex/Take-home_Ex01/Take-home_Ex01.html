@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Shubham Sinha">
+<meta name="dcterms.date" content="2025-09-12">
 
-<title>Take-Home Exercise 01 – ISSS626-GAA</title>
+<title>Take-home Exercise 1: Geospatial Analytics for Public Good – ISSS626-GAA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -130,23 +131,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">    
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01a.html">
- <span class="dropdown-text">Exercise 1 - Geospatial Data Wrangling</span></a>
+ <span class="dropdown-text">Exercise 1A - Geospatial Data Wrangling</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01b.html">
- <span class="dropdown-text">Exercise 1 - Choropleth Mapping</span></a>
+ <span class="dropdown-text">Exercise 1B - Choropleth Mapping</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02a.html">
- <span class="dropdown-text">Exercise 2 - 1st Order spatial point pattern analysis methods</span></a>
+ <span class="dropdown-text">Exercise 2A - 1st Order spatial point pattern analysis methods</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02b.html">
- <span class="dropdown-text">Exercise 2 - 2nd Order spatial point pattern analysis methods</span></a>
+ <span class="dropdown-text">Exercise 2B - 2nd Order spatial point pattern analysis methods</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html">
- <span class="dropdown-text">Exercise 3 - Spatio-Temporal Point Patterns Analysis</span></a>
+ <span class="dropdown-text">Exercise 3A - Spatio-Temporal Point Patterns Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html">
+ <span class="dropdown-text">Exercise 4A - Spatial Weights and Applications</span></a>
   </li>  
     </ul>
   </li>
@@ -237,7 +242,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Take-Home Exercise 01</h1>
+<h1 class="title">Take-home Exercise 1: Geospatial Analytics for Public Good</h1>
 </div>
 
 
@@ -251,7 +256,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 12, 2025</p>
+    </div>
+  </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">September 14, 2025</p>
+    </div>
+  </div>
     
   </div>
   
@@ -276,257 +293,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>acra_data <span class="ot">&lt;-</span> file_list <span class="sc">%&gt;%</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_dfr</span>(read_csv)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Rows: 166348 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 90920 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 135478 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 70351 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 83190 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 66990 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 81783 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 90798 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 58738 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 65251 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 73983 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 89064 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 118925 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 57432 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 39336 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 21124 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 95595 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 11790 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 67792 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 224176 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 136758 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 23592 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 35777 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 55774 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 12396 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 36391 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-Rows: 17183 Columns: 53
-── Column specification ────────────────────────────────────────────────────────
-Delimiter: ","
-chr  (49): uen, issuance_agency_id, entity_name, entity_type_description, bu...
-dbl   (2): primary_ssic_code, no_of_officers
-date  (2): registration_incorporation_date, uen_issue_date
-
-ℹ Use `spec()` to retrieve the full column specification for this data.
-ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-</div>
 </div>
 </section>
 <section id="saving-acra-data" class="level2">
 <h2 class="anchored" data-anchor-id="saving-acra-data">Saving ACRA data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(acra_data,<span class="st">"data/rds/acra_data.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(acra_data,<span class="st">"data/rds/acra_data.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="tidying-acra-data" class="level2">

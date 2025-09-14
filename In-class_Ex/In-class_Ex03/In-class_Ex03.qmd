@@ -1,9 +1,4 @@
 ---
-title: "In-class Exercise 03"
-author: "Shubham Sinha"
----
-
----
 title: "In-class Exercise 3b : Working with Open Government Data"
 author: "Shubham Sinha"
 date: "September 13, 2025"

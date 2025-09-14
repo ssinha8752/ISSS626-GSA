@@ -1,11 +1,11 @@
 ---
-title: "Hands-on Exercise 1"
+title: "Hands-on Exercise 1A - Geospatial Data Wrangling with R"
 author: "Shubham Sinha"
+date: "2024-09-14"
+date-modified: "last-modified"
 ---
 
 # Getting Started
-
-# Geospatial Data Wrangling with R
 
 ## 1. Install and launching R packages
 

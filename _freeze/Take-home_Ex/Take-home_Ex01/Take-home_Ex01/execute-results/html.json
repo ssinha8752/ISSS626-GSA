@@ -1,0 +1,15 @@
+{
+  "hash": "ff4ea85de043305573e1a912d0cf83e7",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Take-home Exercise 1: Geospatial Analytics for Public Good\"\nauthor: \"Shubham Sinha\"\ndate: \"September 12, 2025\"\ndate-modified: \"last-modified\"\nexecute: \n  eval: true\n  echo: true\n  warning: false\n  freeze: true\n---\n\n\n\n\nThis is the TAKE HOME Ex01\n\n## Loading the R Package\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(sf,tmap,tidyverse,httr)\n```\n:::\n\n\n\n\n## Importing the ACRA Data\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nfolder_path <- \"data/aspatial/acra\" \nfile_list <- list.files(path=folder_path,\n                        pattern =\"^ACRA*.*\\\\.csv$\",\n                        full.names = TRUE)\nacra_data <- file_list %>%\n  map_dfr(read_csv)\n```\n:::\n\n\n\n\n## Saving ACRA data\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nwrite_rds(acra_data,\"data/rds/acra_data.rds\")\n```\n:::\n\n\n\n\n## Tidying ACRA Data\n\nwrite the code to do the following - \n1. Select target data using SSIC code\n2. Derive the year and month fields from the registeration_incorporation_date field\n3. tidy postal code values ensure avoid 5-digit postal code mistakes\n4. select businesses registered in 2025\n\nCODE HERE\nbix_56111 <- acra_data %>%\nselect (1:24) %>%\nfilter (primary_ssic_code == 56111) %>%\nrename (date=registeration_incorporation_date) %>%\nmutate (date = as.Date(date),\nYEAR = year(date),\nMOTH_NUM = month(date),\nMONTH_ABBR = month(date, label=TRUE, abbr = TRUE)) %>%\nmutate(\npostal_code = str_pad(postal_code,\nwidth=6, side=\"left\", pad=\"0\")) %>%\nfilter(YEAR==2025)\n\n\n## Geocoding\n\ncode in picture\n\nrun the code and will take really long time\n\n## Tidying the geocoded data\n\n## Appending the location information\n\nbiz_56111 = biz56111 %>%\nleft_join (found, \nby = c('postal_code'='POSTAL'))\n\n## Saving the data\n\n## Converting into SF data frame\n\nbiz_56111_sf <- st_as_sf(biz_56111, coords = c(\"X\",\"Y\"), crs=3414)\n\n\n)\n\n\n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

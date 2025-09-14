@@ -1,6 +1,13 @@
 ---
-title: "Take-Home Exercise 01"
+title: "Take-home Exercise 1: Geospatial Analytics for Public Good"
 author: "Shubham Sinha"
+date: "September 12, 2025"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
 ---
 
 This is the TAKE HOME Ex01

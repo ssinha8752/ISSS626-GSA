@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Shubham Sinha">
+<meta name="dcterms.date" content="2024-09-14">
 
-<title>Hands-on Exercise 3 – ISSS626-GAA</title>
+<title>Hands-on Exercise 3 - Spatio-Temporal Point Patterns Analysis – ISSS626-GAA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -130,27 +131,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">    
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01a.html">
- <span class="dropdown-text">Exercise 1 - Geospatial Data Wrangling</span></a>
+ <span class="dropdown-text">Exercise 1A - Geospatial Data Wrangling</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01b.html">
- <span class="dropdown-text">Exercise 1 - Choropleth Mapping</span></a>
+ <span class="dropdown-text">Exercise 1B - Choropleth Mapping</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02a.html">
- <span class="dropdown-text">Exercise 2 - 1st Order spatial point pattern analysis methods</span></a>
+ <span class="dropdown-text">Exercise 2A - 1st Order spatial point pattern analysis methods</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02b.html">
- <span class="dropdown-text">Exercise 2 - 2nd Order spatial point pattern analysis methods</span></a>
+ <span class="dropdown-text">Exercise 2B - 2nd Order spatial point pattern analysis methods</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html">
- <span class="dropdown-text">Exercise 3 - Spatio-Temporal Point Patterns Analysis</span></a>
+ <span class="dropdown-text">Exercise 3A - Spatio-Temporal Point Patterns Analysis</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html">
- <span class="dropdown-text">Exercise 4 - Spatial Weights and Applications</span></a>
+ <span class="dropdown-text">Exercise 4A - Spatial Weights and Applications</span></a>
   </li>  
     </ul>
   </li>
@@ -224,9 +225,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#spatio-temporal-point-patterns-analysis" id="toc-spatio-temporal-point-patterns-analysis" class="nav-link active" data-scroll-target="#spatio-temporal-point-patterns-analysis">Spatio-Temporal Point Patterns Analysis</a>
-  <ul class="collapse">
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">1.Overview</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">1.Overview</a></li>
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">2. Data</a></li>
   <li><a href="#installing-and-loading-packages" id="toc-installing-and-loading-packages" class="nav-link" data-scroll-target="#installing-and-loading-packages">3. Installing and Loading packages</a></li>
   <li><a href="#importing-preparing-study-area" id="toc-importing-preparing-study-area" class="nav-link" data-scroll-target="#importing-preparing-study-area">4. Importing &amp; Preparing Study Area</a>
@@ -259,7 +258,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#computing-spatio-temporal-kde-1" id="toc-computing-spatio-temporal-kde-1" class="nav-link" data-scroll-target="#computing-spatio-temporal-kde-1">9.1 Computing spatio-temporal KDE</a></li>
   <li><a href="#plotting-the-output-spatio-temporal-kde" id="toc-plotting-the-output-spatio-temporal-kde" class="nav-link" data-scroll-target="#plotting-the-output-spatio-temporal-kde">9.2 Plotting the output spatio temporal KDE</a></li>
   </ul></li>
-  </ul></li>
   </ul>
 </nav>
     </div>
@@ -268,7 +266,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Hands-on Exercise 3</h1>
+<h1 class="title">Hands-on Exercise 3 - Spatio-Temporal Point Patterns Analysis</h1>
 </div>
 
 
@@ -282,7 +280,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 14, 2024</p>
+    </div>
+  </div>
   
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">September 14, 2025</p>
+    </div>
+  </div>
     
   </div>
   
@@ -291,8 +301,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="spatio-temporal-point-patterns-analysis" class="level1">
-<h1>Spatio-Temporal Point Patterns Analysis</h1>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">1.Overview</h2>
 <p>Spatio-temporal point processes model the occurrence of events across both space and time, capturing phenomena such as disease outbreaks, natural disasters, or species sightings. With the growing availability of geographically and temporally tagged data, analyzing these patterns has become essential across disciplines. This chapter introduces a practical approach to spatio-temporal point pattern analysis using R, showcasing how multiple packages can be integrated to perform robust and intuitive analyses. To illustrate the methodology, it applies these tools to forest fire events recorded in Kepulauan Bangka Belitung, Indonesia, throughout 2023, highlighting key techniques, workflows, and interpretations.</p>
@@ -5581,7 +5589,6 @@ Evaluation
 </div>
 
 
-</section>
 </section>
 </section>
 
