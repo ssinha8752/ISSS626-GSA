@@ -38,7 +38,7 @@ toc: false
 
 ## 1 Welcome to my Geospatial Analytics
 
-Hello there! I am Shubham and this is my homepage for [*ISSS626: Geospatial Analysis and Application*]{.underline}, a course taught by [Prof KAM Tin Seong at Singapore Management University]{.underline} as part of my [Master of IT in Business program (Data Science & Analytics)]{.underline}. This site showcases my coursework, where I apply a range of geospatial techniques to transform, visualize, and analyze spatial data in meaningful ways.
+Hello there! I am ***Shubham Sinha***, and this is my homepage for [*ISSS626: Geospatial Analysis and Application*]{.underline}, a course taught by [*Prof KAM Tin Seong at Singapore Management University*]{.underline} as part of my [Master of IT in Business program (Data Science & Analytics)]{.underline}. This site showcases my coursework, where I apply a range of geospatial techniques to transform, visualize, and analyze spatial data in meaningful ways.
 
 ## 2 Course Overview
 
@@ -48,15 +48,15 @@ Hello there! I am Shubham and this is my homepage for [*ISSS626: Geospatial Anal
 
 ## [Hands-on Exercise](/Hands-on_Ex/)
 
-::: {.listing id="hands_on"}
+::: {#hands_on .listing}
 :::
 
 ## [In-class Exercise](/In-class_Ex/)
 
-::: {.listing id="in_class"}
+::: {#in_class .listing}
 :::
 
 ## [Take-home Exercise](/Take-home_Ex/)
 
-::: {.listing id="take-home"}
+::: {#take-home .listing}
 :::

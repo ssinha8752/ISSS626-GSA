@@ -1,7 +1,7 @@
 ---
-title: "Hands-on Exercise 2 - Second-order Spatial Point Patterns Analysis Methods"
+title: "Hands-on Exercise 2B - Second-order Spatial Point Patterns Analysis Methods"
 author: "Shubham Sinha"
-date: "2024-09-14"
+date: "2024-09-03"
 date-modified: "last-modified"
 ---
 

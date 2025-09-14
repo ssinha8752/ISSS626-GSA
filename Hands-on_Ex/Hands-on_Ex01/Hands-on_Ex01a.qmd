@@ -1,7 +1,7 @@
 ---
 title: "Hands-on Exercise 1A - Geospatial Data Wrangling with R"
 author: "Shubham Sinha"
-date: "2024-09-14"
+date: "2024-08-31"
 date-modified: "last-modified"
 ---
 
