@@ -445,8 +445,9 @@ tm_shape(hunan_Corr) +
     -   The Spearman correlation is based on the ranks of the data rather than their actual values. It measures the strength and direction of a monotonic relationship between two variables.
 
 ::: ```
+:::
+::::
+
 # Reference
 
 Kam, T. S. Geographically Weighted Summary Statistics - gwModel methods. *ISSS626 Geospatial Analytics and Applications.* <https://isss626-ay2025-26aug.netlify.app/in-class_ex/in-class_ex04/in-class_ex04#/title-slide>
-:::
-::::
