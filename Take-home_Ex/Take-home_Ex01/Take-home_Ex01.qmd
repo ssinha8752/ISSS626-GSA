@@ -2,7 +2,7 @@
 title: "Take-home Exercise 1: Geospatial Analytics for Public Good"
 author: "Shubham Sinha"
 date: "September 12, 2025"
-date-modified: "last-modified"
+date-modified: "September 24, 2025"
 execute: 
   eval: true
   echo: true
@@ -263,7 +263,7 @@ Unlike geospatial datasets that directly include latitude and longitude, the ACR
 
 For this project, we will use the OneMap API, Singapore’s official geospatial platform, to geocode each postal code. The API will return the corresponding coordinates, allowing us to plot business locations accurately on a map and perform spatial analyses such as clustering, density estimation, and proximity measurements. This step is essential because spatial operations require coordinate data, not just textual addresses.
 
-1. Combining the data by row:
+**Combining the data by row**
 
 ```{r}
 combined_data <- rbind(FNB_56111,retail_47111,IT_62011)
@@ -282,7 +282,7 @@ if (file.exists("data/rds/combined_data.rds")) {
 }
 ```
 
-2. Extract Unique postal codes from the above extracted data.
+**Extract Unique postal codes from the above extracted data**
 
 ```{r}
 postcodes <- unique(combined_data$postal_code)
@@ -329,7 +329,7 @@ found <- read_rds("data/rds/found.rds")
 not_found <- read_rds("data/rds/not_found.rds")
 ```
 
-Examining the mapping result:
+**Examining the mapping result**
 
 ```{r}
 nrow(found)
@@ -622,8 +622,9 @@ FNBSG_points <- as.data.frame(FNBSG_ppp_km)
 plot(FNBSG_points$x, FNBSG_points$y, main = "Original Points", 
      cex = 0.5, pch = 16, xlab = "x", ylab = "y")
 ```
-
+::: callout-note
 The KDE plots show high-density points in central regions like Downtown Core, Orchard, and Marina Bay. There are also secondary clusters in regional centers like Tampines and Jurong East.
+:::
 
 #### First Order SPPA at Planning Area
 
@@ -776,9 +777,8 @@ Perform CSR Test with G-function
 
 Null and Alternative Hypotheses:
 
-H0 = The nearest neighbor distances of FNB businesses in Downtown Core are randomly distributed.
-
-H1 = The nearest neighbor distances of FNB businesses in Downtown Core are not randomly distributed
+- H0 = The nearest neighbor distances of FNB businesses in Downtown Core are randomly distributed.
+- H1 = The nearest neighbor distances of FNB businesses in Downtown Core are not randomly distributed
 
 Significance Level: A 95% confidence level will be used
 
@@ -796,11 +796,9 @@ plot(G_DC.csr, main="G-function CSR Test: Downtown Core")
 Statistical Conclusion
 
 The spatial distribution of food and beverage outlets in Singapore’s Downtown Core significantly deviates from what would be expected under Complete Spatial Randomness (CSR). This is evident as the observed G-function consistently lies above both the theoretical CSR curve and the simulation envelope, which represents the expected range of variation under random placement. This upward deviation indicates statistically significant clustering, meaning outlets are located closer to one another than a random distribution would suggest. Such clustering is likely influenced by strategic urban planning, concentrated commercial demand, and high pedestrian traffic—factors typical of dense city centers that encourage co-location and competitive proximity.
-
-
 :::
 
-Compute L-function estimation
+**Compute L-function estimation**
 
 ```{r}
 L_DC = Lest(FNB_DC_ppp, correction = "Ripley")
@@ -810,9 +808,8 @@ plot(L_DC, . -r ~ r, ylab= "L(d)-r", xlab = "d(m)", main="L-function: Downtown C
 
 Perform CSR Test with L-function Null and Alternative Hypotheses:
 
-H0 = The distribution of FNB businesses in Downtown Core are randomly distributed.
-
-H1 = The distribution of FNB businesses in Downtown Core are not randomly distributed
+- H0 = The distribution of FNB businesses in Downtown Core are randomly distributed.
+- H1 = The distribution of FNB businesses in Downtown Core are not randomly distributed
 
 Significance Level: A 95% confidence level will be used
 
@@ -849,10 +846,9 @@ G_TP.csr <- envelope(FNB_TP_ppp, Gest, rank=1, nsim = 99)
 par(bg = "#f6f6f6")
 plot(G_TP.csr, main="G-function CSR Test: Geylang")
 ```
-The spatial arrangement of outlets in Geylang demonstrates significant clustering, as the observed distribution consistently exceeds the expected range under complete spatial randomness. This suggests that businesses are intentionally concentrated, likely influenced by local planning, consumer demand, and shared infrastructure, making proximity a strategic advantage in this suburban commercial hub.
 
 
-Compute L-function estimation
+**Compute L-function estimation**
 
 ```{r}
 L_TP = Lest(FNB_TP_ppp, correction = "Ripley")
@@ -871,17 +867,21 @@ L_TP.csr <- envelope(FNB_TP_ppp, Lest, nsim = 99, rank = 1, glocal=TRUE)
 par(bg = "#f6f6f6")
 plot(L_TP.csr, . - r ~ r, xlab="d", ylab="L(d)-r", main="L-function CSR Test: Geylang")
 ```
-The spatial pattern of outlets in Geylang exhibits significant clustering, as the observed distribution consistently exceeds the expected range under complete spatial randomness. This suggests that businesses are intentionally concentrated, likely influenced by local planning policies, consumer behavior, and shared infrastructure—factors that promote proximity and commercial synergy in suburban retail environments
 
-##### Findings
+::: callout-note
+The spatial pattern of outlets in Geylang exhibits significant clustering, as the observed distribution consistently exceeds the expected range under complete spatial randomness. This suggests that businesses are intentionally concentrated, likely influenced by local planning policies, consumer behavior, and shared infrastructure—factors that promote proximity and commercial synergy in suburban retail environments
+:::
+
+#### Findings
 
 The spatial analysis reveals that Food and Beverage (FNB) businesses in Singapore exhibit strong clustering patterns at multiple scales:
 
 Global Level:
 There is clear evidence of significant clustering across Singapore, indicating that FNB outlets are not randomly distributed but tend to concentrate in commercially active zones.
-Regional Level:
 
+Regional Level:
 All three major planning areas show distinct clustering characteristics:
+
 - Downtown Core:
 Displays intensive micro-clustering, especially in the Central Business District, where outlets are tightly packed within short distances—likely driven by high pedestrian volumes and dense commercial zoning.
 
@@ -970,7 +970,7 @@ par(bg = "#f6f6f6")
 plot(retail_m_ppp, main = "Retail Business Entities Registered by Month")
 ```
 
-Compute Spatial-temporal KDE
+#### Compute Spatial-temporal KDE
 
 ```{r}
 retail_m_ppp_km <- rescale.ppp(retail_m_ppp, 1000, "km")
@@ -1091,6 +1091,14 @@ These six monthly L-function plots show how spatial relationships among entities
 :::
 
 
+#### Findings 
+
+The retail trade sector in Singapore demonstrates remarkable spatial stability and strategic clustering throughout the first half of 2025. Analysis reveals that retail establishments maintain consistent clustering patterns across all six months, with Clark-Evans R values consistently ranging between 0.61-0.78, all statistically significant (p < 0.05). This temporal consistency indicates that retail location decisions are driven by long-term strategic factors rather than short-term market fluctuations. The sector exhibits a clear hierarchical spatial organization, with primary clusters concentrated in the Central Region's established shopping districts and secondary clusters emerging in regional centers like Tampines and Jurong East, supporting Singapore's polycentric development model. Retail businesses show strong preference for locations near transportation nodes and in mixed-use developments, optimizing for pedestrian accessibility and shared customer traffic.
+
+Retail businesses maintain stable, statistically significant clustering patterns (R = 0.61-0.78) across all six months, demonstrating strategic co-location behavior focused on transportation nodes and established commercial corridors, with a clear hierarchical distribution from central business districts to regional centers.
+
+
+
 ### Information Technology
 
 #### Geospatial Data Wrangling
@@ -1165,10 +1173,11 @@ plot(density(IT_non_DC_ppp_km,
              kernel="gaussian"),
      main="IT Entities - Outside Downtown Core (PPL)")
 ```
-
+::: callout-note
 Interpretation: Look for hotspots in the CBD vs outside. High intensity in CBD would indicate tech hubs like Raffles Place, Marina Bay, One-North.
+:::
 
-Second-Order SPPA G-function
+#### Second-Order SPPA G-function
 
 ```{r}
 # Downtown Core
@@ -1182,9 +1191,11 @@ par(bg="#f6f6f6")
 plot(G_n_DC_IT, xlim=c(0,500))
 ```
 
+::: callout-note
 This plot compares the observed spatial distribution of IT businesses in the Downtown Core to a theoretical random pattern. The black curve rises more steeply than the red dashed line, especially at shorter distances, indicating that businesses are located closer together than expected under complete spatial randomness. This suggests significant clustering, likely driven by proximity to infrastructure, talent, and commercial demand. The pattern reflects strategic co-location behavior typical of high-density urban tech ecosystems.
+:::
 
-CSR Test with G-function
+**CSR Test with G-function**
 
 ```{r}
 set.seed(1234)
@@ -1195,13 +1206,14 @@ plot(G_DC_IT.csr)
 G_n_DC_IT.csr <- envelope(IT_non_DC_ppp, Gest, rank = 1, nsim = 99)
 plot(G_n_DC_IT.csr)
 ```
+
+::: callout-note
 This plot visually tests whether the spatial distribution of IT businesses in the Downtown Core deviates from complete spatial randomness. The solid black curve represents the actual observed pattern, while the dashed red line shows the theoretical expectation under randomness. The shaded gray region and accompanying curves define a simulation envelope—essentially a confidence band based on randomized scenarios. Since the observed curve lies above both the theoretical line and the envelope at shorter distances, it indicates statistically significant clustering. This suggests that IT firms tend to locate close to one another, likely to leverage shared infrastructure, talent pools, and business synergies typical of high-density urban tech zones.
+:::
 
 
-
-L-function
+**L-function**
 ```{r}
-#| label: it-l-function-optimized
 #| warning: false
 #| message: false
 
@@ -1218,7 +1230,7 @@ These side-by-side plots compare spatial clustering of IT businesses inside and 
 
 
 
-CSR Test with L-function + Interactive Plot
+**CSR Test with L-function + Interactive Plot**
 
 ```{r}
 set.seed(1234)
@@ -1261,7 +1273,15 @@ interactive_plot <- plot_ly(L_df, x = ~r) %>%
 interactive_plot
 ```
 
-This plot shows the spatial distribution of IT businesses across a large area using the L-function. The observed curve rises well above the theoretical expectation between 0 and 3000 meters, indicating strong clustering at short to mid-range distances. Beyond 3500 meters, the curve dips below the confidence interval, suggesting dispersion or regular spacing at larger scales. This pattern implies that IT firms tend to concentrate in specific hubs but avoid overlapping across broader regions. The dual behavior reflects both localized agglomeration and strategic spacing across the urban landscape.
+::: callout-note
+This plot above shows the spatial distribution of IT businesses across a large area using the L-function. The observed curve rises well above the theoretical expectation between 0 and 3000 meters, indicating strong clustering at short to mid-range distances. Beyond 3500 meters, the curve dips below the confidence interval, suggesting dispersion or regular spacing at larger scales. This pattern implies that IT firms tend to concentrate in specific hubs but avoid overlapping across broader regions. The dual behavior reflects both localized agglomeration and strategic spacing across the urban landscape.
+:::
+
+#### Findings 
+
+The IT sector exhibits a sophisticated dual spatial strategy that reflects the diverse needs of different technology business models. The analysis reveals extreme clustering in the Downtown Core (Clark-Evans R = 0.32) alongside significant but different clustering patterns in peripheral areas (R = 0.40). This bifurcated spatial organization shows corporate IT and fintech firms hyper-concentrating in the CBD for proximity to clients and financial institutions, while R&D and innovation-focused companies form specialized clusters in areas like one-north. The sector operates at multiple spatial scales, with CBD clustering occurring at very fine scales (50-150 meters) for maximum interaction density, while peripheral clusters function at larger scales (200-500 meters) suitable for campus-style development. This pattern reflects global trends in tech industry location strategies and demonstrates how different IT business models require distinct spatial environments.
+
+IT businesses display a dual clustering pattern with extreme concentration in the CBD (R = 0.32) for client-facing operations and strategic clustering in peripheral innovation corridors (R = 0.40) for R&D activities, reflecting sector segmentation by business function and spatial needs at different scales.
 
 ## Conclusion
 This geospatial analysis of new business registrations in Singapore for the first half of 2025 reveals that commercial activity is far from randomly distributed, instead following distinct spatial patterns driven by agglomeration economies. Using rigorous spatial point pattern analysis, including Clark-Evans tests and KDE, the study moves beyond simple mapping to uncover why businesses locate where they do and the implications for urban planning. The findings demonstrate that business clustering is a consistent feature across sectors, reflecting strategic location decisions that maximize access to customers, infrastructure, and complementary services.
@@ -1287,6 +1307,17 @@ Understanding when businesses emerge is just as powerful as knowing where. Weekl
 
 3. Multi-Type Point Pattern Analysis
 This adds a layer of relational intelligence. By analyzing how different business types interact spatially (e.g., IT firms clustering near F&B outlets), you can uncover ecosystem dynamics—valuable for designing mixed-use developments, optimizing tenant mixes, or supporting innovation districts. It’s especially relevant in Singapore’s compact urban fabric where synergy matters.
+
+
+## Reference
+
+1. First-order Spatial Point Patterns Analysis Methods - https://r4gdsa.netlify.app/chap04.html
+
+2. 2nd Order Spatial Point Patterns Analysis Methods - 
+https://r4gdsa.netlify.app/chap05.html
+
+3. Spatio-Temporal Point Patterns Analysis - https://r4gdsa.netlify.app/chap06.html
+
 
 
 
