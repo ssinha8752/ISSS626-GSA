@@ -324,3 +324,134 @@ Since the observed Moran's I value is significantly greater than the bulk of the
 There is significant positive spatial autocorrelation in the GDP per capita (GDPPC) across regions, as indicated by the Moran's I test. This suggests that regions with similar GDPPC values are more likely to be geographically clustered.
 
 :::
+
+## Global Measures of Spatial Autocorrelation: Geary's C
+
+In this section, we will perform Geary's C statistics testing by using appropriate functions of **spdep** package.
+
+### Geary's C test
+
+Another popular index of global spatial autocorrelation is Geary’s C which is a cousin to the Moran’s I.
+
+::: callout-note
+
+Geary’s C, also referred to as Geary’s contiguity ratio, is a statistical measure used to evaluate spatial autocorrelation within a dataset. Unlike Moran’s I, it is more sensitive to local differences, making it especially useful for detecting subtle spatial patterns in smaller geographic areas.
+
+**Understanding Geary’s C Values:**
+
+- **Range and Expectation**: Geary’s C ranges from 0 to 2, with an expected value of 1 under the null hypothesis of no spatial autocorrelation.
+
+- **Values Less Than 1**: Indicate positive spatial autocorrelation—neighboring areas tend to have similar attribute values.
+
+- **Value Equal to 1**: Suggests no spatial autocorrelation, implying a random spatial distribution of values.
+
+- **Values Greater Than 1**: Reflect negative spatial autocorrelation—neighboring areas are more likely to have contrasting values.
+
+
+:::
+
+>Moran’s I and Geary’s C are both global measures of spatial autocorrelation, but they differ in how they capture spatial relationships. Moran’s I relies on standardized spatial covariance to detect overall clustering patterns
+>
+>while Geary’s C uses the sum of squared differences between neighboring values, making it more sensitive to local variations. This distinction allows Geary’s C to uncover finer spatial nuances that Moran’s I might overlook.
+
+To test for spatial autocorrelation in GDP per capita (GDPPC) across regions, we can apply Geary’s C using the `geary.test()` function from the **spdep** package in R.  
+- **Null Hypothesis (H₀)**: No spatial autocorrelation exists—Geary’s C equals 1.  
+- **Alternative Hypothesis (H₁)**: Positive spatial autocorrelation is present—Geary’s C is less than 1.  
+
+We use a **significance level of α = 0.05**, meaning results are considered statistically significant if the p-value is below 0.05.
+
+
+
+```{r}
+geary.test(hunan$GDPPC, listw=rswm_q)
+```
+::: callout-note
+**Question: What statistical conclusion can you draw from the output above?**
+
+- The value of Geary's C statistic is 0.6907, which is less than the expected value of 1.0. This indicates positive spatial autocorrelation, meaning regions with similar GDP per capita (GDPPC) values tend to be geographically close to each other.
+
+- The p-value is 0.0001526, which is much smaller than our alpha value of 0.05. This provides strong evidence against the null hypothesis of no spatial autocorrelation.
+
+Therefore, we will reject the null hypothesis at 95% confidence interval because the p-value is smaller than our chosen alpha value.
+:::
+
+### Computing Monte Carlo Geary's C
+
+Similar to Moran’s I, it is best to test the statistical significance of Geary’s C using a Monte Carlo simulation.
+
+To perform permutation test for Geary's C statistic by using geary.mc() of **spdep**:
+
+```{r}
+set.seed(1234)
+bperm=geary.mc(hunan$GDPPC,
+               listw=rswm_q,
+               nsim=999)
+bperm
+```
+
+::: callout-note
+
+**Question: What statistical conclusion can you draw from the output above?**
+
+- The value of Geary's C statistic is 0.6907, which is less than the expected value of 1.0. This indicates positive spatial autocorrelation, meaning regions with similar GDP per capita (GDPPC) values tend to be geographically close to each other.
+
+- The p-value from the Monte Carlo simulation is 0.001, which is much smaller than our alpha value of 0.05. This provides strong evidence against the null hypothesis of no spatial autocorrelation.
+
+Therefore, we will **reject the null hypothesis at 95% confidence** because the p-value is smaller than our chosen alpha value.
+
+:::
+
+### Visualising the Monte Carlo Geary's C
+
+Next, we will plot a histogram to reveal the distribution of the simulated values by using the code block below.
+
+We will first observe the summary report of the Geary's C output before visualizing the plots using `ggplot2` and base R.
+
+
+``` {r}
+# Calculate the mean of the first 999 simulated geary's c values
+mean(bperm$res[1:999])
+```
+
+```{r}
+# Calculate the variance of the first 999 simulated geary's c values
+var(bperm$res[1:999])
+
+summary(bperm$res[1:999])
+```
+::: panel-tabset
+
+#### ggplot2
+
+```{r}
+
+ggplot(data.frame(x = bperm$res), aes(x = x)) +
+  geom_histogram(binwidth = diff(range(bperm$res)) / 20,
+                 color = "black",
+                 fill = "grey") +
+  geom_vline(xintercept = 1,
+             color = "red") +
+  labs(x = "Simulated Geary's C",
+       y = "Frequency",
+       title = "Histogram of Simulated Geary's C Values")
+
+```
+
+#### base R
+```{r}
+hist(bperm$res, freq=TRUE, breaks=20, xlab="Simulated Geary's C")
+abline(v=1, col="red")
+```
+:::
+
+
+::: callout-note
+**Question: What statistical conclusion can you draw from the output above?**
+
+The observed Geary's C value (0.69072) lies outside the range of most simulated values, which are centered around the expected value of 1.0 under the null hypothesis of no spatial autocorrelation. The histogram shows that most of the simulated values of Geary's C are clustered around the mean of 1.0044, with a variance of 0.0074.
+
+Since the observed Geary's C value is significantly lower than the bulk of the simulated values and the p-value from the test is very small (p < 0.05), there is strong evidence against the null hypothesis.
+
+There is significant positive spatial autocorrelation in the GDP per capita (GDPPC) across regions, as indicated by the Geary's C test. This suggests that regions with similar GDPPC values are more likely to be geographically clustered.
+:::
+

@@ -259,6 +259,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#computing-monte-carlo-morans-i" id="toc-computing-monte-carlo-morans-i" class="nav-link" data-scroll-target="#computing-monte-carlo-morans-i"><span class="header-section-number">7.2</span> Computing Monte Carlo Moran’s I</a></li>
   <li><a href="#visualising-monte-carlo-morans-i" id="toc-visualising-monte-carlo-morans-i" class="nav-link" data-scroll-target="#visualising-monte-carlo-morans-i"><span class="header-section-number">7.3</span> Visualising Monte Carlo Moran’s I</a></li>
   </ul></li>
+  <li><a href="#global-measures-of-spatial-autocorrelation-gearys-c" id="toc-global-measures-of-spatial-autocorrelation-gearys-c" class="nav-link" data-scroll-target="#global-measures-of-spatial-autocorrelation-gearys-c"><span class="header-section-number">8</span> Global Measures of Spatial Autocorrelation: Geary’s C</a>
+  <ul class="collapse">
+  <li><a href="#gearys-c-test" id="toc-gearys-c-test" class="nav-link" data-scroll-target="#gearys-c-test"><span class="header-section-number">8.1</span> Geary’s C test</a></li>
+  <li><a href="#computing-monte-carlo-gearys-c" id="toc-computing-monte-carlo-gearys-c" class="nav-link" data-scroll-target="#computing-monte-carlo-gearys-c"><span class="header-section-number">8.2</span> Computing Monte Carlo Geary’s C</a></li>
+  <li><a href="#visualising-the-monte-carlo-gearys-c" id="toc-visualising-the-monte-carlo-gearys-c" class="nav-link" data-scroll-target="#visualising-the-monte-carlo-gearys-c"><span class="header-section-number">8.3</span> Visualising the Monte Carlo Geary’s C</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -785,6 +791,195 @@ Note
 <p>The observed Moran’s I value (0.30075) lies outside the range of most simulated values, indicating that it is an outlier compared to the expected distribution under the null hypothesis, which are centered around the expected value of 0.0 under the null hypothesis of no spatial autocorrelation. The histogram shows that most of the simulated values of Moran’s I are clustered around the mean of -0.01504572, with a variance of 0.004371574.</p>
 <p>Since the observed Moran’s I value is significantly greater than the bulk of the simulated values and given the p-value from the test is very small (p &lt; 0.05), there is strong evidence against the null hypothesis.</p>
 <p>There is significant positive spatial autocorrelation in the GDP per capita (GDPPC) across regions, as indicated by the Moran’s I test. This suggests that regions with similar GDPPC values are more likely to be geographically clustered.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="global-measures-of-spatial-autocorrelation-gearys-c" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="global-measures-of-spatial-autocorrelation-gearys-c"><span class="header-section-number">8</span> Global Measures of Spatial Autocorrelation: Geary’s C</h2>
+<p>In this section, we will perform Geary’s C statistics testing by using appropriate functions of <strong>spdep</strong> package.</p>
+<section id="gearys-c-test" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="gearys-c-test"><span class="header-section-number">8.1</span> Geary’s C test</h3>
+<p>Another popular index of global spatial autocorrelation is Geary’s C which is a cousin to the Moran’s I.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Geary’s C, also referred to as Geary’s contiguity ratio, is a statistical measure used to evaluate spatial autocorrelation within a dataset. Unlike Moran’s I, it is more sensitive to local differences, making it especially useful for detecting subtle spatial patterns in smaller geographic areas.</p>
+<p><strong>Understanding Geary’s C Values:</strong></p>
+<ul>
+<li><p><strong>Range and Expectation</strong>: Geary’s C ranges from 0 to 2, with an expected value of 1 under the null hypothesis of no spatial autocorrelation.</p></li>
+<li><p><strong>Values Less Than 1</strong>: Indicate positive spatial autocorrelation—neighboring areas tend to have similar attribute values.</p></li>
+<li><p><strong>Value Equal to 1</strong>: Suggests no spatial autocorrelation, implying a random spatial distribution of values.</p></li>
+<li><p><strong>Values Greater Than 1</strong>: Reflect negative spatial autocorrelation—neighboring areas are more likely to have contrasting values.</p></li>
+</ul>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Moran’s I and Geary’s C are both global measures of spatial autocorrelation, but they differ in how they capture spatial relationships. Moran’s I relies on standardized spatial covariance to detect overall clustering patterns</p>
+<p>while Geary’s C uses the sum of squared differences between neighboring values, making it more sensitive to local variations. This distinction allows Geary’s C to uncover finer spatial nuances that Moran’s I might overlook.</p>
+</blockquote>
+<p>To test for spatial autocorrelation in GDP per capita (GDPPC) across regions, we can apply Geary’s C using the <code>geary.test()</code> function from the <strong>spdep</strong> package in R.<br>
+- <strong>Null Hypothesis (H₀)</strong>: No spatial autocorrelation exists—Geary’s C equals 1.<br>
+- <strong>Alternative Hypothesis (H₁)</strong>: Positive spatial autocorrelation is present—Geary’s C is less than 1.</p>
+<p>We use a <strong>significance level of α = 0.05</strong>, meaning results are considered statistically significant if the p-value is below 0.05.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">geary.test</span>(hunan<span class="sc">$</span>GDPPC, <span class="at">listw=</span>rswm_q)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Geary C test under randomisation
+
+data:  hunan$GDPPC 
+weights: rswm_q   
+
+Geary C statistic standard deviate = 3.6108, p-value = 0.0001526
+alternative hypothesis: Expectation greater than statistic
+sample estimates:
+Geary C statistic       Expectation          Variance 
+        0.6907223         1.0000000         0.0073364 </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question: What statistical conclusion can you draw from the output above?</strong></p>
+<ul>
+<li><p>The value of Geary’s C statistic is 0.6907, which is less than the expected value of 1.0. This indicates positive spatial autocorrelation, meaning regions with similar GDP per capita (GDPPC) values tend to be geographically close to each other.</p></li>
+<li><p>The p-value is 0.0001526, which is much smaller than our alpha value of 0.05. This provides strong evidence against the null hypothesis of no spatial autocorrelation.</p></li>
+</ul>
+<p>Therefore, we will reject the null hypothesis at 95% confidence interval because the p-value is smaller than our chosen alpha value.</p>
+</div>
+</div>
+</section>
+<section id="computing-monte-carlo-gearys-c" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="computing-monte-carlo-gearys-c"><span class="header-section-number">8.2</span> Computing Monte Carlo Geary’s C</h3>
+<p>Similar to Moran’s I, it is best to test the statistical significance of Geary’s C using a Monte Carlo simulation.</p>
+<p>To perform permutation test for Geary’s C statistic by using geary.mc() of <strong>spdep</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>bperm<span class="ot">=</span><span class="fu">geary.mc</span>(hunan<span class="sc">$</span>GDPPC,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">listw=</span>rswm_q,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">nsim=</span><span class="dv">999</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>bperm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Monte-Carlo simulation of Geary C
+
+data:  hunan$GDPPC 
+weights: rswm_q  
+number of simulations + 1: 1000 
+
+statistic = 0.69072, observed rank = 1, p-value = 0.001
+alternative hypothesis: greater</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question: What statistical conclusion can you draw from the output above?</strong></p>
+<ul>
+<li><p>The value of Geary’s C statistic is 0.6907, which is less than the expected value of 1.0. This indicates positive spatial autocorrelation, meaning regions with similar GDP per capita (GDPPC) values tend to be geographically close to each other.</p></li>
+<li><p>The p-value from the Monte Carlo simulation is 0.001, which is much smaller than our alpha value of 0.05. This provides strong evidence against the null hypothesis of no spatial autocorrelation.</p></li>
+</ul>
+<p>Therefore, we will <strong>reject the null hypothesis at 95% confidence</strong> because the p-value is smaller than our chosen alpha value.</p>
+</div>
+</div>
+</section>
+<section id="visualising-the-monte-carlo-gearys-c" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="visualising-the-monte-carlo-gearys-c"><span class="header-section-number">8.3</span> Visualising the Monte Carlo Geary’s C</h3>
+<p>Next, we will plot a histogram to reveal the distribution of the simulated values by using the code block below.</p>
+<p>We will first observe the summary report of the Geary’s C output before visualizing the plots using <code>ggplot2</code> and base R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the mean of the first 999 simulated geary's c values</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(bperm<span class="sc">$</span>res[<span class="dv">1</span><span class="sc">:</span><span class="dv">999</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.004402</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the variance of the first 999 simulated geary's c values</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(bperm<span class="sc">$</span>res[<span class="dv">1</span><span class="sc">:</span><span class="dv">999</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.007436493</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bperm<span class="sc">$</span>res[<span class="dv">1</span><span class="sc">:</span><span class="dv">999</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.7142  0.9502  1.0052  1.0044  1.0595  1.2722 </code></pre>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">ggplot2</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">base R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> bperm<span class="sc">$</span>res), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fu">diff</span>(<span class="fu">range</span>(bperm<span class="sc">$</span>res)) <span class="sc">/</span> <span class="dv">20</span>,</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"grey"</span>) <span class="sc">+</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span>,</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Simulated Geary's C"</span>,</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Histogram of Simulated Geary's C Values"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(bperm<span class="sc">$</span>res, <span class="at">freq=</span><span class="cn">TRUE</span>, <span class="at">breaks=</span><span class="dv">20</span>, <span class="at">xlab=</span><span class="st">"Simulated Geary's C"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">1</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question: What statistical conclusion can you draw from the output above?</strong></p>
+<p>The observed Geary’s C value (0.69072) lies outside the range of most simulated values, which are centered around the expected value of 1.0 under the null hypothesis of no spatial autocorrelation. The histogram shows that most of the simulated values of Geary’s C are clustered around the mean of 1.0044, with a variance of 0.0074.</p>
+<p>Since the observed Geary’s C value is significantly lower than the bulk of the simulated values and the p-value from the test is very small (p &lt; 0.05), there is strong evidence against the null hypothesis.</p>
+<p>There is significant positive spatial autocorrelation in the GDP per capita (GDPPC) across regions, as indicated by the Geary’s C test. This suggests that regions with similar GDPPC values are more likely to be geographically clustered.</p>
 </div>
 </div>
 
