@@ -455,3 +455,87 @@ Since the observed Geary's C value is significantly lower than the bulk of the s
 There is significant positive spatial autocorrelation in the GDP per capita (GDPPC) across regions, as indicated by the Geary's C test. This suggests that regions with similar GDPPC values are more likely to be geographically clustered.
 :::
 
+## Spatial Correlogram
+
+Spatial correlograms are useful for examining patterns of spatial autocorrelation in your data or model residuals. They show how the correlation between pairs of spatial observations changes as the distance (lag) between them increases. Essentially, they are plots of a spatial autocorrelation index (such as Moran's I or Geary's C) against distance.
+
+While correlograms are not as fundamental as variograms—a core concept in geostatistics—they serve as powerful exploratory and descriptive tools. In fact, for examining spatial patterns, correlograms can provide more detailed insights than variograms.
+
+
+### Compute Moran's I Correlogram
+
+In the code below, we use the [`sp.correlogram()`](https://r-spatial.github.io/spdep/reference/sp.correlogram.html) function from the **spdep** package to compute a 6-lag spatial correlogram for GDP per capita (GDPPC). This function calculates global spatial autocorrelation using Moran's I. The base R **plot()** function is then used to visualize the correlogram.
+
+```{r}
+MI_corr <- sp.correlogram(wm_q,
+                          hunan$GDPPC,
+                          order = 6,
+                          method = "I",
+                          style = "W")
+plot(MI_corr)
+```
+::: callout-tip
+However, simply plotting the output does not provide a complete interpretation because not all autocorrelation values may be statistically significant. Therefore, it is important to examine the full analysis report by printing the results.
+:::
+
+
+```{r}
+print(MI_corr)
+```
+
+::: callout-note
+**Question: What statistical observation can you draw from the plot above?**
+
+The spatial correlogram illustrates how Moran’s I values shift across varying distance lags, revealing how GDP per capita (GDPPC) is spatially correlated as the distance between counties increases.
+
+1. **Strong Positive Autocorrelation at Short Ranges**  
+   - At lags 1 and 2, Moran’s I values are notably high (0.30075 and 0.20601), with p-values below 0.001. This indicates that counties with similar GDPPC values are tightly clustered at close distances.
+
+2. **Weak or No Autocorrelation at Moderate Ranges**  
+   - Lag 3 shows a weaker Moran’s I of 0.06683, still statistically significant (p < 0.05), suggesting mild clustering. At lag 4, the value drops to 0.02995 with a non-significant p-value (0.226), implying no meaningful spatial pattern at this range.
+
+3. **Clear Negative Autocorrelation at Longer Ranges**  
+   - Lags 5 and 6 yield negative Moran’s I values (-0.15305 and -0.11871), with highly significant p-values (p < 0.001 and p < 0.01). This suggests that counties with contrasting GDPPC values are more likely to be located farther apart.
+
+:::
+
+### Compute Geary's C Correlogram and Plot
+
+In the code chunk below, **sp.correlogram()** of **spdep** package is used to compute a 6-lag spatial correlogram of GDPPC. The global spatial autocorrelation used in Geary’s C. The plot() of base Graph is then used to plot the output.
+
+```{r}
+GC_corr <- sp.correlogram(wm_q,
+                          hunan$GDPPC,
+                          order=6,
+                          method="C",
+                          style="W")
+plot(GC_corr)
+```
+
+Similar to the previous step, we will print out the analysis report by using the code block below.
+
+```{r}
+print(GC_corr)
+```
+::: callout-note
+**Question: What statistical observation can you draw from the plot above?**
+
+The spatial correlogram using Geary’s C reveals how GDP per capita (GDPPC) values relate across varying distances, helping us understand clustering or dispersion patterns over space.
+
+1. **Strong Positive Autocorrelation at Short Distances**  
+   - Geary’s C values at lags 1 and 2 are 0.6907 and 0.7630, both significantly below 1. This indicates that counties with similar GDPPC values tend to be located near each other (p < 0.05).
+
+2. **No Meaningful Autocorrelation at Mid-Range Distances**  
+   - At lags 3 and 4, Geary’s C values approach 1.0 (0.9397 and 1.0098), and their confidence intervals include 1. This suggests no statistically significant spatial autocorrelation (p > 0.05).
+
+3. **Clear Negative Autocorrelation at Longer Distances**  
+   - Lag 5 shows a Geary’s C value of 1.2008, which is significantly above 1 and outside the confidence interval. This reflects a strong negative spatial autocorrelation, meaning dissimilar GDPPC values are more likely to be found farther apart (p < 0.05).
+
+4. **No Significant Pattern at the Furthest Distance**  
+   - At lag 6, the Geary’s C value is 1.0773, slightly above 1. However, since the confidence interval includes 1, there is no significant spatial autocorrelation at this distance (p > 0.05).
+
+
+
+:::
+
+

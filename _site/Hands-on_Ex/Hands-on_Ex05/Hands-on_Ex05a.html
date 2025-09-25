@@ -265,6 +265,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#computing-monte-carlo-gearys-c" id="toc-computing-monte-carlo-gearys-c" class="nav-link" data-scroll-target="#computing-monte-carlo-gearys-c"><span class="header-section-number">8.2</span> Computing Monte Carlo Geary’s C</a></li>
   <li><a href="#visualising-the-monte-carlo-gearys-c" id="toc-visualising-the-monte-carlo-gearys-c" class="nav-link" data-scroll-target="#visualising-the-monte-carlo-gearys-c"><span class="header-section-number">8.3</span> Visualising the Monte Carlo Geary’s C</a></li>
   </ul></li>
+  <li><a href="#spatial-correlogram" id="toc-spatial-correlogram" class="nav-link" data-scroll-target="#spatial-correlogram"><span class="header-section-number">9</span> Spatial Correlogram</a>
+  <ul class="collapse">
+  <li><a href="#compute-morans-i-correlogram" id="toc-compute-morans-i-correlogram" class="nav-link" data-scroll-target="#compute-morans-i-correlogram"><span class="header-section-number">9.1</span> Compute Moran’s I Correlogram</a></li>
+  <li><a href="#compute-gearys-c-correlogram-and-plot" id="toc-compute-gearys-c-correlogram-and-plot" class="nav-link" data-scroll-target="#compute-gearys-c-correlogram-and-plot"><span class="header-section-number">9.2</span> Compute Geary’s C Correlogram and Plot</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -980,6 +985,155 @@ Note
 <p>The observed Geary’s C value (0.69072) lies outside the range of most simulated values, which are centered around the expected value of 1.0 under the null hypothesis of no spatial autocorrelation. The histogram shows that most of the simulated values of Geary’s C are clustered around the mean of 1.0044, with a variance of 0.0074.</p>
 <p>Since the observed Geary’s C value is significantly lower than the bulk of the simulated values and the p-value from the test is very small (p &lt; 0.05), there is strong evidence against the null hypothesis.</p>
 <p>There is significant positive spatial autocorrelation in the GDP per capita (GDPPC) across regions, as indicated by the Geary’s C test. This suggests that regions with similar GDPPC values are more likely to be geographically clustered.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="spatial-correlogram" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="spatial-correlogram"><span class="header-section-number">9</span> Spatial Correlogram</h2>
+<p>Spatial correlograms are useful for examining patterns of spatial autocorrelation in your data or model residuals. They show how the correlation between pairs of spatial observations changes as the distance (lag) between them increases. Essentially, they are plots of a spatial autocorrelation index (such as Moran’s I or Geary’s C) against distance.</p>
+<p>While correlograms are not as fundamental as variograms—a core concept in geostatistics—they serve as powerful exploratory and descriptive tools. In fact, for examining spatial patterns, correlograms can provide more detailed insights than variograms.</p>
+<section id="compute-morans-i-correlogram" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="compute-morans-i-correlogram"><span class="header-section-number">9.1</span> Compute Moran’s I Correlogram</h3>
+<p>In the code below, we use the <a href="https://r-spatial.github.io/spdep/reference/sp.correlogram.html"><code>sp.correlogram()</code></a> function from the <strong>spdep</strong> package to compute a 6-lag spatial correlogram for GDP per capita (GDPPC). This function calculates global spatial autocorrelation using Moran’s I. The base R <strong>plot()</strong> function is then used to visualize the correlogram.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>MI_corr <span class="ot">&lt;-</span> <span class="fu">sp.correlogram</span>(wm_q,</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>                          hunan<span class="sc">$</span>GDPPC,</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">order =</span> <span class="dv">6</span>,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">method =</span> <span class="st">"I"</span>,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">style =</span> <span class="st">"W"</span>)</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(MI_corr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>However, simply plotting the output does not provide a complete interpretation because not all autocorrelation values may be statistically significant. Therefore, it is important to examine the full analysis report by printing the results.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(MI_corr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Spatial correlogram for hunan$GDPPC 
+method: Moran's I
+         estimate expectation   variance standard deviate Pr(I) two sided    
+1 (88)  0.3007500  -0.0114943  0.0043484           4.7351       2.189e-06 ***
+2 (88)  0.2060084  -0.0114943  0.0020962           4.7505       2.029e-06 ***
+3 (88)  0.0668273  -0.0114943  0.0014602           2.0496        0.040400 *  
+4 (88)  0.0299470  -0.0114943  0.0011717           1.2107        0.226015    
+5 (88) -0.1530471  -0.0114943  0.0012440          -4.0134       5.984e-05 ***
+6 (88) -0.1187070  -0.0114943  0.0016791          -2.6164        0.008886 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question: What statistical observation can you draw from the plot above?</strong></p>
+<p>The spatial correlogram illustrates how Moran’s I values shift across varying distance lags, revealing how GDP per capita (GDPPC) is spatially correlated as the distance between counties increases.</p>
+<ol type="1">
+<li><strong>Strong Positive Autocorrelation at Short Ranges</strong>
+<ul>
+<li>At lags 1 and 2, Moran’s I values are notably high (0.30075 and 0.20601), with p-values below 0.001. This indicates that counties with similar GDPPC values are tightly clustered at close distances.</li>
+</ul></li>
+<li><strong>Weak or No Autocorrelation at Moderate Ranges</strong>
+<ul>
+<li>Lag 3 shows a weaker Moran’s I of 0.06683, still statistically significant (p &lt; 0.05), suggesting mild clustering. At lag 4, the value drops to 0.02995 with a non-significant p-value (0.226), implying no meaningful spatial pattern at this range.</li>
+</ul></li>
+<li><strong>Clear Negative Autocorrelation at Longer Ranges</strong>
+<ul>
+<li>Lags 5 and 6 yield negative Moran’s I values (-0.15305 and -0.11871), with highly significant p-values (p &lt; 0.001 and p &lt; 0.01). This suggests that counties with contrasting GDPPC values are more likely to be located farther apart.</li>
+</ul></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="compute-gearys-c-correlogram-and-plot" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="compute-gearys-c-correlogram-and-plot"><span class="header-section-number">9.2</span> Compute Geary’s C Correlogram and Plot</h3>
+<p>In the code chunk below, <strong>sp.correlogram()</strong> of <strong>spdep</strong> package is used to compute a 6-lag spatial correlogram of GDPPC. The global spatial autocorrelation used in Geary’s C. The plot() of base Graph is then used to plot the output.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>GC_corr <span class="ot">&lt;-</span> <span class="fu">sp.correlogram</span>(wm_q,</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>                          hunan<span class="sc">$</span>GDPPC,</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">order=</span><span class="dv">6</span>,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">method=</span><span class="st">"C"</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">style=</span><span class="st">"W"</span>)</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(GC_corr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Similar to the previous step, we will print out the analysis report by using the code block below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(GC_corr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Spatial correlogram for hunan$GDPPC 
+method: Geary's C
+        estimate expectation  variance standard deviate Pr(I) two sided    
+1 (88) 0.6907223   1.0000000 0.0073364          -3.6108       0.0003052 ***
+2 (88) 0.7630197   1.0000000 0.0049126          -3.3811       0.0007220 ***
+3 (88) 0.9397299   1.0000000 0.0049005          -0.8610       0.3892612    
+4 (88) 1.0098462   1.0000000 0.0039631           0.1564       0.8757128    
+5 (88) 1.2008204   1.0000000 0.0035568           3.3673       0.0007592 ***
+6 (88) 1.0773386   1.0000000 0.0058042           1.0151       0.3100407    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question: What statistical observation can you draw from the plot above?</strong></p>
+<p>The spatial correlogram using Geary’s C reveals how GDP per capita (GDPPC) values relate across varying distances, helping us understand clustering or dispersion patterns over space.</p>
+<ol type="1">
+<li><strong>Strong Positive Autocorrelation at Short Distances</strong>
+<ul>
+<li>Geary’s C values at lags 1 and 2 are 0.6907 and 0.7630, both significantly below 1. This indicates that counties with similar GDPPC values tend to be located near each other (p &lt; 0.05).</li>
+</ul></li>
+<li><strong>No Meaningful Autocorrelation at Mid-Range Distances</strong>
+<ul>
+<li>At lags 3 and 4, Geary’s C values approach 1.0 (0.9397 and 1.0098), and their confidence intervals include 1. This suggests no statistically significant spatial autocorrelation (p &gt; 0.05).</li>
+</ul></li>
+<li><strong>Clear Negative Autocorrelation at Longer Distances</strong>
+<ul>
+<li>Lag 5 shows a Geary’s C value of 1.2008, which is significantly above 1 and outside the confidence interval. This reflects a strong negative spatial autocorrelation, meaning dissimilar GDPPC values are more likely to be found farther apart (p &lt; 0.05).</li>
+</ul></li>
+<li><strong>No Significant Pattern at the Furthest Distance</strong>
+<ul>
+<li>At lag 6, the Geary’s C value is 1.0773, slightly above 1. However, since the confidence interval includes 1, there is no significant spatial autocorrelation at this distance (p &gt; 0.05).</li>
+</ul></li>
+</ol>
 </div>
 </div>
 
