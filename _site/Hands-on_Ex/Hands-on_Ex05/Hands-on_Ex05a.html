@@ -248,6 +248,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#perform-relational-join" id="toc-perform-relational-join" class="nav-link" data-scroll-target="#perform-relational-join"><span class="header-section-number">5.3</span> Perform Relational Join</a></li>
   <li><a href="#visualizing-regional-development-indicator" id="toc-visualizing-regional-development-indicator" class="nav-link" data-scroll-target="#visualizing-regional-development-indicator"><span class="header-section-number">5.4</span> Visualizing Regional Development Indicator</a></li>
   </ul></li>
+  <li><a href="#global-measures-of-spatial-autocorrelation" id="toc-global-measures-of-spatial-autocorrelation" class="nav-link" data-scroll-target="#global-measures-of-spatial-autocorrelation"><span class="header-section-number">6</span> Global Measures of Spatial Autocorrelation</a>
+  <ul class="collapse">
+  <li><a href="#computing-contiguity-spatial-weights" id="toc-computing-contiguity-spatial-weights" class="nav-link" data-scroll-target="#computing-contiguity-spatial-weights"><span class="header-section-number">6.1</span> Computing Contiguity Spatial Weights</a></li>
+  <li><a href="#row-standardised-weights-matrix" id="toc-row-standardised-weights-matrix" class="nav-link" data-scroll-target="#row-standardised-weights-matrix"><span class="header-section-number">6.2</span> Row-standardised Weights Matrix</a></li>
+  </ul></li>
+  <li><a href="#global-measures-of-spatial-autocorrelation-morans-i" id="toc-global-measures-of-spatial-autocorrelation-morans-i" class="nav-link" data-scroll-target="#global-measures-of-spatial-autocorrelation-morans-i"><span class="header-section-number">7</span> Global Measures of Spatial Autocorrelation: Moran’s I</a>
+  <ul class="collapse">
+  <li><a href="#morans-i-test" id="toc-morans-i-test" class="nav-link" data-scroll-target="#morans-i-test"><span class="header-section-number">7.1</span> Moran’s I test</a></li>
+  <li><a href="#computing-monte-carlo-morans-i" id="toc-computing-monte-carlo-morans-i" class="nav-link" data-scroll-target="#computing-monte-carlo-morans-i"><span class="header-section-number">7.2</span> Computing Monte Carlo Moran’s I</a></li>
+  <li><a href="#visualising-monte-carlo-morans-i" id="toc-visualising-monte-carlo-morans-i" class="nav-link" data-scroll-target="#visualising-monte-carlo-morans-i"><span class="header-section-number">7.3</span> Visualising Monte Carlo Moran’s I</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -496,6 +507,284 @@ Note
 <p>The left plot uses equal interval classification to divide GDP per capita (GDPPC) into five evenly spaced ranges, ensuring each class spans the same value range. This method is ideal for continuous datasets like temperature or precipitation and is appreciated for its simplicity and ease of interpretation, especially for nontechnical audiences. However, it can be misleading for skewed datasets, as many data points may cluster in just one or two classes, leaving others sparsely populated or empty.</p>
 <hr>
 <p>In contrast, the right plot applies equal quantile classification, which divides the 88 counties of Hunan into five groups with roughly 17.6 counties each. This approach is useful for highlighting relative rankings, such as identifying the top 20% of counties by GDPPC. While it ensures balanced representation across classes, it can distort the data’s true distribution—counties with vastly different values may end up in the same class, or similar values may be split across different classes, exaggerating differences that aren’t statistically significant.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="global-measures-of-spatial-autocorrelation" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="global-measures-of-spatial-autocorrelation"><span class="header-section-number">6</span> Global Measures of Spatial Autocorrelation</h2>
+<p>In this section, we will compute global spatial autocorrelation statistics and to perform spatial complete randomness test for global spatial autocorrelation.</p>
+<section id="computing-contiguity-spatial-weights" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="computing-contiguity-spatial-weights"><span class="header-section-number">6.1</span> Computing Contiguity Spatial Weights</h3>
+<p>Before we can compute the global spatial autocorrelation statistics, we need to construct a spatial weights of the study area. The spatial weights is used to define the neighbourhood relationships between the geographical units (i.e.&nbsp;county) in the study area.</p>
+<p>In the code block below, the <code>poly2nb()</code> function from the <strong>spdep</strong> package calculates contiguity weight matrices for the study area by identifying regions that share boundaries.</p>
+<p>By default, <code>poly2nb()</code> uses the “Queen” criteria, which considers any shared boundary or corner as a neighbor (equivalent to setting <code>queen = TRUE</code>). If we want to restrict the criteria to shared boundaries only (excluding corners), set <code>queen = FALSE</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>wm_q <span class="ot">&lt;-</span> <span class="fu">poly2nb</span>(hunan,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">queen=</span><span class="cn">TRUE</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(wm_q)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Neighbour list object:
+Number of regions: 88 
+Number of nonzero links: 448 
+Percentage nonzero weights: 5.785124 
+Average number of links: 5.090909 
+Link number distribution:
+
+ 1  2  3  4  5  6  7  8  9 11 
+ 2  2 12 16 24 14 11  4  2  1 
+2 least connected regions:
+30 65 with 1 link
+1 most connected region:
+85 with 11 links</code></pre>
+</div>
+</div>
+<p>The summary report above shows that there are 88 area units in Hunan. The most connected area unit has 11 neighbours. There are two area units with only one neighbours.</p>
+</section>
+<section id="row-standardised-weights-matrix" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="row-standardised-weights-matrix"><span class="header-section-number">6.2</span> Row-standardised Weights Matrix</h3>
+<p>To assign weights to neighboring polygons, we use the equal weight method (style=“W”), where each neighbor receives a weight of 1 divided by the total number of neighbors. These weights are then used to calculate the lagged income values by summing the weighted contributions from adjacent counties.</p>
+<p>This approach is intuitive and simple, making it a common choice for spatial analysis. However, it has a drawback: polygons at the edges of the study area have fewer neighbors, which can distort their lagged values and misrepresent spatial autocorrelation.</p>
+<p>For this example, we’ll stick with style=“W” for clarity and ease of use. Still, it’s worth noting that more robust alternatives like style=“B” exist, which can better handle edge effects and provide more accurate spatial insights.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>rswm_q <span class="ot">&lt;-</span> <span class="fu">nb2listw</span>(wm_q, <span class="at">style=</span><span class="st">"W"</span>, <span class="at">zero.policy =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rswm_q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Characteristics of weights list object:
+Neighbour list object:
+Number of regions: 88 
+Number of nonzero links: 448 
+Percentage nonzero weights: 5.785124 
+Average number of links: 5.090909 
+
+Weights style: W 
+Weights constants summary:
+   n   nn S0       S1       S2
+W 88 7744 88 37.86334 365.9147</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>The input of <a href="https://r-spatial.github.io/spdep/reference/nb2listw.html"><code>nb2listw()</code></a> must be an object of class <strong>nb</strong>. The syntax of the function has two major arguments, namely style and zero.poly.</p></li>
+<li><p><em>style</em> can take values “W”, “B”, “C”, “U”, “minmax” and “S”. B is the basic binary coding, W is row standardised (sums over all links to n), C is globally standardised (sums over all links to n), U is equal to C divided by the number of neighbours (sums over all links to unity), while S is the variance-stabilizing coding scheme proposed by Tiefelsdorf et al.&nbsp;1999, p.&nbsp;167-168 (sums over all links to n).</p></li>
+<li><p>The zero.policy=TRUE option allows for lists of non-neighbors. This should be used with caution since the user may not be aware of missing neighbors in their dataset however, a zero.policy of FALSE would return an error.</p></li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="global-measures-of-spatial-autocorrelation-morans-i" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="global-measures-of-spatial-autocorrelation-morans-i"><span class="header-section-number">7</span> Global Measures of Spatial Autocorrelation: Moran’s I</h2>
+<p>In this section, you will learn how to perform Moran’s I statistics testing by using <a href="https://r-spatial.github.io/spdep/reference/moran.test.html"><code>moran.test()</code></a> of <strong>spdep</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Spatial autocorrelation is a key concept in geographic data analysis, helping researchers understand whether similar values are clustered together or spread out across space. One widely used measure for this is <strong>Global Moran’s I</strong>, which evaluates the overall spatial pattern of a dataset by considering both the location of features and the values they carry. It helps determine whether the observed distribution is random, clustered, or dispersed—offering insights into underlying spatial processes such as economic inequality, disease spread, or environmental patterns.</p>
+<p>Here’s how to interpret Global Moran’s I:</p>
+<ul>
+<li><p><strong>Range of Values</strong>: Moran’s I ranges from -1 to +1.</p>
+<ul>
+<li>Close to +1 → strong clustering of similar values.</li>
+<li>Close to -1 → strong dispersion of similar values.</li>
+<li>Near 0 → random spatial distribution.</li>
+</ul></li>
+<li><p><strong>Positive Spatial Autocorrelation</strong>: High values are near other high values, and low values are near other low values.</p></li>
+<li><p><strong>Negative Spatial Autocorrelation</strong>: High values are near low values, indicating contrast between neighboring areas.</p></li>
+<li><p><strong>Zero Spatial Autocorrelation</strong>: No meaningful spatial pattern—values are randomly distributed.</p></li>
+<li><p><strong>Statistical Significance</strong>: Moran’s I is accompanied by a z-score and p-value to test whether the observed pattern is statistically significant or could have occurred by chance.</p></li>
+</ul>
+</div>
+</div>
+<section id="morans-i-test" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="morans-i-test"><span class="header-section-number">7.1</span> Moran’s I test</h3>
+<p>To evaluate whether GDP per capita (GDPPC) values are spatially clustered across regions, we apply <strong>Moran’s I test</strong>, a statistical method designed to detect spatial autocorrelation. This test is implemented using the <code>moran.test()</code> function from the <strong>spdep</strong> package in R, which analyzes both the spatial arrangement of regions and their associated GDPPC values. The goal is to determine whether similar economic values tend to group together geographically or are randomly distributed.</p>
+<p>Key components of the test include:</p>
+<ul>
+<li><strong>Null Hypothesis (H₀)</strong>: No spatial autocorrelation exists—GDPPC values are randomly distributed (Moran’s I = 0).</li>
+<li><strong>Alternative Hypothesis (H₁)</strong>: Positive spatial autocorrelation is present—regions with similar GDPPC values are geographically clustered (Moran’s I &gt; 0).</li>
+<li><strong>Significance Level (α = 0.05)</strong>: We use a 95% confidence threshold to assess whether the observed spatial pattern is statistically significant or could have occurred by chance.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">moran.test</span>(hunan<span class="sc">$</span>GDPPC,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">listw=</span>rswm_q,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">zero.policy =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">na.action=</span>na.omit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Moran I test under randomisation
+
+data:  hunan$GDPPC  
+weights: rswm_q    
+
+Moran I statistic standard deviate = 4.7351, p-value = 1.095e-06
+alternative hypothesis: greater
+sample estimates:
+Moran I statistic       Expectation          Variance 
+      0.300749970      -0.011494253       0.004348351 </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question: What statistical conclusion can you draw from the output above?</strong></p>
+<ul>
+<li><p>The value of Moran’s I is 0.3007, a positive number, indicating positive spatial autocorrelation. This means that regions with similar GDP per capita (GDPPC) values tend to be geographically close to each other.</p></li>
+<li><p>The p-value is 1.095e-06, which is much smaller than our alpha value of 0.05. This provides strong evidence against the null hypothesis of no spatial autocorrelation.</p></li>
+</ul>
+<p>Therefore, We will <strong>reject the null hypothesis at 95% confidence interval</strong> because the p-value is smaller than our chosen alpha value.</p>
+</div>
+</div>
+</section>
+<section id="computing-monte-carlo-morans-i" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="computing-monte-carlo-morans-i"><span class="header-section-number">7.2</span> Computing Monte Carlo Moran’s I</h3>
+<p>Now we analyze the spatial distribution of GDP per capita (GDPPC) across Hunan’s counties using a Monte Carlo simulation. A total of 1000 iterations will be run to assess spatial patterns. The same hypothesis testing framework—based on Moran’s I—will be applied to evaluate statistical significance.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>bperm<span class="ot">=</span> <span class="fu">moran.mc</span>(hunan<span class="sc">$</span>GDPPC,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">listw=</span>rswm_q,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">nsim=</span><span class="dv">999</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">zero.policy =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">na.action=</span>na.omit)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>bperm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Monte-Carlo simulation of Moran I
+
+data:  hunan$GDPPC 
+weights: rswm_q  
+number of simulations + 1: 1000 
+
+statistic = 0.30075, observed rank = 1000, p-value = 0.001
+alternative hypothesis: greater</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question: What statistical conclusion can you draw from the output above?</strong></p>
+<ul>
+<li><p>The value of Moran’s I is 0.30075, which is a positive number, indicating positive spatial autocorrelation. This suggests that regions with similar GDP per capita (GDPPC) values are geographically close to each other.</p></li>
+<li><p>The p-value obtained from the Monte Carlo simulation is 0.001, which is much smaller than our alpha value of 0.05. This provides strong evidence against the null hypothesis of no spatial autocorrelation.</p></li>
+</ul>
+<p>Therefore, we will <strong>reject the null hypothesis at 95% confidence interval</strong> because the p-value is smaller than our chosen alpha value.</p>
+</div>
+</div>
+</section>
+<section id="visualising-monte-carlo-morans-i" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="visualising-monte-carlo-morans-i"><span class="header-section-number">7.3</span> Visualising Monte Carlo Moran’s I</h3>
+<p>It is always a good practice for us the examine the simulated Moran’s I test statistics in greater detail. This can be achieved by plotting the distribution of the statistical values as a histogram by using the code block below.</p>
+<p>We will first observe the summary report of the Monte Carlo Moran’s I output before visualizing the plots using <code>ggplot2</code> and base R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the mean of the first 999 simulated Moran's I values</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(bperm<span class="sc">$</span>res[<span class="dv">1</span><span class="sc">:</span><span class="dv">999</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.01504572</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the variance of the first 999 simulated Moran's I values</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(bperm<span class="sc">$</span>res[<span class="dv">1</span><span class="sc">:</span><span class="dv">999</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.004371574</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(bperm<span class="sc">$</span>res[<span class="dv">1</span><span class="sc">:</span><span class="dv">999</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-0.18339 -0.06168 -0.02125 -0.01505  0.02611  0.27593 </code></pre>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">ggplot2</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">base R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> bperm<span class="sc">$</span>res), <span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fu">diff</span>(<span class="fu">range</span>(bperm<span class="sc">$</span>res)) <span class="sc">/</span> <span class="dv">20</span>,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"grey"</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>,</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"red"</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"solid"</span>) <span class="sc">+</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Simulated Moran's I"</span>,</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Frequency"</span>,</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Histogram of Simulated Moran's I Values"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(bperm<span class="sc">$</span>res,</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">freq =</span> <span class="cn">TRUE</span>,         <span class="co"># Show the frequency (count) on y-axis</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">breaks =</span> <span class="dv">20</span>,         <span class="co"># Set the number of bins</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Simulated Moran's I"</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add vertical red line at 0 to indicate the mean under the null hypothesis of no autocorrelation</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="dv">0</span>,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05a_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question: What statistical conclusion can you draw from the output above?</strong></p>
+<p>The observed Moran’s I value (0.30075) lies outside the range of most simulated values, indicating that it is an outlier compared to the expected distribution under the null hypothesis, which are centered around the expected value of 0.0 under the null hypothesis of no spatial autocorrelation. The histogram shows that most of the simulated values of Moran’s I are clustered around the mean of -0.01504572, with a variance of 0.004371574.</p>
+<p>Since the observed Moran’s I value is significantly greater than the bulk of the simulated values and given the p-value from the test is very small (p &lt; 0.05), there is strong evidence against the null hypothesis.</p>
+<p>There is significant positive spatial autocorrelation in the GDP per capita (GDPPC) across regions, as indicated by the Moran’s I test. This suggests that regions with similar GDPPC values are more likely to be geographically clustered.</p>
 </div>
 </div>
 

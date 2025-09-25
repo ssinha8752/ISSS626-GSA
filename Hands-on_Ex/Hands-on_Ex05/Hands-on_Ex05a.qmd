@@ -139,3 +139,188 @@ The left plot uses equal interval classification to divide GDP per capita (GDPPC
 In contrast, the right plot applies equal quantile classification, which divides the 88 counties of Hunan into five groups with roughly 17.6 counties each. This approach is useful for highlighting relative rankings, such as identifying the top 20% of counties by GDPPC. While it ensures balanced representation across classes, it can distort the data’s true distribution—counties with vastly different values may end up in the same class, or similar values may be split across different classes, exaggerating differences that aren’t statistically significant.
 
 :::
+
+
+## Global Measures of Spatial Autocorrelation
+
+In this section, we will compute global spatial autocorrelation statistics and to perform spatial complete randomness test for global spatial autocorrelation.
+
+### Computing Contiguity Spatial Weights
+
+Before we can compute the global spatial autocorrelation statistics, we need to construct a spatial weights of the study area. The spatial weights is used to define the neighbourhood relationships between the geographical units (i.e. county) in the study area.
+
+In the code block below, the `poly2nb()` function from the **spdep** package calculates contiguity weight matrices for the study area by identifying regions that share boundaries.
+
+By default, `poly2nb()` uses the "Queen" criteria, which considers any shared boundary or corner as a neighbor (equivalent to setting `queen = TRUE`). If we want to restrict the criteria to shared boundaries only (excluding corners), set `queen = FALSE`.
+
+```{r}
+wm_q <- poly2nb(hunan,
+                queen=TRUE)
+summary(wm_q)
+```
+
+The summary report above shows that there are 88 area units in Hunan. The most connected area unit has 11 neighbours. There are two area units with only one neighbours.
+
+### Row-standardised Weights Matrix
+
+To assign weights to neighboring polygons, we use the equal weight method (style="W"), where each neighbor receives a weight of 1 divided by the total number of neighbors. These weights are then used to calculate the lagged income values by summing the weighted contributions from adjacent counties.
+
+This approach is intuitive and simple, making it a common choice for spatial analysis. However, it has a drawback: polygons at the edges of the study area have fewer neighbors, which can distort their lagged values and misrepresent spatial autocorrelation.
+
+For this example, we’ll stick with style="W" for clarity and ease of use. Still, it's worth noting that more robust alternatives like style="B" exist, which can better handle edge effects and provide more accurate spatial insights.
+
+
+
+```{r}
+rswm_q <- nb2listw(wm_q, style="W", zero.policy = TRUE)
+rswm_q
+```
+
+::: callout-tip
+- The input of [`nb2listw()`](https://r-spatial.github.io/spdep/reference/nb2listw.html) must be an object of class **nb**. The syntax of the function has two major arguments, namely style and zero.poly.
+
+-   *style* can take values "W", "B", "C", "U", "minmax" and "S". B is the basic binary coding, W is row standardised (sums over all links to n), C is globally standardised (sums over all links to n), U is equal to C divided by the number of neighbours (sums over all links to unity), while S is the variance-stabilizing coding scheme proposed by Tiefelsdorf et al. 1999, p. 167-168 (sums over all links to n).
+
+-   The zero.policy=TRUE option allows for lists of non-neighbors. This should be used with caution since the user may not be aware of missing neighbors in their dataset however, a zero.policy of FALSE would return an error.
+:::
+
+## Global Measures of Spatial Autocorrelation: Moran's I
+
+In this section, you will learn how to perform Moran's I statistics testing by using [`moran.test()`](https://r-spatial.github.io/spdep/reference/moran.test.html) of **spdep**.
+
+::: callout-note
+Spatial autocorrelation is a key concept in geographic data analysis, helping researchers understand whether similar values are clustered together or spread out across space. One widely used measure for this is **Global Moran’s I**, which evaluates the overall spatial pattern of a dataset by considering both the location of features and the values they carry. It helps determine whether the observed distribution is random, clustered, or dispersed—offering insights into underlying spatial processes such as economic inequality, disease spread, or environmental patterns.
+
+Here’s how to interpret Global Moran’s I:
+
+- **Range of Values**: Moran’s I ranges from -1 to +1.
+  - Close to +1 → strong clustering of similar values.
+  - Close to -1 → strong dispersion of similar values.
+  - Near 0 → random spatial distribution.
+
+- **Positive Spatial Autocorrelation**: High values are near other high values, and low values are near other low values.
+
+- **Negative Spatial Autocorrelation**: High values are near low values, indicating contrast between neighboring areas.
+
+- **Zero Spatial Autocorrelation**: No meaningful spatial pattern—values are randomly distributed.
+
+- **Statistical Significance**: Moran’s I is accompanied by a z-score and p-value to test whether the observed pattern is statistically significant or could have occurred by chance.
+
+
+:::
+
+### Moran's I test
+
+To evaluate whether GDP per capita (GDPPC) values are spatially clustered across regions, we apply **Moran’s I test**, a statistical method designed to detect spatial autocorrelation. This test is implemented using the `moran.test()` function from the **spdep** package in R, which analyzes both the spatial arrangement of regions and their associated GDPPC values. The goal is to determine whether similar economic values tend to group together geographically or are randomly distributed.
+
+Key components of the test include:
+
+- **Null Hypothesis (H₀)**: No spatial autocorrelation exists—GDPPC values are randomly distributed (Moran’s I = 0).
+- **Alternative Hypothesis (H₁)**: Positive spatial autocorrelation is present—regions with similar GDPPC values are geographically clustered (Moran’s I > 0).
+- **Significance Level (α = 0.05)**: We use a 95% confidence threshold to assess whether the observed spatial pattern is statistically significant or could have occurred by chance.
+
+
+```{r}
+moran.test(hunan$GDPPC,
+           listw=rswm_q,
+           zero.policy = TRUE,
+           na.action=na.omit)
+```
+
+::: callout-note
+**Question: What statistical conclusion can you draw from the output above?**
+
+-   The value of Moran's I is 0.3007, a positive number, indicating positive spatial autocorrelation. This means that regions with similar GDP per capita (GDPPC) values tend to be geographically close to each other.
+
+-   The p-value is 1.095e-06, which is much smaller than our alpha value of 0.05. This provides strong evidence against the null hypothesis of no spatial autocorrelation.
+
+Therefore, We will **reject the null hypothesis at 95% confidence interval** because the p-value is smaller than our chosen alpha value.
+:::
+
+### Computing Monte Carlo Moran's I
+
+Now we analyze the spatial distribution of GDP per capita (GDPPC) across Hunan’s counties using a Monte Carlo simulation. A total of 1000 iterations will be run to assess spatial patterns. The same hypothesis testing framework—based on Moran’s I—will be applied to evaluate statistical significance.
+
+
+```{r}
+set.seed(1234)
+
+bperm= moran.mc(hunan$GDPPC,
+                listw=rswm_q,
+                nsim=999,
+                zero.policy = TRUE,
+                na.action=na.omit)
+bperm
+```
+
+::: callout-note
+**Question: What statistical conclusion can you draw from the output above?**
+
+-   The value of Moran's I is 0.30075, which is a positive number, indicating positive spatial autocorrelation. This suggests that regions with similar GDP per capita (GDPPC) values are geographically close to each other.
+
+- The p-value obtained from the Monte Carlo simulation is 0.001, which is much smaller than our alpha value of 0.05. This provides strong evidence against the null hypothesis of no spatial autocorrelation.
+
+Therefore, we will **reject the null hypothesis at 95% confidence interval** because the p-value is smaller than our chosen alpha value.
+:::
+
+### Visualising Monte Carlo Moran's I
+
+It is always a good practice for us the examine the simulated Moran's I test statistics in greater detail. This can be achieved by plotting the distribution of the statistical values as a histogram by using the code block below.
+
+We will first observe the summary report of the Monte Carlo Moran's I output before visualizing the plots using `ggplot2` and base R.
+
+
+``` {r}
+# Calculate the mean of the first 999 simulated Moran's I values
+mean(bperm$res[1:999])
+```
+
+```{r}
+# Calculate the variance of the first 999 simulated Moran's I values
+var(bperm$res[1:999])
+```
+
+```{r}
+summary(bperm$res[1:999])
+```
+::: panel-tabset
+
+#### ggplot2
+
+```{r}
+ggplot(data.frame(x = bperm$res), aes(x = x)) +
+  geom_histogram(binwidth = diff(range(bperm$res)) / 20,
+                 fill = "grey",
+                 color = "black") +
+  geom_vline(xintercept = 0,
+             color = "red",
+             linetype = "solid") +
+  labs(x = "Simulated Moran's I",
+       y = "Frequency",
+       title = "Histogram of Simulated Moran's I Values")
+```
+
+#### base R
+```{r}
+hist(bperm$res,
+     freq = TRUE,         # Show the frequency (count) on y-axis
+     breaks = 20,         # Set the number of bins
+     xlab = "Simulated Moran's I")
+
+# Add vertical red line at 0 to indicate the mean under the null hypothesis of no autocorrelation
+abline(v = 0,
+       col = "red")
+```
+:::
+
+
+::: callout-note
+**Question: What statistical conclusion can you draw from the output above?**
+
+The observed Moran's I value (0.30075) lies outside the range of most simulated values, indicating that it is an outlier compared to the expected distribution under the null hypothesis, which are centered around the expected value of 0.0 under the null hypothesis of no spatial autocorrelation. The histogram shows that most of the simulated values of Moran's I are clustered around the mean of -0.01504572, with a variance of 0.004371574.
+
+Since the observed Moran's I value is significantly greater than the bulk of the simulated values and given the p-value from the test is very small (p < 0.05), there is strong evidence against the null hypothesis.
+
+There is significant positive spatial autocorrelation in the GDP per capita (GDPPC) across regions, as indicated by the Moran's I test. This suggests that regions with similar GDPPC values are more likely to be geographically clustered.
+
+:::
