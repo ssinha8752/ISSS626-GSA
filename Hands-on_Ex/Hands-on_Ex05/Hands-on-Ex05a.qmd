@@ -1,0 +1,17 @@
+---
+title: "Hands-on Exercise 5A: Global Measures of Spatial Autocorrelation"
+author: "Shubham Sinha"
+date: "2025-09-21"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  message: false
+  freeze: true
+format: 
+  html:
+    code-fold: false
+    code-summary: "code chunk"
+    number-sections: true
+    number-depth: 4
+---
