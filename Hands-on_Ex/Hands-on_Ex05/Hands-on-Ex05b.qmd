@@ -22,9 +22,14 @@ Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships betw
 
 In this hands-on exercise, you will learn how to compute Local Measures of Spatial Autocorrelation (LMSA) by using sfdep package. By the end to this hands-on exercise, you will be able to:
 
--Import geospatial data using appropriate function(s) of sf package,
--Import csv file using appropriate function of readr package,
--Perform relational join using appropriate join function of dplyr package,
--Compute Local Indicator of Spatial Association (LISA) statistics for detecting clusters and outliers by using appropriate functions sfdep package;
--Compute Getis-Ord’s Gi-statistics for detecting hot spot or/and cold spot area by using appropriate functions of sfdep package; and
--Visualise the analysis output by using tmap package.
+- Import geospatial data using appropriate function(s) of sf package,
+
+- Import csv file using appropriate function of readr package,
+
+- Perform relational join using appropriate join function of dplyr package,
+
+- Compute Local Indicator of Spatial Association (LISA) statistics for detecting clusters and outliers by using appropriate functions sfdep package;
+
+- Compute Getis-Ord’s Gi-statistics for detecting hot spot or/and cold spot area by using appropriate functions of sfdep package; and
+
+- Visualise the analysis output by using tmap package.
