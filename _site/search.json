@@ -1307,5 +1307,33 @@
     "title": "Take-home Exercise 1: Geospatial Analytics for Public Good",
     "section": "13 Reference",
     "text": "13 Reference\n\nFirst-order Spatial Point Patterns Analysis Methods - https://r4gdsa.netlify.app/chap04.html\n2nd Order Spatial Point Patterns Analysis Methods - https://r4gdsa.netlify.app/chap05.html\nSpatio-Temporal Point Patterns Analysis - https://r4gdsa.netlify.app/chap06.html"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on-Ex05b.html",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on-Ex05b.html",
+    "title": "Hands-on Exercise 5B: Local Measures of Spatial Autocorrelation",
+    "section": "",
+    "text": "Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships between each observation and its surroundings, rather than providing a single summary of these relationships across the map. In this sense, they are not summary statistics but scores that allow us to learn more about the spatial structure in our data. The general intuition behind the metrics however is similar to that of global ones. Some of them are even mathematically connected, where the global version can be decomposed into a collection of local ones. One such example are Local Indicators of Spatial Association (LISA). Beside LISA, Getis-Ord’s Gi-statistics will be introduce as an alternative LMSA statistics that present complementary information or allow us to obtain similar insights for geographically referenced data."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on-Ex05b.html#overview",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on-Ex05b.html#overview",
+    "title": "Hands-on Exercise 5B: Local Measures of Spatial Autocorrelation",
+    "section": "",
+    "text": "Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships between each observation and its surroundings, rather than providing a single summary of these relationships across the map. In this sense, they are not summary statistics but scores that allow us to learn more about the spatial structure in our data. The general intuition behind the metrics however is similar to that of global ones. Some of them are even mathematically connected, where the global version can be decomposed into a collection of local ones. One such example are Local Indicators of Spatial Association (LISA). Beside LISA, Getis-Ord’s Gi-statistics will be introduce as an alternative LMSA statistics that present complementary information or allow us to obtain similar insights for geographically referenced data."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on-Ex05a.html",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on-Ex05a.html",
+    "title": "Hands-on Exercise 5A: Global Measures of Spatial Autocorrelation",
+    "section": "",
+    "text": "Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships between each observation and its surroundings, rather than providing a single summary of these relationships across the map. In this sense, they are not summary statistics but scores that allow us to learn more about the spatial structure in our data. The general intuition behind the metrics however is similar to that of global ones. Some of them are even mathematically connected, where the global version can be decomposed into a collection of local ones. One such example are Local Indicators of Spatial Association (LISA). Beside LISA, Getis-Ord’s Gi-statistics will be introduce as an alternative LMSA statistics that present complementary information or allow us to obtain similar insights for geographically referenced data."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on-Ex05a.html#overview",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on-Ex05a.html#overview",
+    "title": "Hands-on Exercise 5A: Global Measures of Spatial Autocorrelation",
+    "section": "",
+    "text": "Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships between each observation and its surroundings, rather than providing a single summary of these relationships across the map. In this sense, they are not summary statistics but scores that allow us to learn more about the spatial structure in our data. The general intuition behind the metrics however is similar to that of global ones. Some of them are even mathematically connected, where the global version can be decomposed into a collection of local ones. One such example are Local Indicators of Spatial Association (LISA). Beside LISA, Getis-Ord’s Gi-statistics will be introduce as an alternative LMSA statistics that present complementary information or allow us to obtain similar insights for geographically referenced data."
   }
 ]
