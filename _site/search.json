@@ -116,7 +116,7 @@
     "href": "index.html#hands-on-exercise",
     "title": "Welcome to ISSS626 Geospatial Analytics and Applications",
     "section": "Hands-on Exercise",
-    "text": "Hands-on Exercise\n\n\n\n\n\n\n\n\nHands-on Exercise 4: Spatial Weights and Applications\n\n\n20 min\n\n\n\nSep 14, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 3 - Spatio-Temporal Point Patterns Analysis\n\n\n5 min\n\n\n\nSep 8, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2B - Second-order Spatial Point Patterns Analysis Methods\n\n\n9 min\n\n\n\nSep 3, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2A - First-order Spatial Point Patterns Analysis Methods\n\n\n13 min\n\n\n\nSep 2, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1B - Choropleth Mapping with R\n\n\n14 min\n\n\n\nAug 31, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1A - Geospatial Data Wrangling with R\n\n\n6 min\n\n\n\nAug 31, 2024\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Hands-on Exercise\n\n\n\n\n\n\n\n\nHands-on Exercise 5B: Local Measures of Spatial Autocorrelation\n\n\n1 min\n\n\n\nSep 23, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 5A: Global Measures of Spatial Autocorrelation\n\n\n1 min\n\n\n\nSep 21, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 4: Spatial Weights and Applications\n\n\n20 min\n\n\n\nSep 14, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 3 - Spatio-Temporal Point Patterns Analysis\n\n\n5 min\n\n\n\nSep 8, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2B - Second-order Spatial Point Patterns Analysis Methods\n\n\n9 min\n\n\n\nSep 3, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2A - First-order Spatial Point Patterns Analysis Methods\n\n\n13 min\n\n\n\nSep 2, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1B - Choropleth Mapping with R\n\n\n14 min\n\n\n\nAug 31, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1A - Geospatial Data Wrangling with R\n\n\n6 min\n\n\n\nAug 31, 2024\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html#in-class-exercise",
@@ -823,7 +823,7 @@
     "href": "Hands-on_Ex/index.html",
     "title": "Hands-on Exercise",
     "section": "",
-    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nHands-on Exercise 4: Spatial Weights and Applications\n\n\n\nSep 14, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 3 - Spatio-Temporal Point Patterns Analysis\n\n\n\nSep 8, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2B - Second-order Spatial Point Patterns Analysis Methods\n\n\n\nSep 3, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2A - First-order Spatial Point Patterns Analysis Methods\n\n\n\nSep 2, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1B - Choropleth Mapping with R\n\n\n\nAug 31, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1A - Geospatial Data Wrangling with R\n\n\n\nAug 31, 2024\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nHands-on Exercise 5B: Local Measures of Spatial Autocorrelation\n\n\n\nSep 23, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 5A: Global Measures of Spatial Autocorrelation\n\n\n\nSep 21, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 4: Spatial Weights and Applications\n\n\n\nSep 14, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 3 - Spatio-Temporal Point Patterns Analysis\n\n\n\nSep 8, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2B - Second-order Spatial Point Patterns Analysis Methods\n\n\n\nSep 3, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2A - First-order Spatial Point Patterns Analysis Methods\n\n\n\nSep 2, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1B - Choropleth Mapping with R\n\n\n\nAug 31, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1A - Geospatial Data Wrangling with R\n\n\n\nAug 31, 2024\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "In-class_Ex/In-class_Ex02/In-class_Ex02.html",
@@ -887,5 +887,33 @@
     "title": "Take-home Exercise",
     "section": "",
     "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n     \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\nTake-home Exercise 1: Geospatial Analytics for Public Good\n\n\n\nSep 12, 2025\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html",
+    "title": "Hands-on Exercise 5A: Global Measures of Spatial Autocorrelation",
+    "section": "",
+    "text": "Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships between each observation and its surroundings, rather than providing a single summary of these relationships across the map. In this sense, they are not summary statistics but scores that allow us to learn more about the spatial structure in our data. The general intuition behind the metrics however is similar to that of global ones. Some of them are even mathematically connected, where the global version can be decomposed into a collection of local ones. One such example are Local Indicators of Spatial Association (LISA). Beside LISA, Getis-Ord’s Gi-statistics will be introduce as an alternative LMSA statistics that present complementary information or allow us to obtain similar insights for geographically referenced data."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html#overview",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html#overview",
+    "title": "Hands-on Exercise 5A: Global Measures of Spatial Autocorrelation",
+    "section": "",
+    "text": "Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships between each observation and its surroundings, rather than providing a single summary of these relationships across the map. In this sense, they are not summary statistics but scores that allow us to learn more about the spatial structure in our data. The general intuition behind the metrics however is similar to that of global ones. Some of them are even mathematically connected, where the global version can be decomposed into a collection of local ones. One such example are Local Indicators of Spatial Association (LISA). Beside LISA, Getis-Ord’s Gi-statistics will be introduce as an alternative LMSA statistics that present complementary information or allow us to obtain similar insights for geographically referenced data."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html",
+    "title": "Hands-on Exercise 5B: Local Measures of Spatial Autocorrelation",
+    "section": "",
+    "text": "Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships between each observation and its surroundings, rather than providing a single summary of these relationships across the map. In this sense, they are not summary statistics but scores that allow us to learn more about the spatial structure in our data. The general intuition behind the metrics however is similar to that of global ones. Some of them are even mathematically connected, where the global version can be decomposed into a collection of local ones. One such example are Local Indicators of Spatial Association (LISA). Beside LISA, Getis-Ord’s Gi-statistics will be introduce as an alternative LMSA statistics that present complementary information or allow us to obtain similar insights for geographically referenced data."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html#overview",
+    "href": "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html#overview",
+    "title": "Hands-on Exercise 5B: Local Measures of Spatial Autocorrelation",
+    "section": "",
+    "text": "Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships between each observation and its surroundings, rather than providing a single summary of these relationships across the map. In this sense, they are not summary statistics but scores that allow us to learn more about the spatial structure in our data. The general intuition behind the metrics however is similar to that of global ones. Some of them are even mathematically connected, where the global version can be decomposed into a collection of local ones. One such example are Local Indicators of Spatial Association (LISA). Beside LISA, Getis-Ord’s Gi-statistics will be introduce as an alternative LMSA statistics that present complementary information or allow us to obtain similar insights for geographically referenced data."
   }
 ]
