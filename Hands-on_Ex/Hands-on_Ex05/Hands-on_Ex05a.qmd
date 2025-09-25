@@ -18,4 +18,48 @@ format:
 
 ## Overview
 
-Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships between each observation and its surroundings, rather than providing a single summary of these relationships across the map. In this sense, they are not summary statistics but scores that allow us to learn more about the spatial structure in our data. The general intuition behind the metrics however is similar to that of global ones. Some of them are even mathematically connected, where the global version can be decomposed into a collection of local ones. One such example are Local Indicators of Spatial Association (LISA). Beside LISA, Getis-Ord’s Gi-statistics will be introduce as an alternative LMSA statistics that present complementary information or allow us to obtain similar insights for geographically referenced data.
+In this hands-on exercise, you will learn how to compute Global Measures of Spatial Autocorrelation (GMSA) by using **spdep** package. By the end to this hands-on exercise, you will be able to:
+
+-   Import geospatial data using appropriate function(s) of **sf** package,
+-   Import csv file using appropriate function of **readr** package,
+-   Perform relational join using appropriate join function of **dplyr** package,
+-   Compute Global Spatial Autocorrelation (GSA) statistics by using appropriate functions of **spdep** package,
+    -   plot Moran scatterplot,
+    -   compute and plot spatial correlogram using appropriate function of **spdep** package.
+-   provide statistically correct interpretation of GSA statistics.
+
+## The Analytical Question
+
+In spatial policy planning, one of the main development objective of the local government and planners is to ensure equal distribution of development in the province. In this study, we will apply spatial statistical methods to examine the distribution of development in Hunan Province, China, using a selected indicator (e.g., GDP per capita).
+
+> Our key questions are:
+>
+> 1.  Is development evenly distributed geographically?
+> 2.  If not, is there evidence of spatial clustering?
+> 3.  If clustering exists, where are these clusters located?
+
+## The Data
+
+The following 2 datasets will be used in this exercise.
+
+| **Data Set** | **Description** | **Format** |
+|-----------------|-------------------------------------|-----------------|
+| Hunan county boundary layer | Geospatial data set representing the county boundaries of Hunan | ESRI Shapefile |
+| Hunan_2012.csv | Contains selected local development indicators for Hunan in 2012 | CSV |
+
+## Installing and Launching the R Packages
+
+The following R packages will be used in this exercise:
+
+| **Package** | **Purpose** | **Use Case in Exercise** |
+|-----------------|----------------------------|----------------------------|
+| **sf** | Imports, manages, and processes vector-based geospatial data. | Handling vector geospatial data such as the Hunan county boundary layer in shapefile format. |
+| **spdep** | Provides functions for spatial dependence analysis, including spatial weights and spatial autocorrelation. | Computing spatial weights and creating spatially lagged variables. |
+| **tmap** | Creates static and interactive thematic maps using cartographic quality elements. | Visualizing regional development indicators and plotting maps showing spatial relationships and patterns. |
+| **tidyverse** | A collection of packages for data science tasks such as data manipulation, visualization, and modeling. | Importing CSV files, wrangling data, and performing relational joins. |
+
+To install and load these packages, use the following code:
+
+```{r}
+pacman::p_load(sf, spdep, tmap, tidyverse)
+```

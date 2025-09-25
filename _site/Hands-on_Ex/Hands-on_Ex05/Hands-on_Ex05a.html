@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -204,6 +238,9 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a></li>
+  <li><a href="#the-analytical-question" id="toc-the-analytical-question" class="nav-link" data-scroll-target="#the-analytical-question"><span class="header-section-number">2</span> The Analytical Question</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="header-section-number">3</span> The Data</a></li>
+  <li><a href="#installing-and-launching-the-r-packages" id="toc-installing-and-launching-the-r-packages" class="nav-link" data-scroll-target="#installing-and-launching-the-r-packages"><span class="header-section-number">4</span> Installing and Launching the R Packages</a></li>
   </ul>
 </nav>
     </div>
@@ -249,7 +286,104 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="overview" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1</span> Overview</h2>
-<p>Local Measures of Spatial Autocorrelation (LMSA) focus on the relationships between each observation and its surroundings, rather than providing a single summary of these relationships across the map. In this sense, they are not summary statistics but scores that allow us to learn more about the spatial structure in our data. The general intuition behind the metrics however is similar to that of global ones. Some of them are even mathematically connected, where the global version can be decomposed into a collection of local ones. One such example are Local Indicators of Spatial Association (LISA). Beside LISA, Getis-Ord’s Gi-statistics will be introduce as an alternative LMSA statistics that present complementary information or allow us to obtain similar insights for geographically referenced data.</p>
+<p>In this hands-on exercise, you will learn how to compute Global Measures of Spatial Autocorrelation (GMSA) by using <strong>spdep</strong> package. By the end to this hands-on exercise, you will be able to:</p>
+<ul>
+<li>Import geospatial data using appropriate function(s) of <strong>sf</strong> package,</li>
+<li>Import csv file using appropriate function of <strong>readr</strong> package,</li>
+<li>Perform relational join using appropriate join function of <strong>dplyr</strong> package,</li>
+<li>Compute Global Spatial Autocorrelation (GSA) statistics by using appropriate functions of <strong>spdep</strong> package,
+<ul>
+<li>plot Moran scatterplot,</li>
+<li>compute and plot spatial correlogram using appropriate function of <strong>spdep</strong> package.</li>
+</ul></li>
+<li>provide statistically correct interpretation of GSA statistics.</li>
+</ul>
+</section>
+<section id="the-analytical-question" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="the-analytical-question"><span class="header-section-number">2</span> The Analytical Question</h2>
+<p>In spatial policy planning, one of the main development objective of the local government and planners is to ensure equal distribution of development in the province. In this study, we will apply spatial statistical methods to examine the distribution of development in Hunan Province, China, using a selected indicator (e.g., GDP per capita).</p>
+<blockquote class="blockquote">
+<p>Our key questions are:</p>
+<ol type="1">
+<li>Is development evenly distributed geographically?</li>
+<li>If not, is there evidence of spatial clustering?</li>
+<li>If clustering exists, where are these clusters located?</li>
+</ol>
+</blockquote>
+</section>
+<section id="the-data" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="the-data"><span class="header-section-number">3</span> The Data</h2>
+<p>The following 2 datasets will be used in this exercise.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 52%">
+<col style="width: 23%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Data Set</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Format</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Hunan county boundary layer</td>
+<td>Geospatial data set representing the county boundaries of Hunan</td>
+<td>ESRI Shapefile</td>
+</tr>
+<tr class="even">
+<td>Hunan_2012.csv</td>
+<td>Contains selected local development indicators for Hunan in 2012</td>
+<td>CSV</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="installing-and-launching-the-r-packages" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="installing-and-launching-the-r-packages"><span class="header-section-number">4</span> Installing and Launching the R Packages</h2>
+<p>The following R packages will be used in this exercise:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 38%">
+<col style="width: 38%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Package</strong></th>
+<th><strong>Purpose</strong></th>
+<th><strong>Use Case in Exercise</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>sf</strong></td>
+<td>Imports, manages, and processes vector-based geospatial data.</td>
+<td>Handling vector geospatial data such as the Hunan county boundary layer in shapefile format.</td>
+</tr>
+<tr class="even">
+<td><strong>spdep</strong></td>
+<td>Provides functions for spatial dependence analysis, including spatial weights and spatial autocorrelation.</td>
+<td>Computing spatial weights and creating spatially lagged variables.</td>
+</tr>
+<tr class="odd">
+<td><strong>tmap</strong></td>
+<td>Creates static and interactive thematic maps using cartographic quality elements.</td>
+<td>Visualizing regional development indicators and plotting maps showing spatial relationships and patterns.</td>
+</tr>
+<tr class="even">
+<td><strong>tidyverse</strong></td>
+<td>A collection of packages for data science tasks such as data manipulation, visualization, and modeling.</td>
+<td>Importing CSV files, wrangling data, and performing relational joins.</td>
+</tr>
+</tbody>
+</table>
+<p>To install and load these packages, use the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, spdep, tmap, tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section>
