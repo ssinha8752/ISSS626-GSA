@@ -63,3 +63,79 @@ To install and load these packages, use the following code:
 ```{r}
 pacman::p_load(sf, spdep, tmap, tidyverse)
 ```
+
+
+## Import Data and Preparation
+
+In this section, we will perform 3 necessary steps to prepare the data for analysis.
+
+
+### Import Geospatial Shapefile
+
+In the code chunk below we will use [`st_read()`](https://r-spatial.github.io/sf/reference/st_read.html) of **sf** package to import Hunan shapefile into R. The imported shapefile will be **simple features** Object of **sf**.
+
+```{r}
+hunan <- st_read(dsn = "data/geospatial",
+                 layer = "Hunan")
+```
+
+### Import Aspatial csv File
+
+Next, we will import *Hunan_2012.csv* into R by using `read_csv()` of **readr** package. The output is R dataframe class.
+
+```{r}
+hunan2012 <- read_csv("data/aspatial/Hunan_2012.csv")
+```
+
+### Perform Relational Join
+
+he code chunk below will be used to update the attribute table of hunan’s SpatialPolygonsDataFrame with the attribute fields of hunan2012 dataframe. This is performed by using left_join() of dplyr package.
+
+
+```{r}
+hunan <- left_join(hunan,hunan2012) %>%
+  select(1:4, 7, 15)
+```
+
+### Visualizing Regional Development Indicator
+
+To visualize the regional development indicator, we are going to prepare a basemap and a choropleth map showing the distribution of GDPPC 2012 by using qtm() of tmap package.
+
+```{r fig.width=16, fig.height=8}
+equal <- tm_shape(hunan) +
+  tm_polygons(fill = "GDPPC",
+              fill.scale = tm_scale_intervals(
+                style = "equal",
+                n = 5,
+                values = "brewer.blues")) +
+  tm_borders(fiil_alpha = 0.5) + 
+  tm_layout(legend.position = c("left", "bottom"), 
+            main.title = "Equal interval classification")
+
+quantile <- tm_shape(hunan) +
+  tm_polygons(fill = "GDPPC",
+              fill.scale = tm_scale_intervals(
+                style = "quantile",
+                n = 5)) +
+  tm_borders(fiil_alpha = 0.5) + 
+  tm_layout(legend.position = c("left", "bottom"), 
+            main.title = "Quantile classification")
+
+tmap_arrange(equal, 
+             quantile, 
+             asp=1, 
+             ncol=2)
+
+```
+
+::: callout-note
+**Observations**
+
+
+The left plot uses equal interval classification to divide GDP per capita (GDPPC) into five evenly spaced ranges, ensuring each class spans the same value range. This method is ideal for continuous datasets like temperature or precipitation and is appreciated for its simplicity and ease of interpretation, especially for nontechnical audiences. However, it can be misleading for skewed datasets, as many data points may cluster in just one or two classes, leaving others sparsely populated or empty.
+
+------------------------------------------------------------------------
+
+In contrast, the right plot applies equal quantile classification, which divides the 88 counties of Hunan into five groups with roughly 17.6 counties each. This approach is useful for highlighting relative rankings, such as identifying the top 20% of counties by GDPPC. While it ensures balanced representation across classes, it can distort the data’s true distribution—counties with vastly different values may end up in the same class, or similar values may be split across different classes, exaggerating differences that aren’t statistically significant.
+
+:::
