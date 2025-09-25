@@ -33,3 +33,44 @@ In this hands-on exercise, you will learn how to compute Local Measures of Spati
 - Compute Getis-Ord’s Gi-statistics for detecting hot spot or/and cold spot area by using appropriate functions of sfdep package; and
 
 - Visualise the analysis output by using tmap package.
+
+## The Analytical Question
+
+In spatial policy planning, one of the main development objective of the local government and planners is to ensure equal distribution of development in the province. In this study, we will apply spatial statistical methods to examine the distribution of development in Hunan Province, China, using a selected indicator (e.g., GDP per capita).
+
+> Our key questions are:
+>
+> 1.  Is development evenly distributed geographically?
+> 2.  If not, is there evidence of spatial clustering?
+> 3.  If clustering exists, where are these clusters located?
+
+## The Data
+
+The following 2 datasets will be used in this exercise.
+
+| **Data Set**                | **Description**                                                  | **Format**     |
+|------------------|------------------------------------|------------------|
+| Hunan county boundary layer | Geospatial data set representing the county boundaries of Hunan  | ESRI Shapefile |
+| Hunan_2012.csv              | Contains selected local development indicators for Hunan in 2012 | CSV            |
+
+## Installing and Launching the R Packages
+
+The following R packages will be used in this exercise:
+
+| **Package**           | **Purpose**                                                                                     | **Use Case in Exercise**                                                                   |
+|-----------------------|-------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
+| **sf**                | Handles spatial data, particularly vector-based geospatial data.                                | Importing and managing township boundary data for Myanmar.                                  |
+| **rgdal**             | Provides bindings to the Geospatial Data Abstraction Library (GDAL) for reading and writing spatial data. | Reading and writing geospatial data in various formats, including shapefiles.               |
+| **spdep**             | Analyzes spatial dependence and provides tools for spatial econometrics.                        | Performing spatially constrained clustering and other spatial dependence analyses.          |
+| **tidyverse**         | A collection of packages for data science tasks like data manipulation and visualization.       | Handling attribute data, reading CSV files, and data wrangling with **readr**, **dplyr**, and **ggplot2**. |
+| **tmap**              | Creates static and interactive thematic maps.                                                   | Visualizing data using choropleth maps to display spatial patterns and relationships.       |
+| **corrplot**          | Visualizes correlation matrices.                                                                | Creating correlation plots to explore relationships between different ICT measures.         |
+| **ggpubr**            | Provides functions to create and customize 'ggplot2'-based publication-ready plots.              | Enhancing multivariate data visualizations for clearer presentation of results.             |
+| **heatmaply**         | Generates interactive heatmaps.                                                                 | Visualizing multivariate data through interactive heatmaps for deeper insights.             |
+| **cluster**           | Performs cluster analysis.                                                                      | Conducting hierarchical clustering to group similar regions based on ICT measures.          |
+| **ClustGeo**          | Performs spatially constrained hierarchical clustering.                                         | Applying spatial constraints to hierarchical clustering for identifying homogeneous regions. |
+To install and load these packages, use the following code:
+
+```{r}
+pacman::p_load(sf, spdep, tmap, tidyverse)
+```
