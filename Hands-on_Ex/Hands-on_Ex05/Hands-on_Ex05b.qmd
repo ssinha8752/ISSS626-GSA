@@ -240,3 +240,277 @@ glimpse(lisa)
 ```
 
 #### Mapping the Local Moran's I
+
+#### Mapping local Moran's I values
+
+We can plot the local Moran's I values using choropleth mapping functions of **tmap** package.
+
+```{r}
+tm_shape(lisa) +
+  tm_polygons(fill = "ii",
+              fill.scale = tm_scale_intervals(
+                style = "pretty",
+                n = 5,
+                values = "brewer.RdBu"),
+              fill.legend = tm_legend(
+                title = "Local Morans'I",
+                position = tm_pos_out())) + 
+  tm_borders(fill_alpha = 0.5) +
+  tm_title("Loal Morans'I of GDPPC (Queen's method)")
+```
+
+#### Mapping local Moran's I p-values
+
+The choropleth shows there is evidence for both positive and negative Ii values. However, it is useful to consider the p-values for each of these values
+
+The code block below produce a choropleth map of Moran's I p-values by using functions of **tmap** package.
+
+```{r}
+tm_shape(lisa) +
+  tm_polygons(fill = "p_ii", 
+              fill.scale = tm_scale_intervals(
+                breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
+                values = "-brewer.Reds"),
+              fill.legend = tm_legend(
+                title = "p-value",
+      position = tm_pos_out())) + 
+  tm_borders(fill_alpha = 0.5) +
+  tm_title("p-values of Loal Moran's I of GDPPC (Queen's method)")
+```
+
+#### Mapping both local Moran's I values and p-values
+
+For effective interpretation, it is better to plot both the local Moran's I values map and its corresponding p-values map next to each other.
+
+The code block below will be used to create such visualisation.
+
+```{r}
+ii.map <- tm_shape(lisa) +
+  tm_polygons(fill = "ii",
+              fill.scale = tm_scale_intervals(
+                style = "pretty",
+                n = 5,
+                values = "brewer.RdBu"),
+              fill.legend = tm_legend(
+                title = "Local Moran's I",
+                position = tm_pos_in(
+                  "left", "bottom"))) + 
+  tm_borders(fill_alpha = 0.5) +
+  tm_title("Loal Moran's I of GDPPC (Queen's method)")
+
+p_ii.map <- tm_shape(lisa) +
+  tm_polygons(fill = "p_ii", 
+              fill.scale = tm_scale_intervals(
+                breaks = c(-Inf, 0.001, 0.01, 0.05, 0.1, Inf),
+                values = "-brewer.Reds"),
+              fill.legend = tm_legend(
+                title = "p-value",
+      position = tm_pos_in("left", "bottom")
+    )) + 
+  tm_borders(fill_alpha = 0.5) +
+  tm_title("p-values of Loal Moran's I of GDPPC (Queen's method)")
+
+tmap_arrange(ii.map, p_ii.map, asp=1, ncol=2)
+```
+
+::: callout-note
+The plot above consists of two maps: one showing the Local Moran's I statistics (`Ii`) and the other displaying the corresponding p-values for Local Moran's I statistics.
+
+##### Left Plot: Local Moran's I Statistics
+
+**Color Scale**: - The color scale ranges from light yellow to dark green, representing different ranges of Local Moran's I values (`Ii`).
+
+-   **Dark BLue Areas**: Represent counties with high positive Local Moran's I values (between 3 and 5). These areas show strong positive spatial autocorrelation, indicating clusters where counties have similar high GDP per capita values compared to their neighbors.
+
+-   **Light Yellow Areas**: Represent counties with lower Local Moran's I values (around 0 to 1). These areas have weaker spatial autocorrelation, suggesting less significant clustering or similarity with their neighbors.
+
+-   **Orange Areas**: Represent negative Local Moran's I values (between -2 to 0). These are areas where counties have significantly different GDP per capita values from their neighbors (spatial outliers).
+
+##### Right Plot: Local Moran's I p-values
+
+**Color Scale**: - The color scale ranges from light blue to dark blue, representing different ranges of p-values for Local Moran's I statistics.
+
+-   **Dark Red Areas**: Represent counties with very low p-values (less than 0.001), indicating that the observed spatial clustering is statistically significant at a very high confidence level.
+
+-   **Orange Areas**: Represent counties with higher p-values (e.g., between 0.01 and 0.10), suggesting that the clustering is less statistically significant.
+
+-   **Light Orange Areas**: Represent counties with p-values greater than 0.10, indicating that there is no statistically significant spatial autocorrelation.
+
+##### Observations:
+
+-   The map shows that the central-eastern region (around the Changsha county) has several dark blue counties with very low p-values, indicating strong evidence of significant spatial clustering of similar GDP per capita values.
+:::
+
+## Creating and Visualizing LISA Map
+
+Visualizing LISA involves creating maps that highlight significant spatial patterns, such as hot spots (high values clustered together) and cold spots (low values clustered together), as well as identifying spatial outliers. Common methods include choropleth maps showing LISA values, Moran scatterplots which depict local spatial autocorrelation for individual locations, and hot spot analysis maps.
+
+The LISA Cluster Map shows the significant locations color coded by type of spatial autocorrelation. The first step before we can generate the LISA cluster map is to plot the Moran scatterplot.
+
+### Plotting Moran scatterplot
+
+The Moran scatterplot is an illustration of the relationship between the values of the chosen attribute at each location and the average value of the same attribute at neighboring locations.
+
+In the code chunk below, st_lag() of sfdep package is used to calculates the spatial lag of GDPPC given a neighbor (i.e. nb) and weights list (i.e. wt).
+
+```{r}
+lisa <- lisa %>%
+  mutate(lag_GDPPC = st_lag(
+    GDPPC, nb, wt),
+    .before = 1) %>%
+  unnest(lag_GDPPC)
+```
+
+Then, the code chunk below is used to plot the Moran Scatterplot of GDPPC against its spatial lag version as shown in the code cunk below.
+
+```{r}
+ggplot(data = lisa, 
+       aes(x = GDPPC, 
+           y = lag_GDPPC)) +
+  geom_point() +
+  geom_smooth(method = "lm", 
+              se = FALSE, 
+              color = "red") +
+  labs(x = "GDPPC",
+       y = "Spatial Lag of GDPPC",
+       title = "Moran Scatterplot") +
+  theme_minimal()
+```
+
+The Moran Scatterplot above is not very intuitive. To support effective visual communication, the code chunk below is used.
+
+```{r}
+ggplot(data = lisa, 
+       aes(x = GDPPC, 
+           y = lag_GDPPC, 
+           color = mean)) +
+  geom_point(size = 2) +
+  geom_smooth(method = "lm", 
+              se = FALSE, 
+              color = "black") +
+  geom_hline(yintercept=mean(lisa$lag_GDPPC), lty=2) + 
+    geom_vline(xintercept=mean(lisa$GDPPC), lty=2) +
+  scale_color_manual(
+    values = c("High-High" = "red", 
+               "Low-Low" = "blue",
+               "Low-High" = "lightblue", 
+               "High-Low" = "pink")) +
+  labs(x = "GDPPC",
+       y = "Spatial Lag of GDPPC",
+       title = "Moran Scatterplot with LISA Quadrants") +
+  theme_minimal()
+```
+
+
+::: callout-note
+**Observations** The plot is split in 4 quadrants. The top right corner belongs to areas that have high GDPPC and are surrounded by other areas that have the average level of GDPPC. This are the high-high locations in the lesson slide, recall:
+
+:::
+
+### Plotting Moran scatterplot with Standardised Variable
+
+To plot Moran scatterplot with standardised variable:
+
+-   Use `scale()` to center and scale the variable. Centering is done by subtracting the mean (omitting NAs) the corresponding columns, and scaling is done by dividing the (centered) variable by their standard deviations.
+
+-   Use `as.vector()` to ensure that the standardized output is treated as a vector, which is necessary for proper mapping into the output data frame.
+
+-   Plot the Moran scatterplot
+
+```{r}
+lisa <- lisa %>%
+  mutate(z_GDPPC = scale(GDPPC),
+         z_lag_GDPPC = scale(lag_GDPPC),
+         .before = 1)
+```
+
+```{r}
+ggplot(data = lisa, 
+       aes(x = z_GDPPC, 
+           y = z_lag_GDPPC, 
+           color = mean)) +
+  geom_point(size = 2) +
+  geom_smooth(method = "lm", 
+              se = FALSE, 
+              color = "black") +
+  geom_hline(yintercept=mean(lisa$z_lag_GDPPC), lty=2) + 
+    geom_vline(xintercept=mean(lisa$z_GDPPC), lty=2) +
+  scale_color_manual(
+    values = c("High-High" = "red", 
+               "Low-Low" = "blue",
+               "Low-High" = "lightblue", 
+               "High-Low" = "pink")) +
+  labs(x = "Standardised GDPPC",
+       y = "Standardised Spatial Lag of GDPPC",
+       title = "Standardised Moran Scatterplot with LISA Quadrants") +
+  theme_minimal()
+```
+
+::: callout-note
+Note that the plot is similar to the previous plot. After scaling it, the cut off axis for x and y-axis is at 0.
+:::
+
+### Preparing LISA map classes
+
+The code block below show the steps to prepare a LISA cluster map.
+
+Set a statistical significance level (alpha value) for the local Moran.
+
+```{r}
+signif <- 0.05
+```
+
+### Plotting LISA map
+
+Now, we can build the LISA map:
+
+```{r}
+lisa <- lisa %>%
+  mutate(
+    LISA_cluster = ifelse(
+      p_ii < 0.05,
+      as.character(mean), 
+      "Insignificant"),
+    LISA_cluster = factor(
+      LISA_cluster,
+      levels = c("Insignificant", "Low-Low", "Low-High", "High-Low", "High-High")
+    )
+  )
+```
+
+For effective interpretation, it is better to plot both the local Moran’s I values map and its corresponding p-values map next to each other.
+
+To create such visualisation:
+
+```{r}
+lisa_map <- tm_shape(lisa) + 
+  tm_polygons(
+    fill = "LISA_cluster",
+    fill.scale = tm_scale_categorical(
+      values = c(
+        "grey80",      # Insignificant
+        "blue",        # Low-Low
+        "lightblue",   # Low-High
+        "pink",        # High-Low
+        "red"          # High-High
+      )
+    ),
+    fill.legend = tm_legend(
+      title = "LISA Cluster",
+      position = tm_pos_in("left", "bottom"))
+  ) +
+  tm_borders() +
+  tm_title("Local Moran's I Clusters (p < 0.05)")
+lisa_map
+```
+
+::: callout-note
+**Question: What statistical observations can you draw from the LISA map above?**
+
+From the LISA map and GDPPC map, there is a significant "high-high" cluster in the central-eastern part of the province, where counties with high GDP per capita are surrounded by similar counties.
+
+This pattern is reinforced by the Local Moran's I statistics map, which show the same region in a deep green shade, indicating strong positive spatial autocorrelation. The corresponding low p-values further confirm the statistical significance of this economic clustering.
+
+Notably, the high-high cluster on the LISA map extends over more counties than those highlighted by the Local Moran's I statistics.
+:::
+

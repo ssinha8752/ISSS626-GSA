@@ -254,6 +254,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#row-standardised-weights-matrix" id="toc-row-standardised-weights-matrix" class="nav-link" data-scroll-target="#row-standardised-weights-matrix"><span class="header-section-number">6.2</span> Row-standardised Weights Matrix</a></li>
   <li><a href="#computing-local-morans-i" id="toc-computing-local-morans-i" class="nav-link" data-scroll-target="#computing-local-morans-i"><span class="header-section-number">6.3</span> Computing Local Moran’s I</a></li>
   </ul></li>
+  <li><a href="#creating-and-visualizing-lisa-map" id="toc-creating-and-visualizing-lisa-map" class="nav-link" data-scroll-target="#creating-and-visualizing-lisa-map"><span class="header-section-number">7</span> Creating and Visualizing LISA Map</a>
+  <ul class="collapse">
+  <li><a href="#plotting-moran-scatterplot" id="toc-plotting-moran-scatterplot" class="nav-link" data-scroll-target="#plotting-moran-scatterplot"><span class="header-section-number">7.1</span> Plotting Moran scatterplot</a></li>
+  <li><a href="#plotting-moran-scatterplot-with-standardised-variable" id="toc-plotting-moran-scatterplot-with-standardised-variable" class="nav-link" data-scroll-target="#plotting-moran-scatterplot-with-standardised-variable"><span class="header-section-number">7.2</span> Plotting Moran scatterplot with Standardised Variable</a></li>
+  <li><a href="#preparing-lisa-map-classes" id="toc-preparing-lisa-map-classes" class="nav-link" data-scroll-target="#preparing-lisa-map-classes"><span class="header-section-number">7.3</span> Preparing LISA map classes</a></li>
+  <li><a href="#plotting-lisa-map" id="toc-plotting-lisa-map" class="nav-link" data-scroll-target="#plotting-lisa-map"><span class="header-section-number">7.4</span> Plotting LISA map</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -654,14 +661,14 @@ Tip
 <pre><code>Rows: 88
 Columns: 21
 $ ii           &lt;dbl&gt; -1.468468e-03, 2.587817e-02, -1.198765e-02, 1.022468e-03,…
-$ eii          &lt;dbl&gt; -1.846910e-03, -4.999658e-03, -6.032386e-02, 3.283112e-04…
-$ var_ii       &lt;dbl&gt; 5.067465e-04, 1.185346e-02, 8.233488e-02, 6.353081e-06, 1…
-$ z_ii         &lt;dbl&gt; 0.01681140, 0.28361178, 0.16845377, 0.27540081, 0.4530744…
-$ p_ii         &lt;dbl&gt; 9.865871e-01, 7.767079e-01, 8.662263e-01, 7.830083e-01, 6…
-$ p_ii_sim     &lt;dbl&gt; 0.86, 0.94, 0.78, 0.68, 0.54, 0.66, 0.04, 0.10, 0.02, 0.2…
-$ p_folded_sim &lt;dbl&gt; 0.43, 0.47, 0.39, 0.34, 0.27, 0.33, 0.02, 0.05, 0.01, 0.1…
-$ skewness     &lt;dbl&gt; -0.5046974, -1.0693095, 0.6120674, 1.2741963, 1.0559023, …
-$ kurtosis     &lt;dbl&gt; -0.8555584, 1.3697034, -0.5668618, 2.0063841, 0.9486768, …
+$ eii          &lt;dbl&gt; 9.157738e-04, -7.215320e-03, -2.754977e-02, -1.915717e-04…
+$ var_ii       &lt;dbl&gt; 5.502930e-04, 9.366257e-03, 1.220802e-01, 6.769049e-06, 1…
+$ z_ii         &lt;dbl&gt; -0.10163733, 0.34194761, 0.04453961, 0.46662603, 0.441290…
+$ p_ii         &lt;dbl&gt; 9.190446e-01, 7.323903e-01, 9.644743e-01, 6.407675e-01, 6…
+$ p_ii_sim     &lt;dbl&gt; 0.86, 0.96, 0.76, 0.52, 0.58, 0.70, 0.04, 0.14, 0.02, 0.1…
+$ p_folded_sim &lt;dbl&gt; 0.43, 0.48, 0.38, 0.26, 0.29, 0.35, 0.02, 0.07, 0.01, 0.0…
+$ skewness     &lt;dbl&gt; -0.7860498, -1.0413576, 1.4344059, 1.4441996, 0.9549469, …
+$ kurtosis     &lt;dbl&gt; 0.278032898, 0.629948256, 2.016022571, 2.312038412, 0.414…
 $ mean         &lt;fct&gt; Low-High, Low-Low, High-Low, High-High, High-High, High-L…
 $ median       &lt;fct&gt; High-High, High-High, High-High, High-High, High-High, Hi…
 $ pysal        &lt;fct&gt; Low-High, Low-Low, High-Low, High-High, High-High, High-L…
@@ -678,9 +685,386 @@ $ geometry     &lt;POLYGON [°]&gt; POLYGON ((112.0625 29.75523..., POLYGON ((11
 </div>
 <section id="mapping-the-local-morans-i" class="level4" data-number="6.3.1">
 <h4 data-number="6.3.1" class="anchored" data-anchor-id="mapping-the-local-morans-i"><span class="header-section-number">6.3.1</span> Mapping the Local Moran’s I</h4>
-
-
 </section>
+<section id="mapping-local-morans-i-values" class="level4" data-number="6.3.2">
+<h4 data-number="6.3.2" class="anchored" data-anchor-id="mapping-local-morans-i-values"><span class="header-section-number">6.3.2</span> Mapping local Moran’s I values</h4>
+<p>We can plot the local Moran’s I values using choropleth mapping functions of <strong>tmap</strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa) <span class="sc">+</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"ii"</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">style =</span> <span class="st">"pretty"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">values =</span> <span class="st">"brewer.RdBu"</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">"Local Morans'I"</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="fu">tm_pos_out</span>())) <span class="sc">+</span> </span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">fill_alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Loal Morans'I of GDPPC (Queen's method)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[scale] tm_polygons:() the data variable assigned to 'fill' contains positive and negative values, so midpoint is set to 0. Set 'midpoint = NA' in 'fill.scale = tm_scale_intervals(&lt;HERE&gt;)' to use all visual values (e.g. colors)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[cols4all] color palettes: use palettes from the R package cols4all. Run
+`cols4all::c4a_gui()` to explore them. The old palette name "brewer.RdBu" is
+named "rd_bu" (in long format "brewer.rd_bu")
+[plot mode] fit legend/component: Some legend items or map compoments do not
+fit well, and are therefore rescaled.
+ℹ Set the tmap option `component.autoscale = FALSE` to disable rescaling.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05b_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="mapping-local-morans-i-p-values" class="level4" data-number="6.3.3">
+<h4 data-number="6.3.3" class="anchored" data-anchor-id="mapping-local-morans-i-p-values"><span class="header-section-number">6.3.3</span> Mapping local Moran’s I p-values</h4>
+<p>The choropleth shows there is evidence for both positive and negative Ii values. However, it is useful to consider the p-values for each of these values</p>
+<p>The code block below produce a choropleth map of Moran’s I p-values by using functions of <strong>tmap</strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(lisa) <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"p_ii"</span>, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="cn">Inf</span>),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">values =</span> <span class="st">"-brewer.Reds"</span>),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">"p-value"</span>,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">position =</span> <span class="fu">tm_pos_out</span>())) <span class="sc">+</span> </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">fill_alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"p-values of Loal Moran's I of GDPPC (Queen's method)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[cols4all] color palettes: use palettes from the R package cols4all. Run
+`cols4all::c4a_gui()` to explore them. The old palette name "-brewer.Reds" is
+named "reds" (in long format "brewer.reds")
+[plot mode] fit legend/component: Some legend items or map compoments do not
+fit well, and are therefore rescaled.
+ℹ Set the tmap option `component.autoscale = FALSE` to disable rescaling.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05b_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="mapping-both-local-morans-i-values-and-p-values" class="level4" data-number="6.3.4">
+<h4 data-number="6.3.4" class="anchored" data-anchor-id="mapping-both-local-morans-i-values-and-p-values"><span class="header-section-number">6.3.4</span> Mapping both local Moran’s I values and p-values</h4>
+<p>For effective interpretation, it is better to plot both the local Moran’s I values map and its corresponding p-values map next to each other.</p>
+<p>The code block below will be used to create such visualisation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ii.map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(lisa) <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"ii"</span>,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">style =</span> <span class="st">"pretty"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">values =</span> <span class="st">"brewer.RdBu"</span>),</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">"Local Moran's I"</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="fu">tm_pos_in</span>(</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"left"</span>, <span class="st">"bottom"</span>))) <span class="sc">+</span> </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">fill_alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Loal Moran's I of GDPPC (Queen's method)"</span>)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>p_ii.map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(lisa) <span class="sc">+</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"p_ii"</span>, </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">breaks =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="fl">0.1</span>, <span class="cn">Inf</span>),</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">values =</span> <span class="st">"-brewer.Reds"</span>),</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">"p-value"</span>,</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">position =</span> <span class="fu">tm_pos_in</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    )) <span class="sc">+</span> </span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">fill_alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"p-values of Loal Moran's I of GDPPC (Queen's method)"</span>)</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(ii.map, p_ii.map, <span class="at">asp=</span><span class="dv">1</span>, <span class="at">ncol=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[scale] tm_polygons:() the data variable assigned to 'fill' contains positive and negative values, so midpoint is set to 0. Set 'midpoint = NA' in 'fill.scale = tm_scale_intervals(&lt;HERE&gt;)' to use all visual values (e.g. colors)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>[cols4all] color palettes: use palettes from the R package cols4all. Run
+`cols4all::c4a_gui()` to explore them. The old palette name "brewer.RdBu" is
+named "rd_bu" (in long format "brewer.rd_bu")
+[plot mode] fit legend/component: Some legend items or map compoments do not
+fit well, and are therefore rescaled.
+ℹ Set the tmap option `component.autoscale = FALSE` to disable rescaling.
+[cols4all] color palettes: use palettes from the R package cols4all. Run
+`cols4all::c4a_gui()` to explore them. The old palette name "-brewer.Reds" is
+named "reds" (in long format "brewer.reds")
+[plot mode] fit legend/component: Some legend items or map compoments do not
+fit well, and are therefore rescaled.
+ℹ Set the tmap option `component.autoscale = FALSE` to disable rescaling.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05b_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The plot above consists of two maps: one showing the Local Moran’s I statistics (<code>Ii</code>) and the other displaying the corresponding p-values for Local Moran’s I statistics.</p>
+<section id="left-plot-local-morans-i-statistics" class="level5">
+<h5 class="anchored" data-anchor-id="left-plot-local-morans-i-statistics">Left Plot: Local Moran’s I Statistics</h5>
+<p><strong>Color Scale</strong>: - The color scale ranges from light yellow to dark green, representing different ranges of Local Moran’s I values (<code>Ii</code>).</p>
+<ul>
+<li><p><strong>Dark BLue Areas</strong>: Represent counties with high positive Local Moran’s I values (between 3 and 5). These areas show strong positive spatial autocorrelation, indicating clusters where counties have similar high GDP per capita values compared to their neighbors.</p></li>
+<li><p><strong>Light Yellow Areas</strong>: Represent counties with lower Local Moran’s I values (around 0 to 1). These areas have weaker spatial autocorrelation, suggesting less significant clustering or similarity with their neighbors.</p></li>
+<li><p><strong>Orange Areas</strong>: Represent negative Local Moran’s I values (between -2 to 0). These are areas where counties have significantly different GDP per capita values from their neighbors (spatial outliers).</p></li>
+</ul>
+</section>
+<section id="right-plot-local-morans-i-p-values" class="level5">
+<h5 class="anchored" data-anchor-id="right-plot-local-morans-i-p-values">Right Plot: Local Moran’s I p-values</h5>
+<p><strong>Color Scale</strong>: - The color scale ranges from light blue to dark blue, representing different ranges of p-values for Local Moran’s I statistics.</p>
+<ul>
+<li><p><strong>Dark Red Areas</strong>: Represent counties with very low p-values (less than 0.001), indicating that the observed spatial clustering is statistically significant at a very high confidence level.</p></li>
+<li><p><strong>Orange Areas</strong>: Represent counties with higher p-values (e.g., between 0.01 and 0.10), suggesting that the clustering is less statistically significant.</p></li>
+<li><p><strong>Light Orange Areas</strong>: Represent counties with p-values greater than 0.10, indicating that there is no statistically significant spatial autocorrelation.</p></li>
+</ul>
+</section>
+<section id="observations" class="level5">
+<h5 class="anchored" data-anchor-id="observations">Observations:</h5>
+<ul>
+<li>The map shows that the central-eastern region (around the Changsha county) has several dark blue counties with very low p-values, indicating strong evidence of significant spatial clustering of similar GDP per capita values.</li>
+</ul>
+</section>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="creating-and-visualizing-lisa-map" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="creating-and-visualizing-lisa-map"><span class="header-section-number">7</span> Creating and Visualizing LISA Map</h2>
+<p>Visualizing LISA involves creating maps that highlight significant spatial patterns, such as hot spots (high values clustered together) and cold spots (low values clustered together), as well as identifying spatial outliers. Common methods include choropleth maps showing LISA values, Moran scatterplots which depict local spatial autocorrelation for individual locations, and hot spot analysis maps.</p>
+<p>The LISA Cluster Map shows the significant locations color coded by type of spatial autocorrelation. The first step before we can generate the LISA cluster map is to plot the Moran scatterplot.</p>
+<section id="plotting-moran-scatterplot" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="plotting-moran-scatterplot"><span class="header-section-number">7.1</span> Plotting Moran scatterplot</h3>
+<p>The Moran scatterplot is an illustration of the relationship between the values of the chosen attribute at each location and the average value of the same attribute at neighboring locations.</p>
+<p>In the code chunk below, st_lag() of sfdep package is used to calculates the spatial lag of GDPPC given a neighbor (i.e.&nbsp;nb) and weights list (i.e.&nbsp;wt).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>lisa <span class="ot">&lt;-</span> lisa <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lag_GDPPC =</span> <span class="fu">st_lag</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    GDPPC, nb, wt),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">.before =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(lag_GDPPC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then, the code chunk below is used to plot the Moran Scatterplot of GDPPC against its spatial lag version as shown in the code cunk below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> lisa, </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> GDPPC, </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> lag_GDPPC)) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"GDPPC"</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Spatial Lag of GDPPC"</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Moran Scatterplot"</span>) <span class="sc">+</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05b_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The Moran Scatterplot above is not very intuitive. To support effective visual communication, the code chunk below is used.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> lisa, </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> GDPPC, </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> lag_GDPPC, </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> mean)) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fu">mean</span>(lisa<span class="sc">$</span>lag_GDPPC), <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">mean</span>(lisa<span class="sc">$</span>GDPPC), <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"High-High"</span> <span class="ot">=</span> <span class="st">"red"</span>, </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Low-Low"</span> <span class="ot">=</span> <span class="st">"blue"</span>,</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Low-High"</span> <span class="ot">=</span> <span class="st">"lightblue"</span>, </span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>               <span class="st">"High-Low"</span> <span class="ot">=</span> <span class="st">"pink"</span>)) <span class="sc">+</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"GDPPC"</span>,</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Spatial Lag of GDPPC"</span>,</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Moran Scatterplot with LISA Quadrants"</span>) <span class="sc">+</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05b_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Observations</strong> The plot is split in 4 quadrants. The top right corner belongs to areas that have high GDPPC and are surrounded by other areas that have the average level of GDPPC. This are the high-high locations in the lesson slide, recall:</p>
+</div>
+</div>
+</section>
+<section id="plotting-moran-scatterplot-with-standardised-variable" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="plotting-moran-scatterplot-with-standardised-variable"><span class="header-section-number">7.2</span> Plotting Moran scatterplot with Standardised Variable</h3>
+<p>To plot Moran scatterplot with standardised variable:</p>
+<ul>
+<li><p>Use <code>scale()</code> to center and scale the variable. Centering is done by subtracting the mean (omitting NAs) the corresponding columns, and scaling is done by dividing the (centered) variable by their standard deviations.</p></li>
+<li><p>Use <code>as.vector()</code> to ensure that the standardized output is treated as a vector, which is necessary for proper mapping into the output data frame.</p></li>
+<li><p>Plot the Moran scatterplot</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>lisa <span class="ot">&lt;-</span> lisa <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">z_GDPPC =</span> <span class="fu">scale</span>(GDPPC),</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">z_lag_GDPPC =</span> <span class="fu">scale</span>(lag_GDPPC),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">.before =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> lisa, </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> z_GDPPC, </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> z_lag_GDPPC, </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">color =</span> mean)) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span><span class="fu">mean</span>(lisa<span class="sc">$</span>z_lag_GDPPC), <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept=</span><span class="fu">mean</span>(lisa<span class="sc">$</span>z_GDPPC), <span class="at">lty=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"High-High"</span> <span class="ot">=</span> <span class="st">"red"</span>, </span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Low-Low"</span> <span class="ot">=</span> <span class="st">"blue"</span>,</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Low-High"</span> <span class="ot">=</span> <span class="st">"lightblue"</span>, </span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>               <span class="st">"High-Low"</span> <span class="ot">=</span> <span class="st">"pink"</span>)) <span class="sc">+</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Standardised GDPPC"</span>,</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Standardised Spatial Lag of GDPPC"</span>,</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Standardised Moran Scatterplot with LISA Quadrants"</span>) <span class="sc">+</span></span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05b_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Note that the plot is similar to the previous plot. After scaling it, the cut off axis for x and y-axis is at 0.</p>
+</div>
+</div>
+</section>
+<section id="preparing-lisa-map-classes" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="preparing-lisa-map-classes"><span class="header-section-number">7.3</span> Preparing LISA map classes</h3>
+<p>The code block below show the steps to prepare a LISA cluster map.</p>
+<p>Set a statistical significance level (alpha value) for the local Moran.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>signif <span class="ot">&lt;-</span> <span class="fl">0.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plotting-lisa-map" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="plotting-lisa-map"><span class="header-section-number">7.4</span> Plotting LISA map</h3>
+<p>Now, we can build the LISA map:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>lisa <span class="ot">&lt;-</span> lisa <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">LISA_cluster =</span> <span class="fu">ifelse</span>(</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>      p_ii <span class="sc">&lt;</span> <span class="fl">0.05</span>,</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as.character</span>(mean), </span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Insignificant"</span>),</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">LISA_cluster =</span> <span class="fu">factor</span>(</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>      LISA_cluster,</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Insignificant"</span>, <span class="st">"Low-Low"</span>, <span class="st">"Low-High"</span>, <span class="st">"High-Low"</span>, <span class="st">"High-High"</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For effective interpretation, it is better to plot both the local Moran’s I values map and its corresponding p-values map next to each other.</p>
+<p>To create such visualisation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>lisa_map <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(lisa) <span class="sc">+</span> </span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"LISA_cluster"</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.scale =</span> <span class="fu">tm_scale_categorical</span>(</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">values =</span> <span class="fu">c</span>(</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"grey80"</span>,      <span class="co"># Insignificant</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"blue"</span>,        <span class="co"># Low-Low</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"lightblue"</span>,   <span class="co"># Low-High</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"pink"</span>,        <span class="co"># High-Low</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"red"</span>          <span class="co"># High-High</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"LISA Cluster"</span>,</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">position =</span> <span class="fu">tm_pos_in</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>))</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>() <span class="sc">+</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Local Moran's I Clusters (p &lt; 0.05)"</span>)</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>lisa_map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05b_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Question: What statistical observations can you draw from the LISA map above?</strong></p>
+<p>From the LISA map and GDPPC map, there is a significant “high-high” cluster in the central-eastern part of the province, where counties with high GDP per capita are surrounded by similar counties.</p>
+<p>This pattern is reinforced by the Local Moran’s I statistics map, which show the same region in a deep green shade, indicating strong positive spatial autocorrelation. The corresponding low p-values further confirm the statistical significance of this economic clustering.</p>
+<p>Notably, the high-high cluster on the LISA map extends over more counties than those highlighted by the Local Moran’s I statistics.</p>
+</div>
+</div>
+
+
 </section>
 </section>
 
