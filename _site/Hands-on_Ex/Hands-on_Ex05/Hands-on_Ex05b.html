@@ -241,6 +241,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#the-analytical-question" id="toc-the-analytical-question" class="nav-link" data-scroll-target="#the-analytical-question"><span class="header-section-number">2</span> The Analytical Question</a></li>
   <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="header-section-number">3</span> The Data</a></li>
   <li><a href="#installing-and-launching-the-r-packages" id="toc-installing-and-launching-the-r-packages" class="nav-link" data-scroll-target="#installing-and-launching-the-r-packages"><span class="header-section-number">4</span> Installing and Launching the R Packages</a></li>
+  <li><a href="#import-data-and-preparation" id="toc-import-data-and-preparation" class="nav-link" data-scroll-target="#import-data-and-preparation"><span class="header-section-number">5</span> Import Data and Preparation</a>
+  <ul class="collapse">
+  <li><a href="#import-geospatial-shapefile" id="toc-import-geospatial-shapefile" class="nav-link" data-scroll-target="#import-geospatial-shapefile"><span class="header-section-number">5.1</span> Import Geospatial Shapefile</a></li>
+  <li><a href="#import-aspatial-csv-file" id="toc-import-aspatial-csv-file" class="nav-link" data-scroll-target="#import-aspatial-csv-file"><span class="header-section-number">5.2</span> Import Aspatial csv File</a></li>
+  <li><a href="#perform-relational-join" id="toc-perform-relational-join" class="nav-link" data-scroll-target="#perform-relational-join"><span class="header-section-number">5.3</span> Perform Relational Join</a></li>
+  <li><a href="#visualizing-regional-development-indicator" id="toc-visualizing-regional-development-indicator" class="nav-link" data-scroll-target="#visualizing-regional-development-indicator"><span class="header-section-number">5.4</span> Visualizing Regional Development Indicator</a></li>
+  </ul></li>
+  <li><a href="#local-indicators-of-spatial-associationlisa" id="toc-local-indicators-of-spatial-associationlisa" class="nav-link" data-scroll-target="#local-indicators-of-spatial-associationlisa"><span class="header-section-number">6</span> Local Indicators of Spatial Association(LISA)</a>
+  <ul class="collapse">
+  <li><a href="#computing-contiguity-spatial-weights" id="toc-computing-contiguity-spatial-weights" class="nav-link" data-scroll-target="#computing-contiguity-spatial-weights"><span class="header-section-number">6.1</span> Computing Contiguity Spatial Weights</a></li>
+  <li><a href="#row-standardised-weights-matrix" id="toc-row-standardised-weights-matrix" class="nav-link" data-scroll-target="#row-standardised-weights-matrix"><span class="header-section-number">6.2</span> Row-standardised Weights Matrix</a></li>
+  <li><a href="#computing-local-morans-i" id="toc-computing-local-morans-i" class="nav-link" data-scroll-target="#computing-local-morans-i"><span class="header-section-number">6.3</span> Computing Local Moran’s I</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -412,8 +425,263 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(sf, spdep, tmap, tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="import-data-and-preparation" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="import-data-and-preparation"><span class="header-section-number">5</span> Import Data and Preparation</h2>
+<section id="import-geospatial-shapefile" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="import-geospatial-shapefile"><span class="header-section-number">5.1</span> Import Geospatial Shapefile</h3>
+<p>Firstly, we will use <a href="https://r-spatial.github.io/sf/reference/st_read.html"><code>st_read()</code></a> of <strong>sf</strong> package to import Hunan shapefile into R. The imported shapefile will be <strong>simple features</strong> Object of <strong>sf</strong>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>hunan <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial"</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">layer =</span> <span class="st">"Hunan"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `Hunan' from data source 
+  `D:\ssinha8752\ISSS608-VAA\Hands-on_Ex\Hands-on_Ex05\data\geospatial' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 88 features and 7 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 108.7831 ymin: 24.6342 xmax: 114.2544 ymax: 30.12812
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+</div>
+</section>
+<section id="import-aspatial-csv-file" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="import-aspatial-csv-file"><span class="header-section-number">5.2</span> Import Aspatial csv File</h3>
+<p>Next, we will import <em>Hunan_2012.csv</em> into R by using <code>read_csv()</code> of <strong>readr</strong> package. The output is R dataframe class.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hunan2012 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/aspatial/Hunan_2012.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 88 Columns: 29
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (2): County, City
+dbl (27): avg_wage, deposite, FAI, Gov_Rev, Gov_Exp, GDP, GDPPC, GIO, Loan, ...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+</section>
+<section id="perform-relational-join" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="perform-relational-join"><span class="header-section-number">5.3</span> Perform Relational Join</h3>
+<p>Then, we will perform a <code>left_join()</code> to update the attribute table of hunan’s SpatialPolygonsDataFrame with the attribute fields of hunan2012 dataframe.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hunan <span class="ot">&lt;-</span> <span class="fu">left_join</span>(hunan,hunan2012) <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">15</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Joining with `by = join_by(County)`</code></pre>
+</div>
+</div>
+</section>
+<section id="visualizing-regional-development-indicator" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="visualizing-regional-development-indicator"><span class="header-section-number">5.4</span> Visualizing Regional Development Indicator</h3>
+<p>Now to build two choropleth maps by using equal interval (i.e equal) and quantile (i.e.&nbsp;quantile) classification methods, and to plot both maps next to each other by using tmap_arrange().</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>equal <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(hunan) <span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"GDPPC"</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">style =</span> <span class="st">"equal"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">values =</span> <span class="st">"brewer.blues"</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">"GDPPC"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="fu">tm_pos_in</span>(</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"left"</span>, <span class="st">"bottom"</span>))) <span class="sc">+</span> </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">fill_alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Equal interval classification"</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>quantile <span class="ot">&lt;-</span> <span class="fu">tm_shape</span>(hunan) <span class="sc">+</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_polygons</span>(<span class="at">fill =</span> <span class="st">"GDPPC"</span>,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.scale =</span> <span class="fu">tm_scale_intervals</span>(</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">style =</span> <span class="st">"quantile"</span>,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">n =</span> <span class="dv">5</span>,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>                <span class="at">values =</span> <span class="st">"brewer.blues"</span>),</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>              <span class="at">fill.legend =</span> <span class="fu">tm_legend</span>(</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">title =</span> <span class="st">"GDPPC"</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>                <span class="at">position =</span> <span class="fu">tm_pos_in</span>(</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"left"</span>, <span class="st">"bottom"</span>))) <span class="sc">+</span> </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">fill_alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_title</span>(<span class="st">"Quantile interval classification"</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="fu">tmap_arrange</span>(equal, </span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>             quantile, </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp=</span><span class="dv">1</span>, </span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">ncol=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Hands-on_Ex05b_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="local-indicators-of-spatial-associationlisa" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="local-indicators-of-spatial-associationlisa"><span class="header-section-number">6</span> Local Indicators of Spatial Association(LISA)</h2>
+<p>Local Indicators of Spatial Association (LISA) are statistics used to identify clusters and outliers in the spatial distribution of a variable. For example, if we are analyzing the GDP per capita in Hunan Province, China, LISA can help detect areas (counties) where GDP values are significantly higher or lower than expected by chance. This means that these values deviate from what would be seen in a random distribution across space.</p>
+<p>In this section, we will apply appropriate Local Indicators for Spatial Association (LISA), particularly the Local Moran’s I statistic, to identify clusters and outliers in the 2012 GDP per capita data for Hunan Province.</p>
+<section id="computing-contiguity-spatial-weights" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="computing-contiguity-spatial-weights"><span class="header-section-number">6.1</span> Computing Contiguity Spatial Weights</h3>
+<p>Before we can compute the global spatial autocorrelation statistics, we need to construct a spatial weights of the study area. The spatial weights is used to define the neighbourhood relationships between the geographical units (i.e.&nbsp;county) in the study area.</p>
+<p>In spatial data analysis using the <code>sfdep</code> package, the process of constructing spatial weight matrices begins with the <code>st_contiguity()</code> function. This function identifies neighboring polygons based on shared boundaries and allows the user to specify the type of contiguity—Queen or Rook—through the <code>queen</code> argument. By default, it uses Queen contiguity, meaning any shared point or edge qualifies two regions as neighbors unless explicitly set to <code>queen = FALSE</code>. Once the neighbor list is created, the <code>st_weights()</code> function is used to compute spatial weights, which quantify the influence of neighboring regions in spatial modeling.</p>
+<hr>
+<ul>
+<li><strong><code>st_contiguity()</code> Function:</strong>
+<ul>
+<li>Computes contiguity-based neighbor lists.</li>
+<li>Uses shared boundaries to define neighbors.</li>
+<li><code>queen = TRUE</code> (default): Queen contiguity (shared point or edge).</li>
+<li><code>queen = FALSE</code>: Rook contiguity (shared edge only).</li>
+</ul></li>
+<li><strong><code>st_weights()</code> Function:</strong>
+<ul>
+<li>Converts neighbor list (<code>nb</code>) into spatial weights.</li>
+<li><strong>Arguments:</strong>
+<ul>
+<li><code>nb</code>: Neighbor list object from <code>st_neighbors()</code>.</li>
+<li><code>style</code>: Defines weight calculation method:
+<ul>
+<li><code>"W"</code>: Row-standardized (default).</li>
+<li><code>"B"</code>: Binary coding.</li>
+<li><code>"C"</code>: Global standardization.</li>
+<li><code>"U"</code>: Global standardization divided by number of neighbors.</li>
+<li><code>"minmax"</code>: Min-max normalization.</li>
+<li><code>"S"</code>: Variance-stabilizing (Tiefelsdorf et al., 1999).</li>
+</ul></li>
+<li><code>allow_zero</code>: If <code>TRUE</code>, assigns zero to zones with no neighbors.</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sfdep)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>wm_q <span class="ot">&lt;-</span> hunan <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">nb =</span> <span class="fu">st_contiguity</span>(geometry),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">wt =</span> <span class="fu">st_weights</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>           nb, <span class="at">style =</span> <span class="st">"W"</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">.before =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(wm_q<span class="sc">$</span>nb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Neighbour list object:
+Number of regions: 88 
+Number of nonzero links: 448 
+Percentage nonzero weights: 5.785124 
+Average number of links: 5.090909 
+Link number distribution:
+
+ 1  2  3  4  5  6  7  8  9 11 
+ 2  2 12 16 24 14 11  4  2  1 
+2 least connected regions:
+30 65 with 1 link
+1 most connected region:
+85 with 11 links</code></pre>
+</div>
+</div>
+<p>The summary report above shows that there are 88 area units in Hunan. The most connected area unit has 11 neighbours. There are two area units with only one neighbours.</p>
+</section>
+<section id="row-standardised-weights-matrix" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="row-standardised-weights-matrix"><span class="header-section-number">6.2</span> Row-standardised Weights Matrix</h3>
+<p>To assign spatial weights to neighboring polygons, the style = “W” method is commonly used, which distributes equal weight by assigning each neighbor a value of . This approach is intuitive and straightforward for summarizing neighboring values like income, but it can introduce bias for edge polygons that have fewer neighbors, potentially distorting spatial autocorrelation. Despite this limitation, style = “W” is used here for simplicity, though more robust alternatives like style = “B” exist.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For simplicity, we use the style=“W” option in this example, but keep in mind that other, potentially more accurate methods are available, such as style=“B”.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>The input of <a href="https://r-spatial.github.io/spdep/reference/nb2listw.html"><code>nb2listw()</code></a> must be an object of class <strong>nb</strong>. The syntax of the function has two major arguments, namely style and zero.poly.</p></li>
+<li><p><em>style</em> can take values “W”, “B”, “C”, “U”, “minmax” and “S”. B is the basic binary coding, W is row standardised (sums over all links to n), C is globally standardised (sums over all links to n), U is equal to C divided by the number of neighbours (sums over all links to unity), while S is the variance-stabilizing coding scheme proposed by Tiefelsdorf et al.&nbsp;1999, p.&nbsp;167-168 (sums over all links to n).</p></li>
+<li><p>The zero.policy=TRUE option allows for lists of non-neighbors. This should be used with caution since the user may not be aware of missing neighbors in their dataset however, a zero.policy of FALSE would return an error.</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="computing-local-morans-i" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="computing-local-morans-i"><span class="header-section-number">6.3</span> Computing Local Moran’s I</h3>
+<p>To compute local Moran’s I, the <a href="https://r-spatial.github.io/spdep/reference/localmoran.html"><em>localmoran()</em></a> function of <strong>spdep</strong> will be used. It computes <em>Ii</em> values, given a set of <em>zi</em> values and a listw object providing neighbour weighting information for the polygon associated with the zi values.</p>
+<p>Now, we compute local Moran’s I of <em>GDPPC2012</em> at the county level.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>lisa <span class="ot">&lt;-</span> wm_q <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">local_moran =</span> <span class="fu">local_moran</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    GDPPC, nb, wt, <span class="at">nsim =</span> <span class="dv">99</span>),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">.before =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(local_moran)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>localmoran()</em> function returns a matrix of values whose columns are:</p>
+<ul>
+<li>Ii: the local Moran’s I statistics</li>
+<li>E.Ii: the expectation of local moran statistic under the randomisation hypothesis</li>
+<li>Var.Ii: the variance of local moran statistic under the randomisation hypothesis</li>
+<li>Z.Ii:the standard deviate of local moran statistic</li>
+<li>Pr(): the p-value of local moran statistic</li>
+</ul>
+</div>
+</div>
+<p>Next, we list the content of the local Moran matrix derived by using <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/printCoefmat"><em>printCoefmat()</em></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(lisa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 88
+Columns: 21
+$ ii           &lt;dbl&gt; -1.468468e-03, 2.587817e-02, -1.198765e-02, 1.022468e-03,…
+$ eii          &lt;dbl&gt; -1.846910e-03, -4.999658e-03, -6.032386e-02, 3.283112e-04…
+$ var_ii       &lt;dbl&gt; 5.067465e-04, 1.185346e-02, 8.233488e-02, 6.353081e-06, 1…
+$ z_ii         &lt;dbl&gt; 0.01681140, 0.28361178, 0.16845377, 0.27540081, 0.4530744…
+$ p_ii         &lt;dbl&gt; 9.865871e-01, 7.767079e-01, 8.662263e-01, 7.830083e-01, 6…
+$ p_ii_sim     &lt;dbl&gt; 0.86, 0.94, 0.78, 0.68, 0.54, 0.66, 0.04, 0.10, 0.02, 0.2…
+$ p_folded_sim &lt;dbl&gt; 0.43, 0.47, 0.39, 0.34, 0.27, 0.33, 0.02, 0.05, 0.01, 0.1…
+$ skewness     &lt;dbl&gt; -0.5046974, -1.0693095, 0.6120674, 1.2741963, 1.0559023, …
+$ kurtosis     &lt;dbl&gt; -0.8555584, 1.3697034, -0.5668618, 2.0063841, 0.9486768, …
+$ mean         &lt;fct&gt; Low-High, Low-Low, High-Low, High-High, High-High, High-L…
+$ median       &lt;fct&gt; High-High, High-High, High-High, High-High, High-High, Hi…
+$ pysal        &lt;fct&gt; Low-High, Low-Low, High-Low, High-High, High-High, High-L…
+$ nb           &lt;nb&gt; &lt;2, 3, 4, 57, 85&gt;, &lt;1, 57, 58, 78, 85&gt;, &lt;1, 4, 5, 85&gt;, &lt;1,…
+$ wt           &lt;list&gt; &lt;0.2, 0.2, 0.2, 0.2, 0.2&gt;, &lt;0.2, 0.2, 0.2, 0.2, 0.2&gt;, &lt;0…
+$ NAME_2       &lt;chr&gt; "Changde", "Changde", "Changde", "Changde", "Changde", "C…
+$ ID_3         &lt;int&gt; 21098, 21100, 21101, 21102, 21103, 21104, 21109, 21110, 2…
+$ NAME_3       &lt;chr&gt; "Anxiang", "Hanshou", "Jinshi", "Li", "Linli", "Shimen", …
+$ ENGTYPE_3    &lt;chr&gt; "County", "County", "County City", "County", "County", "C…
+$ County       &lt;chr&gt; "Anxiang", "Hanshou", "Jinshi", "Li", "Linli", "Shimen", …
+$ GDPPC        &lt;dbl&gt; 23667, 20981, 34592, 24473, 25554, 27137, 63118, 62202, 7…
+$ geometry     &lt;POLYGON [°]&gt; POLYGON ((112.0625 29.75523..., POLYGON ((112.228…</code></pre>
+</div>
+</div>
+<section id="mapping-the-local-morans-i" class="level4" data-number="6.3.1">
+<h4 data-number="6.3.1" class="anchored" data-anchor-id="mapping-the-local-morans-i"><span class="header-section-number">6.3.1</span> Mapping the Local Moran’s I</h4>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
