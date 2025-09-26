@@ -843,5 +843,4 @@ The **right map**, titled *"HCSA Clusters (p < 0.05)"*, simplifies interpretatio
 - **Policy relevance**: Highlights priority zones for economic intervention or support.
 - **Visual clarity**: Uses intuitive color coding and categorical classification for quick interpretation.
 
-Let me know if you'd like to overlay this with demographic data or compare results using adaptive distance weights!
 :::
