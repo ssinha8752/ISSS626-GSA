@@ -1,0 +1,71 @@
+---
+title: "Hands-on Exercise 6A: Geographical Segmentation with Spatially Constrained Clustering Techniques"
+# draft: false
+date: "Sep 27, 2024"
+date-modified: "last-modified"
+author: Shubham Sinha
+execute:
+  echo: true
+  eval: true
+  freeze: true
+  message: false
+  warning: false
+format:
+  html:
+    code-link: true
+    toc: true
+number-sections: true
+number-offset: 1
+editor: visual
+---
+
+## Overview
+
+In this exercise, we will learn to delineate homogeneous regions using hierarchical and spatially constrained clustering techniques on geographically referenced multivariate data.
+
+-   Convert GIS polygon data to R’s simple feature data frame.
+-   Convert simple feature data frame to R’s SpatialPolygonDataFrame object.
+-   Perform cluster analysis with *hclust()*.
+-   Conduct spatially constrained cluster analysis using *skater()*.
+-   Visualize analysis outputs using **ggplot2** and **tmap**.
+
+## The Analytical Question
+
+In geobusiness and spatial policy, delineating market or planning areas into homogeneous regions using multivariate data is a common approach.
+
+> In this exercise, we aim to divide [Shan State, Myanmar](https://en.wikipedia.org/wiki/Shan_State) into homogeneous regions based on various Information and Communication Technology (ICT) indicators, such as radio, television, landline phones, mobile phones, computers, and home internet access.
+
+## The Data
+
+The following 2 datasets will be used in this study.
+
+| **Data Set**                | **Description**                                                                                                         | **Format**     |
+|----------------|----------------------------------------|----------------|
+| myanmar_township_boundaries | GIS data in ESRI shapefile format containing township boundary information of Myanmar, represented as polygon features. | ESRI Shapefile |
+| Shan-ICT.csv                | Extract of the 2014 Myanmar Population and Housing Census at the township level.                                        | CSV            |
+
+Both datasets are downloaded from the [Myanmar Information Management Unit (MIMU)](http://themimu.info/).
+
+## Installing and Launching the R Packages
+
+The following R packages will be used in this exercise:
+
+| **Package**   | **Purpose**                                                                                                | **Use Case in Exercise**                                                                                  |
+|---------------|------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| **sf**        | Handles vector-based geospatial data.                                                                       | Importing and manipulating township boundary data.                                                         |
+| **spdep**     | Provides functions for spatial dependence analysis, including spatial weights and spatial autocorrelation.  | Performing spatially constrained cluster analysis using the SKATER method.                                  |
+| **tmap**      | Creates static and interactive thematic maps using cartographic quality elements.                           | Visualizing geographic clusters and regional patterns in the township data.                                 |
+| **tidyverse** | A collection of packages for data science tasks such as data manipulation, visualization, and modeling.     | Importing CSV files, wrangling data, performing data transformations, and visualizing analysis outputs.     |
+| **corrplot**  | Provides visual tools to explore data correlation matrices.                                                 | Analyzing correlation between clustering variables.                                                        |
+| **ggpubr**    | Enhances 'ggplot2' for easier 'publication-ready' plots.                                                    | Creating small multiple histograms and boxplots for exploratory data analysis.                              |
+| **heatmaply** | Creates interactive cluster heatmaps.                                                                       | Visualizing multivariate data clustering results interactively.                                             |
+| **cluster**   | Provides functions for cluster analysis.                                                                    | Performing hierarchical cluster analysis and evaluating clustering algorithms.                              |
+| **ClustGeo**  | Implements Ward-like hierarchical clustering with spatial/geographical constraints.                        | Performing spatially constrained cluster analysis using a Ward-like hierarchical clustering algorithm.     |
+
+To install and load these packages, use the following code:
+
+```{r pacman}
+pacman::p_load(spdep, tmap, sf, ClustGeo,
+               ggpubr, cluster, factoextra, NbClust,
+               heatmaply, corrplot, psych, tidyverse, GGally, plotly, knitr)
+```
