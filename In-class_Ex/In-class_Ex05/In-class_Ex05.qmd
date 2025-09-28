@@ -704,13 +704,13 @@ tm_shape(ehsa_sig) +
 
 **Additional Notes**
 
-![](img/image4a.png)
+![](img4a.png)
 
-![](img/image4b.png)
+![](img4b.png)
 
-![](img/image4c.png)
+![](img4c.png)
 
-![](img/image4d.png)
+![](img4d.png)
 
 
 ::: callout-note
