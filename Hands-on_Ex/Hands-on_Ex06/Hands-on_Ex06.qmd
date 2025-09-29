@@ -957,4 +957,164 @@ tmap_arrange(hclust.map, shclust.map,
              asp=NA, ncol=2)
 ```
 
+## Spatially Constrained Clustering: ClustGeo Method
+
+In this section, we will perform both non-spatially constrained and spatially constrained hierarchical cluster analysis with the **ClustGeo** package.
+
+### Overview of the ClustGeo Package
+
+The [**ClustGeo**](https://cran.r-project.org/web/packages/ClustGeo/) package in R is designed specifically for spatially constrained cluster analysis. It offers a Ward-like hierarchical clustering algorithm called `hclustgeo()`, which incorporates spatial or geographical constraints:
+
+-   **Dissimilarity Matrices (D0 and D1):**
+    -   **D0**: Represents dissimilarities in the **attribute/clustering variable space**. It can be non-Euclidean, and the weights of the observations can be non-uniform.
+    -   **D1**: Represents dissimilarities in the **constraint space** (e.g., spatial/geographical constraints).
+-   **Mixing Parameter (alpha):**
+    -   A value between \[0, 1\] that balances the importance of the attribute dissimilarity (D0) and the spatial constraint dissimilarity (D1). The objective is to find an alpha value that enhances spatial continuity without significantly compromising the quality of clustering based on the attributes of interest. This can be achieved using the `choicealpha()` function.
+
+### Ward-like Hierarchical Clustering with ClustGeo
+
+The `hclustgeo()` function from the ClustGeo package performs a Ward-like hierarchical clustering, similar to the `hclust()` function.
+
+To perform non-spatially constrained hierarchical clustering, provide the function with a dissimilarity matrix, as demonstrated in the code example below:
+
+```{r plot_dendrogram_ward}
+nongeo_cluster <- hclustgeo(proxmat)
+plot(nongeo_cluster, cex = 0.5)
+rect.hclust(nongeo_cluster,
+            k = 6,
+            border = 2:5)
+```
+
+::: callout-tip
+The dissimilarity matrix must be an object of class `dist`, i.e. an object obtained with the function `dist()`.
+:::
+
+#### Mapping Clusters
+
+We can plot the clusters on a categorical area shaded map.
+
+```{r}
+groups <- as.factor(cutree(nongeo_cluster, k=6))
+```
+
+```{r}
+shan_sf_ngeo_cluster <- cbind(shan_sf, as.matrix(groups)) %>%
+  rename(`CLUSTER` = `as.matrix.groups.`)
+```
+
+```{r plot_ward_clust_tmap}
+qtm(shan_sf_ngeo_cluster, "CLUSTER")
+```
+
+### Spatially Constrained Hierarchical Clustering
+
+Before we can performed spatially constrained hierarchical clustering, a spatial distance matrix will be derived by using [`st_distance()`](https://r-spatial.github.io/sf/reference/geos_measures.html) of sf package.
+
+```{r}
+dist <- st_distance(shan_sf, shan_sf)
+distmat <- as.dist(dist)
+class(distmat)
+```
+
+`as.dist()` is needed to convert the data frame into matrix.
+
+Next, `choicealpha()` will be used to determine a suitable value for the mixing parameter alpha.
+
+```{r choicealpha}
+cr <- choicealpha(proxmat, distmat, range.alpha = seq(0, 1, 0.1), K=6, graph = TRUE)
+```
+
+With reference to the graphs above, alpha = 0.3 will be used since it is the intersection point between D0 and D1.
+
+```{r}
+clustG <- hclustgeo(proxmat, distmat, alpha = 0.3)
+```
+
+Next, `cutree()` is used to derive the cluster objecct.
+
+```{r}
+groups <- as.factor(cutree(clustG, k=6))
+```
+
+We will then join back the group list with *shan_sf* polygon feature data frame by using the code below.
+
+```{r}
+shan_sf_Gcluster <- cbind(shan_sf, as.matrix(groups)) %>%
+  rename(`CLUSTER` = `as.matrix.groups.`)
+```
+
+We can now plot the map of the newly delineated spatially constrained clusters.
+
+```{r plot_deline_clust}
+qtm(shan_sf_Gcluster, "CLUSTER")
+```
+
+## Visual Interpretation of Clusters
+
+### Visualising individual clustering variable
+
+To reveal the distribution of a clustering variable (i.e RADIO_PR) by cluster.
+
+```{r plot_ngeo_clust_boxplot}
+ggplot(data = shan_sf_ngeo_cluster,
+       aes(x = CLUSTER, y = RADIO_PR)) +
+  geom_boxplot()
+```
+
+::: callout-note
+The boxplot reveals Cluster 3 displays the highest mean Radio Ownership Per Thousand Household. This is followed by Cluster 2, 1, 4, 6 and 5.
+:::
+
+### Multivariate Visualisation
+
+Parallel coordinate plot can be used to reveal clustering variables by cluster very effectively.
+
+`ggparcoord()` of \*\*GGally\* package is used in the code below.
+
+```{r multivar_viz}
+#| fig-width: 12
+ggparcoord(data = shan_sf_ngeo_cluster,
+           columns = c(17:21),
+           scale = "globalminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE,
+           title = "Multiple Parallel Coordinates Plots of ICT Variables by Cluster") +
+  facet_grid(~ CLUSTER) +
+  theme(axis.text.x = element_text(angle = 30))
+```
+
+::: callout-note
+**Observation**
+
+-   The parallel coordinate plot above reveals that households in Cluster 4 townships tend to own the highest number of TV and mobile-phone.
+
+-   On the other hand, households in Cluster 5 tends to own the lowest of all the five ICT.
+
+**Note**
+
+The scale argument of `ggparcoor()` provide several methods to scale the clustering variables. They are:
+
+-   **std**: univariately, subtract mean and divide by standard deviation.
+-   **robust**: univariately, subtract median and divide by median absolute deviation.
+-   **uniminmax**: univariately, scale so the minimum of the variable is zero, and the maximum is one.
+-   **globalminmax**: no scaling is done; the range of the graphs is defined by the global minimum and the global maximum.
+-   **center**: use uniminmax to standardize vertical height, then center each variable at a value specified by the scaleSummary param.
+-   **centerObs**: use uniminmax to standardize vertical height, then center each variable at the value of the observation specified by the centerObsID param
+
+The suitability of scale argument is dependent on your use case.
+:::
+
+To complement the visual interpretation, use `group_by()` and `summarise()` of dplyr are used to derive mean values of the clustering variables:
+
+```{r}
+shan_sf_ngeo_cluster %>%
+  st_set_geometry(NULL) %>%
+  group_by(CLUSTER) %>%
+  summarise(mean_RADIO_PR = mean(RADIO_PR),
+            mean_TV_PR = mean(TV_PR),
+            mean_LLPHONE_PR = mean(LLPHONE_PR),
+            mean_MPHONE_PR = mean(MPHONE_PR),
+            mean_COMPUTER_PR = mean(COMPUTER_PR))
+```
+
 
