@@ -393,3 +393,22 @@ At first glance, for the Distribution of total number of households and radios p
 The penetration rate plot provides more nuanced insight into radio ownership, highlighting regions where radios are more common among households, regardless of the total number of households in the region. This may suggest radio ownership rate is no sole dependent on the total population but also on socio-economic factors, or policies etc.
 :::
 
+
+## Correlation Analysis
+
+Before we perform cluster analysis, it is important for us to ensure that the cluster variables are not highly correlated.
+
+In this section, we will use [*corrplot.mixed()*](https://cran.r-project.org/web/packages/corrplot/corrplot.pdf) function of [**corrplot**](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html) package to visualise and analyse the correlation of the input variables.
+
+```{r plot_correlation_analysis}
+cluster_vars.cor = cor(ict_derived[,12:17])
+corrplot.mixed(cluster_vars.cor,
+         lower = "ellipse",
+               upper = "number",
+               tl.pos = "lt",
+               diag = "l",
+               tl.col = "black")
+```
+
+The correlation plot above shows that COMPUTER_PR and INTERNET_PR are highly correlated. This suggest that only one of them should be used in the cluster analysis instead of both.
+
