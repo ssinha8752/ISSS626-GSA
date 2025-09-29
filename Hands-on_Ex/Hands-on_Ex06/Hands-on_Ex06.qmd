@@ -153,3 +153,243 @@ summary(ict_derived)
 ```
 
 This process adds six new fields to the data frame: `RADIO_PR`, `TV_PR`, `LLPHONE_PR`, `MPHONE_PR`, `COMPUTER_PR`, and `INTERNET_PR`, representing the penetration rates for each ICT variable.
+
+## Exploratory Data Analysis (EDA)
+
+### Statistical Graphics
+
+Histogram is useful to identify the overall distribution of the data values (i.e. left skew, right skew or normal distribution)
+
+```{r radio_ownership_hist}
+p <- ggplot(data = ict_derived, aes(x = RADIO)) +
+  geom_histogram(bins = 20, color = "black", fill = "lightblue") +
+  labs(
+    title = "Distribution of Radio Ownership",
+    x = "Number of Households with Radio",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+
+ggplotly(p)
+```
+
+Boxplot is useful to detect if there are outliers.
+
+```{r radio_ownership_boxplot}
+plot_ly(data = ict_derived,
+        x = ~RADIO,
+        type = 'box',
+        fillcolor = 'lightblue',
+        marker = list(color = 'lightblue'),
+        notched = TRUE
+       ) %>%
+  layout(
+    title = "Distribution of Radio Ownership",
+    xaxis = list(title = "Number of Households with Radio")
+  )
+```
+
+We will also plotting the distribution of the newly derived variables (i.e. Radio penetration rate).
+
+```{r radio_pr_plot}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+mean_pr <- round(mean(ict_derived$`RADIO_PR`, na.rm = TRUE), 1)
+
+# Define common axis properties
+axis_settings <- list(
+  title = "",
+  zeroline = FALSE,
+  showline = FALSE,
+  showgrid = FALSE
+)
+
+aax_b <- list(
+  title = "",
+  zeroline = FALSE,
+  showline = FALSE,
+  showticklabels = FALSE,
+  showgrid = FALSE
+)
+
+# Plot Histogram
+histogram_plot <- plot_ly(
+  ict_derived,
+  x = ~`RADIO_PR`,
+  type = 'histogram',
+  histnorm = "count",
+  marker = list(color = 'lightblue'),
+  hovertemplate = 'Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra></extra>'
+) %>%
+  add_lines(
+    x = mean_pr, y = c(0, 15),
+    line = list(width = 3, color = "black"),
+    showlegend = FALSE
+  ) %>%
+  add_annotations(
+    text = paste("Mean: ", mean_pr),
+    x = mean_pr, y = 15,
+    showarrow = FALSE,
+    font = list(size = 12)
+  ) %>%
+  layout(
+    xaxis = list(title = "Radio Penetration Rate"),
+    yaxis = axis_settings,
+    bargap = 0.1
+  )
+
+# Plot Boxplot
+boxplot_plot <- plot_ly(
+  ict_derived,
+  x = ~`RADIO_PR`,
+  type = "box",
+  boxpoints = "all",
+  jitter = 0.3,
+  pointpos = -1.8,
+  notched = TRUE,
+  fillcolor = 'lightblue',
+  marker = list(color = 'lightblue'),
+  showlegend = FALSE
+) %>%
+  layout(
+    xaxis = axis_settings,
+    yaxis = aax_b
+  )
+
+# Combine Histogram and Boxplot
+subplot(
+  boxplot_plot, histogram_plot,
+  nrows = 2, heights = c(0.2, 0.8), shareX = TRUE
+) %>%
+  layout(
+    showlegend = FALSE,
+    title = "Distribution of Radio Penetration Rate",
+    xaxis = list(range = c(0, 500))
+  )
+
+
+```
+
+::: callout-note
+When we compare the distribution of radio ownership vs radio penetration rate, the distribution of radio penetration rate is less skewed.
+:::
+
+We can also plot multiple histograms to get a sense of the feature engineered fields.
+
+```{r feat_eng_hist, fig.width=10}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+radio <- ggplot(data=ict_derived,
+             aes(x= `RADIO_PR`)) +
+  geom_histogram(bins=20,
+                 color="black",
+                 fill="light blue")
+
+tv <- ggplot(data=ict_derived,
+             aes(x= `TV_PR`)) +
+  geom_histogram(bins=20,
+                 color="black",
+                 fill="light blue")
+
+llphone <- ggplot(data=ict_derived,
+             aes(x= `LLPHONE_PR`)) +
+  geom_histogram(bins=20,
+                 color="black",
+                 fill="light blue")
+
+mphone <- ggplot(data=ict_derived,
+             aes(x= `MPHONE_PR`)) +
+  geom_histogram(bins=20,
+                 color="black",
+                 fill="light blue")
+
+computer <- ggplot(data=ict_derived,
+             aes(x= `COMPUTER_PR`)) +
+  geom_histogram(bins=20,
+                 color="black",
+                 fill="light blue")
+
+internet <- ggplot(data=ict_derived,
+             aes(x= `INTERNET_PR`)) +
+  geom_histogram(bins=20,
+                 color="black",
+                 fill="light blue")
+
+ggarrange(radio, tv, llphone, mphone, computer, internet, ncol = 3, nrow = 2)
+```
+
+### EDA using Choropleth Map
+
+#### Joining Geospatial Data with Aspatial Data
+
+Before we can prepare the choropleth map, we need to combine both the geospatial data object (i.e. *shan_sf*) and aspatial data.frame object (i.e. *ict_derived*) into one. This will be performed by using the [*left_join*](https://dplyr.tidyverse.org/reference/join.tbl_df.html) function of **dplyr** package. The *shan_sf* simple feature data.frame will be used as the base data object and the *ict_derived* data.frame will be used as the join table.
+
+To join the data objects, we use the unique identifier, `TS_PCODE`.
+
+```{r create_rds}
+file_path <- "data/rds/shan_sf.rds"
+
+if (!file.exists(file_path)) {
+  shan_sf <- left_join(shan_sf, ict_derived, by = c("TS_PCODE" = "TS_PCODE"))
+  write_rds(shan_sf, file_path)
+
+} else {
+  shan_sf <- read_rds(file_path)
+}
+
+kable(head(shan_sf))
+```
+
+#### Preparing a Choropleth Map
+
+To have a quick look at the distribution of Radio penetration rate of Shan State at township level, a choropleth map will be prepared.
+
+The code below is used to prepare the choropleth map by using the *qtm()* function of **tmap** package.
+
+```{r radio_pr_choropleth}
+qtm(shan_sf, "RADIO_PR")
+```
+
+In order to reveal the distribution shown in the choropleth map above are bias to the underlying total number of households at the townships, we will create two choropleth maps, one for the total number of households (i.e. TT_HOUSEHOLDS.map) and one for the total number of household with Radio (RADIO.map) by using the code below.
+
+```{r households_radio_maps, fig.width=10}
+TT_HOUSEHOLDS.map <- tm_shape(shan_sf) +
+  tm_fill(col = "TT_HOUSEHOLDS",
+          n = 5,
+          style = "jenks",
+          title = "Total households") +
+  tm_borders(alpha = 0.5)
+
+RADIO.map <- tm_shape(shan_sf) +
+  tm_fill(col = "RADIO",
+          n = 5,
+          style = "jenks",
+          title = "Number Radio ") +
+  tm_borders(alpha = 0.5)
+
+tmap_arrange(TT_HOUSEHOLDS.map, RADIO.map,
+             asp=NA, ncol=2)
+
+```
+
+Notice that the choropleth maps above clearly show that townships with relatively larger number ot households are also showing relatively higher number of radio ownership.
+
+Now let us plot the choropleth maps showing the distribution of total number of households and Radio penetration rate by using the code below.
+
+```{r plot_choropleth_households_radio, fig.width=10}
+tm_shape(shan_sf) +
+    tm_polygons(c("TT_HOUSEHOLDS", "RADIO_PR"),
+                style="jenks") +
+    tm_facets(sync = TRUE, ncol = 2) +
+  tm_legend(legend.position = c("right", "bottom"))+
+  tm_layout(outer.margins=0, asp=0)
+```
+
+::: callout-note
+At first glance, for the Distribution of total number of households and radios plot, it reveals that township with relative larger number of households also exhibit relatively higher number of radio ownership.
+
+The penetration rate plot provides more nuanced insight into radio ownership, highlighting regions where radios are more common among households, regardless of the total number of households in the region. This may suggest radio ownership rate is no sole dependent on the total population but also on socio-economic factors, or policies etc.
+:::
+

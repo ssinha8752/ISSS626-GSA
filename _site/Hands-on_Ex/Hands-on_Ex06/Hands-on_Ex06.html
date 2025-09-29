@@ -96,7 +96,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><link rel="stylesheet" href="../../styles.css">
+}</script><link href="../../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><script src="../../site_libs/plotly-binding-4.11.0/plotly.js"></script><script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script><script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script><link href="../../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="../../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><link href="../../site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../../site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script><link rel="stylesheet" href="../../styles.css">
 </head>
 <body class="nav-fixed">
 
@@ -240,6 +243,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#import-geospatial-shapefile" id="toc-import-geospatial-shapefile" class="nav-link" data-scroll-target="#import-geospatial-shapefile"><span class="header-section-number">5.1</span> Import Geospatial Shapefile</a></li>
   <li><a href="#import-aspatial-csv-file" id="toc-import-aspatial-csv-file" class="nav-link" data-scroll-target="#import-aspatial-csv-file"><span class="header-section-number">5.2</span> Import Aspatial csv File</a></li>
   <li><a href="#deriving-new-variables-using-the-dplyr-package" id="toc-deriving-new-variables-using-the-dplyr-package" class="nav-link" data-scroll-target="#deriving-new-variables-using-the-dplyr-package"><span class="header-section-number">5.3</span> Deriving New Variables Using the <strong>dplyr</strong> Package</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#exploratory-data-analysis-eda" id="toc-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#exploratory-data-analysis-eda"><span class="header-section-number">6</span> Exploratory Data Analysis (EDA)</a>
+  <ul class="collapse">
+<li><a href="#statistical-graphics" id="toc-statistical-graphics" class="nav-link" data-scroll-target="#statistical-graphics"><span class="header-section-number">6.1</span> Statistical Graphics</a></li>
+  <li><a href="#eda-using-choropleth-map" id="toc-eda-using-choropleth-map" class="nav-link" data-scroll-target="#eda-using-choropleth-map"><span class="header-section-number">6.2</span> EDA using Choropleth Map</a></li>
   </ul>
 </li>
   </ul></nav>
@@ -803,9 +813,479 @@ First 10 features:
 </div>
 </div>
 <p>This process adds six new fields to the data frame: <code>RADIO_PR</code>, <code>TV_PR</code>, <code>LLPHONE_PR</code>, <code>MPHONE_PR</code>, <code>COMPUTER_PR</code>, and <code>INTERNET_PR</code>, representing the penetration rates for each ICT variable.</p>
+</section></section><section id="exploratory-data-analysis-eda" class="level2" data-number="6"><h2 data-number="6" class="anchored" data-anchor-id="exploratory-data-analysis-eda">
+<span class="header-section-number">6</span> Exploratory Data Analysis (EDA)</h2>
+<section id="statistical-graphics" class="level3" data-number="6.1"><h3 data-number="6.1" class="anchored" data-anchor-id="statistical-graphics">
+<span class="header-section-number">6.1</span> Statistical Graphics</h3>
+<p>Histogram is useful to identify the overall distribution of the data values (i.e.&nbsp;left skew, right skew or normal distribution)</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">ict_derived</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">RADIO</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">20</span>, color <span class="op">=</span> <span class="st">"black"</span>, fill <span class="op">=</span> <span class="st">"lightblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Distribution of Radio Ownership"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Number of Households with Radio"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Frequency"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggplotly</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-51ed3081fe4276381b0f" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-51ed3081fe4276381b0f">{"x":{"data":[{"orientation":"v","width":[1582.1578947368421,1582.1578947368425,1582.1578947368425,1582.1578947368416,1582.1578947368416,1582.1578947368434,1582.1578947368398,1582.1578947368398,1582.1578947368398,1582.1578947368398,1582.1578947368471,1582.1578947368398,1582.1578947368398,1582.1578947368398,1582.1578947368398,1582.1578947368398,1582.1578947368398,1582.1578947368398,1582.1578947368398,1582.1578947368398],"base":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"x":[115,1697.1578947368421,3279.3157894736846,4861.4736842105267,6443.6315789473683,8025.78947368421,9607.9473684210534,11190.105263157893,12772.263157894737,14354.421052631576,15936.57894736842,17518.736842105267,19100.894736842107,20683.052631578947,22265.21052631579,23847.368421052633,25429.526315789473,27011.684210526317,28593.84210526316,30176],"y":[9,18,10,2,3,4,3,3,0,1,1,0,0,0,0,0,0,0,0,1],"text":["count:  9<br />RADIO:   115.000","count: 18<br />RADIO:  1697.158","count: 10<br />RADIO:  3279.316","count:  2<br />RADIO:  4861.474","count:  3<br />RADIO:  6443.632","count:  4<br />RADIO:  8025.789","count:  3<br />RADIO:  9607.947","count:  3<br />RADIO: 11190.105","count:  0<br />RADIO: 12772.263","count:  1<br />RADIO: 14354.421","count:  1<br />RADIO: 15936.579","count:  0<br />RADIO: 17518.737","count:  0<br />RADIO: 19100.895","count:  0<br />RADIO: 20683.053","count:  0<br />RADIO: 22265.211","count:  0<br />RADIO: 23847.368","count:  0<br />RADIO: 25429.526","count:  0<br />RADIO: 27011.684","count:  0<br />RADIO: 28593.842","count:  1<br />RADIO: 30176.000"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(173,216,230,1)","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":40.840182648401829,"r":7.3059360730593621,"b":37.260273972602747,"l":37.260273972602747},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Distribution of Radio Ownership","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-2258.2368421052633,32549.236842105263],"tickmode":"array","ticktext":["0","10000","20000","30000"],"tickvals":[0,10000,20000,30000],"categoryorder":"array","categoryarray":["0","10000","20000","30000"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"Number of Households with Radio","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.90000000000000002,18.899999999999999],"tickmode":"array","ticktext":["0","5","10","15"],"tickvals":[0,5.0000000000000009,10,15],"categoryorder":"array","categoryarray":["0","5","10","15"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"Frequency","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","layer":"below","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"52c44d20606c":{"x":{},"type":"bar"}},"cur_data":"52c44d20606c","visdat":{"52c44d20606c":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>Boxplot is useful to detect if there are outliers.</p>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">plot_ly</span><span class="op">(</span>data <span class="op">=</span> <span class="va">ict_derived</span>,</span>
+<span>        x <span class="op">=</span> <span class="op">~</span><span class="va">RADIO</span>,</span>
+<span>        type <span class="op">=</span> <span class="st">'box'</span>,</span>
+<span>        fillcolor <span class="op">=</span> <span class="st">'lightblue'</span>,</span>
+<span>        marker <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">'lightblue'</span><span class="op">)</span>,</span>
+<span>        notched <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>       <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html">layout</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Distribution of Radio Ownership"</span>,</span>
+<span>    xaxis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Number of Households with Radio"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-2f14de3b93ff5fd30cef" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-2f14de3b93ff5fd30cef">{"x":{"visdat":{"52c41196d58":["function () ","plotlyVisDat"]},"cur_data":"52c41196d58","attrs":{"52c41196d58":{"x":{},"fillcolor":"lightblue","marker":{"color":"lightblue"},"notched":true,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Distribution of Radio Ownership","xaxis":{"domain":[0,1],"automargin":true,"title":"Number of Households with Radio"},"yaxis":{"domain":[0,1],"automargin":true},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"fillcolor":"lightblue","x":[30176,13801,5083,8087,11607,7324,8890,10048,5908,6399,1558,1348,3848,738,2391,2560,2171,1908,1136,701,1240,15307,3031,2245,7867,3907,2891,4543,5985,11257,7510,2794,3159,3907,3880,1493,1267,758,115,1280,1254,1065,810,1573,1240,9121,637,726,428,1713,1717,824,11329,2497,1760],"marker":{"color":"lightblue","line":{"color":"rgba(31,119,180,1)"}},"notched":true,"type":"box","orientation":"h","name":"lightblue","line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>We will also plotting the distribution of the newly derived variables (i.e.&nbsp;Radio penetration rate).</p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mean_pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">ict_derived</span><span class="op">$</span><span class="va">`RADIO_PR`</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Define common axis properties</span></span>
+<span><span class="va">axis_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  title <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  zeroline <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  showline <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  showgrid <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">aax_b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  title <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  zeroline <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  showline <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  showticklabels <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  showgrid <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot Histogram</span></span>
+<span><span class="va">histogram_plot</span> <span class="op">&lt;-</span> <span class="fu">plot_ly</span><span class="op">(</span></span>
+<span>  <span class="va">ict_derived</span>,</span>
+<span>  x <span class="op">=</span> <span class="op">~</span><span class="va">`RADIO_PR`</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">'histogram'</span>,</span>
+<span>  histnorm <span class="op">=</span> <span class="st">"count"</span>,</span>
+<span>  marker <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">'lightblue'</span><span class="op">)</span>,</span>
+<span>  hovertemplate <span class="op">=</span> <span class="st">'Radio Penetration Rate: %{x}&lt;br&gt;Frequency: %{y}&lt;extra&gt;&lt;/extra&gt;'</span></span>
+<span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">add_lines</span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="va">mean_pr</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">15</span><span class="op">)</span>,</span>
+<span>    line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">3</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
+<span>    showlegend <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">add_annotations</span><span class="op">(</span></span>
+<span>    text <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Mean: "</span>, <span class="va">mean_pr</span><span class="op">)</span>,</span>
+<span>    x <span class="op">=</span> <span class="va">mean_pr</span>, y <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>    showarrow <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    font <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html">layout</a></span><span class="op">(</span></span>
+<span>    xaxis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Radio Penetration Rate"</span><span class="op">)</span>,</span>
+<span>    yaxis <span class="op">=</span> <span class="va">axis_settings</span>,</span>
+<span>    bargap <span class="op">=</span> <span class="fl">0.1</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Plot Boxplot</span></span>
+<span><span class="va">boxplot_plot</span> <span class="op">&lt;-</span> <span class="fu">plot_ly</span><span class="op">(</span></span>
+<span>  <span class="va">ict_derived</span>,</span>
+<span>  x <span class="op">=</span> <span class="op">~</span><span class="va">`RADIO_PR`</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"box"</span>,</span>
+<span>  boxpoints <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  jitter <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  pointpos <span class="op">=</span> <span class="op">-</span><span class="fl">1.8</span>,</span>
+<span>  notched <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  fillcolor <span class="op">=</span> <span class="st">'lightblue'</span>,</span>
+<span>  marker <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">'lightblue'</span><span class="op">)</span>,</span>
+<span>  showlegend <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html">layout</a></span><span class="op">(</span></span>
+<span>    xaxis <span class="op">=</span> <span class="va">axis_settings</span>,</span>
+<span>    yaxis <span class="op">=</span> <span class="va">aax_b</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Combine Histogram and Boxplot</span></span>
+<span><span class="fu">subplot</span><span class="op">(</span></span>
+<span>  <span class="va">boxplot_plot</span>, <span class="va">histogram_plot</span>,</span>
+<span>  nrows <span class="op">=</span> <span class="fl">2</span>, heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.8</span><span class="op">)</span>, shareX <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html">layout</a></span><span class="op">(</span></span>
+<span>    showlegend <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Distribution of Radio Penetration Rate"</span>,</span>
+<span>    xaxis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">500</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-2d7019fed586e0de04e2" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-2d7019fed586e0de04e2">{"x":{"data":[{"fillcolor":"lightblue","x":[365.30918599583555,323.70877703241547,205.55645422193464,246.77306154832016,280.76243922498247,417.46466028271772,484.52147373010683,387.10174519397469,231.64993726474279,318.61183031268672,142.92266764517018,153.35608646188851,203.99724328049621,161.48796498905907,268.62150320188744,156.74748959098702,235.95261384632104,227.46781115879827,182.51928020565552,97.44231303864332,228.74008485519275,235.7389268773486,257.32235334069105,168.44237695078033,223.86318365488589,175.88007562798236,134.98622589531681,238.71577951762913,210.95484826054775,349.33589870903677,198.12166939270827,240.01374452366636,230.83668249908661,286.18517433343101,449.49026876737719,194.32513341142783,121.92070823710546,53.264001124306091,21.054558769681435,127.60442627853655,120.05744375299186,76.240246259574775,244.12296564195299,97.44765208772148,75.270122617457815,267.50938526513374,79.376947040498436,71.746219982211684,82.181259600614439,107.67490099943429,161.90476190476193,193.51808360732738,363.35353924115594,405.02838605028387,278.08500553009952],"boxpoints":"all","jitter":0.29999999999999999,"pointpos":-1.8,"notched":true,"marker":{"color":"lightblue","line":{"color":"rgba(31,119,180,1)"}},"showlegend":false,"type":"box","orientation":"h","name":"lightblue","line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[365.30918599583555,323.70877703241547,205.55645422193464,246.77306154832016,280.76243922498247,417.46466028271772,484.52147373010683,387.10174519397469,231.64993726474279,318.61183031268672,142.92266764517018,153.35608646188851,203.99724328049621,161.48796498905907,268.62150320188744,156.74748959098702,235.95261384632104,227.46781115879827,182.51928020565552,97.44231303864332,228.74008485519275,235.7389268773486,257.32235334069105,168.44237695078033,223.86318365488589,175.88007562798236,134.98622589531681,238.71577951762913,210.95484826054775,349.33589870903677,198.12166939270827,240.01374452366636,230.83668249908661,286.18517433343101,449.49026876737719,194.32513341142783,121.92070823710546,53.264001124306091,21.054558769681435,127.60442627853655,120.05744375299186,76.240246259574775,244.12296564195299,97.44765208772148,75.270122617457815,267.50938526513374,79.376947040498436,71.746219982211684,82.181259600614439,107.67490099943429,161.90476190476193,193.51808360732738,363.35353924115594,405.02838605028387,278.08500553009952],"histnorm":"count","marker":{"color":"lightblue","line":{"color":"rgba(255,127,14,1)"}},"hovertemplate":["Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>"],"type":"histogram","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y2","frame":null},{"x":[215.69999999999999,215.69999999999999],"histnorm":"count","marker":{"color":"lightblue","line":{"color":"rgba(44,160,44,1)"}},"hovertemplate":["Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>"],"type":"scatter","y":[0,15],"mode":"lines+markers","line":{"color":"black","width":3},"showlegend":false,"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y2","frame":null}],"layout":{"xaxis":{"domain":[0,1],"automargin":true,"title":"Radio Penetration Rate","zeroline":false,"showline":false,"showgrid":false,"anchor":"y2","range":[0,500]},"yaxis2":{"domain":[0,0.78000000000000003],"automargin":true,"zeroline":false,"showline":false,"showgrid":false,"anchor":"x"},"yaxis":{"domain":[0.82000000000000006,1],"automargin":true,"zeroline":false,"showline":false,"showticklabels":false,"showgrid":false,"anchor":"x"},"annotations":[{"text":"Mean:  215.7","x":215.69999999999999,"y":15,"showarrow":false,"font":{"size":12},"xref":"x","yref":"y2"}],"shapes":[],"images":[],"margin":{"b":40,"l":60,"t":25,"r":10},"hovermode":"closest","showlegend":false,"bargap":0.10000000000000001,"title":"Distribution of Radio Penetration Rate"},"attrs":{"52c4594e27d7":{"x":{},"boxpoints":"all","jitter":0.29999999999999999,"pointpos":-1.8,"notched":true,"fillcolor":"lightblue","marker":{"color":"lightblue"},"showlegend":false,"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box"},"52c46dc32d4e":{"x":{},"histnorm":"count","marker":{"color":"lightblue"},"hovertemplate":"Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"histogram"},"52c46dc32d4e.1":{"x":215.69999999999999,"histnorm":"count","marker":{"color":"lightblue"},"hovertemplate":"Radio Penetration Rate: %{x}<br>Frequency: %{y}<extra><\/extra>","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter","y":[0,15],"mode":"lines","line":{"width":3,"color":"black"},"showlegend":false,"inherit":true}},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"subplot":true,"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When we compare the distribution of radio ownership vs radio penetration rate, the distribution of radio penetration rate is less skewed.</p>
+</div>
+</div>
+<p>We can also plot multiple histograms to get a sense of the feature engineered fields.</p>
+<div class="cell">
+<details class="code-fold"><summary>Show the code</summary><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">radio</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data<span class="op">=</span><span class="va">ict_derived</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span> <span class="va">`RADIO_PR`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins<span class="op">=</span><span class="fl">20</span>,</span>
+<span>                 color<span class="op">=</span><span class="st">"black"</span>,</span>
+<span>                 fill<span class="op">=</span><span class="st">"light blue"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tv</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data<span class="op">=</span><span class="va">ict_derived</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span> <span class="va">`TV_PR`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins<span class="op">=</span><span class="fl">20</span>,</span>
+<span>                 color<span class="op">=</span><span class="st">"black"</span>,</span>
+<span>                 fill<span class="op">=</span><span class="st">"light blue"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">llphone</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data<span class="op">=</span><span class="va">ict_derived</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span> <span class="va">`LLPHONE_PR`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins<span class="op">=</span><span class="fl">20</span>,</span>
+<span>                 color<span class="op">=</span><span class="st">"black"</span>,</span>
+<span>                 fill<span class="op">=</span><span class="st">"light blue"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mphone</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data<span class="op">=</span><span class="va">ict_derived</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span> <span class="va">`MPHONE_PR`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins<span class="op">=</span><span class="fl">20</span>,</span>
+<span>                 color<span class="op">=</span><span class="st">"black"</span>,</span>
+<span>                 fill<span class="op">=</span><span class="st">"light blue"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">computer</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data<span class="op">=</span><span class="va">ict_derived</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span> <span class="va">`COMPUTER_PR`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins<span class="op">=</span><span class="fl">20</span>,</span>
+<span>                 color<span class="op">=</span><span class="st">"black"</span>,</span>
+<span>                 fill<span class="op">=</span><span class="st">"light blue"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">internet</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data<span class="op">=</span><span class="va">ict_derived</span>,</span>
+<span>             <span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span> <span class="va">`INTERNET_PR`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_histogram</span><span class="op">(</span>bins<span class="op">=</span><span class="fl">20</span>,</span>
+<span>                 color<span class="op">=</span><span class="st">"black"</span>,</span>
+<span>                 fill<span class="op">=</span><span class="st">"light blue"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">ggarrange</span><span class="op">(</span><span class="va">radio</span>, <span class="va">tv</span>, <span class="va">llphone</span>, <span class="va">mphone</span>, <span class="va">computer</span>, <span class="va">internet</span>, ncol <span class="op">=</span> <span class="fl">3</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details><div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="Hands-on_Ex06_files/figure-html/feat_eng_hist-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="eda-using-choropleth-map" class="level3" data-number="6.2"><h3 data-number="6.2" class="anchored" data-anchor-id="eda-using-choropleth-map">
+<span class="header-section-number">6.2</span> EDA using Choropleth Map</h3>
+<section id="joining-geospatial-data-with-aspatial-data" class="level4" data-number="6.2.1"><h4 data-number="6.2.1" class="anchored" data-anchor-id="joining-geospatial-data-with-aspatial-data">
+<span class="header-section-number">6.2.1</span> Joining Geospatial Data with Aspatial Data</h4>
+<p>Before we can prepare the choropleth map, we need to combine both the geospatial data object (i.e.&nbsp;<em>shan_sf</em>) and aspatial data.frame object (i.e.&nbsp;<em>ict_derived</em>) into one. This will be performed by using the <a href="https://dplyr.tidyverse.org/reference/join.tbl_df.html"><em>left_join</em></a> function of <strong>dplyr</strong> package. The <em>shan_sf</em> simple feature data.frame will be used as the base data object and the <em>ict_derived</em> data.frame will be used as the join table.</p>
+<p>To join the data objects, we use the unique identifier, <code>TS_PCODE</code>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="st">"data/rds/shan_sf.rds"</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">shan_sf</span> <span class="op">&lt;-</span> <span class="fu">left_join</span><span class="op">(</span><span class="va">shan_sf</span>, <span class="va">ict_derived</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TS_PCODE"</span> <span class="op">=</span> <span class="st">"TS_PCODE"</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">write_rds</span><span class="op">(</span><span class="va">shan_sf</span>, <span class="va">file_path</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="va">shan_sf</span> <span class="op">&lt;-</span> <span class="fu">read_rds</span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">kable</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">shan_sf</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 4%">
+<col style="width: 3%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 5%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 12%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">ST</th>
+<th style="text-align: left;">ST_PCODE</th>
+<th style="text-align: left;">DT.x</th>
+<th style="text-align: left;">DT_PCODE.x</th>
+<th style="text-align: left;">TS.x</th>
+<th style="text-align: left;">TS_PCODE</th>
+<th style="text-align: left;">DT_PCODE.y</th>
+<th style="text-align: left;">DT.y</th>
+<th style="text-align: left;">TS.y</th>
+<th style="text-align: right;">TT_HOUSEHOLDS</th>
+<th style="text-align: right;">RADIO</th>
+<th style="text-align: right;">TV</th>
+<th style="text-align: right;">LLPHONE</th>
+<th style="text-align: right;">MPHONE</th>
+<th style="text-align: right;">COMPUTER</th>
+<th style="text-align: right;">INTERNET</th>
+<th style="text-align: right;">RADIO_PR</th>
+<th style="text-align: right;">TV_PR</th>
+<th style="text-align: right;">LLPHONE_PR</th>
+<th style="text-align: right;">MPHONE_PR</th>
+<th style="text-align: right;">COMPUTER_PR</th>
+<th style="text-align: right;">INTERNET_PR</th>
+<th style="text-align: left;">geometry</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Shan (North)</td>
+<td style="text-align: left;">MMR015</td>
+<td style="text-align: left;">Mongmit</td>
+<td style="text-align: left;">MMR015D008</td>
+<td style="text-align: left;">Mongmit</td>
+<td style="text-align: left;">MMR015017</td>
+<td style="text-align: left;">MMR015D003</td>
+<td style="text-align: left;">Kyaukme</td>
+<td style="text-align: left;">Mongmit</td>
+<td style="text-align: right;">13652</td>
+<td style="text-align: right;">3907</td>
+<td style="text-align: right;">7565</td>
+<td style="text-align: right;">482</td>
+<td style="text-align: right;">3559</td>
+<td style="text-align: right;">166</td>
+<td style="text-align: right;">321</td>
+<td style="text-align: right;">286.1852</td>
+<td style="text-align: right;">554.1313</td>
+<td style="text-align: right;">35.30618</td>
+<td style="text-align: right;">260.6944</td>
+<td style="text-align: right;">12.15939</td>
+<td style="text-align: right;">23.513038</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.96001 23…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Shan (South)</td>
+<td style="text-align: left;">MMR014</td>
+<td style="text-align: left;">Taunggyi</td>
+<td style="text-align: left;">MMR014D001</td>
+<td style="text-align: left;">Pindaya</td>
+<td style="text-align: left;">MMR014006</td>
+<td style="text-align: left;">MMR014D001</td>
+<td style="text-align: left;">Taunggyi</td>
+<td style="text-align: left;">Pindaya</td>
+<td style="text-align: right;">17544</td>
+<td style="text-align: right;">7324</td>
+<td style="text-align: right;">8862</td>
+<td style="text-align: right;">348</td>
+<td style="text-align: right;">2849</td>
+<td style="text-align: right;">226</td>
+<td style="text-align: right;">136</td>
+<td style="text-align: right;">417.4647</td>
+<td style="text-align: right;">505.1300</td>
+<td style="text-align: right;">19.83584</td>
+<td style="text-align: right;">162.3917</td>
+<td style="text-align: right;">12.88190</td>
+<td style="text-align: right;">7.751938</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.7731 21….</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Shan (South)</td>
+<td style="text-align: left;">MMR014</td>
+<td style="text-align: left;">Taunggyi</td>
+<td style="text-align: left;">MMR014D001</td>
+<td style="text-align: left;">Ywangan</td>
+<td style="text-align: left;">MMR014007</td>
+<td style="text-align: left;">MMR014D001</td>
+<td style="text-align: left;">Taunggyi</td>
+<td style="text-align: left;">Ywangan</td>
+<td style="text-align: right;">18348</td>
+<td style="text-align: right;">8890</td>
+<td style="text-align: right;">4781</td>
+<td style="text-align: right;">219</td>
+<td style="text-align: right;">2207</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: right;">484.5215</td>
+<td style="text-align: right;">260.5734</td>
+<td style="text-align: right;">11.93591</td>
+<td style="text-align: right;">120.2856</td>
+<td style="text-align: right;">4.41465</td>
+<td style="text-align: right;">8.284282</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.78483 21…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Shan (South)</td>
+<td style="text-align: left;">MMR014</td>
+<td style="text-align: left;">Taunggyi</td>
+<td style="text-align: left;">MMR014D001</td>
+<td style="text-align: left;">Pinlaung</td>
+<td style="text-align: left;">MMR014009</td>
+<td style="text-align: left;">MMR014D001</td>
+<td style="text-align: left;">Taunggyi</td>
+<td style="text-align: left;">Pinlaung</td>
+<td style="text-align: right;">25504</td>
+<td style="text-align: right;">5908</td>
+<td style="text-align: right;">13816</td>
+<td style="text-align: right;">728</td>
+<td style="text-align: right;">6363</td>
+<td style="text-align: right;">351</td>
+<td style="text-align: right;">737</td>
+<td style="text-align: right;">231.6499</td>
+<td style="text-align: right;">541.7189</td>
+<td style="text-align: right;">28.54454</td>
+<td style="text-align: right;">249.4903</td>
+<td style="text-align: right;">13.76255</td>
+<td style="text-align: right;">28.897428</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.49518 20…</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Shan (North)</td>
+<td style="text-align: left;">MMR015</td>
+<td style="text-align: left;">Mongmit</td>
+<td style="text-align: left;">MMR015D008</td>
+<td style="text-align: left;">Mabein</td>
+<td style="text-align: left;">MMR015018</td>
+<td style="text-align: left;">MMR015D003</td>
+<td style="text-align: left;">Kyaukme</td>
+<td style="text-align: left;">Mabein</td>
+<td style="text-align: right;">8632</td>
+<td style="text-align: right;">3880</td>
+<td style="text-align: right;">6117</td>
+<td style="text-align: right;">628</td>
+<td style="text-align: right;">3389</td>
+<td style="text-align: right;">142</td>
+<td style="text-align: right;">165</td>
+<td style="text-align: right;">449.4903</td>
+<td style="text-align: right;">708.6423</td>
+<td style="text-align: right;">72.75255</td>
+<td style="text-align: right;">392.6089</td>
+<td style="text-align: right;">16.45042</td>
+<td style="text-align: right;">19.114921</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.66306 24…</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Shan (South)</td>
+<td style="text-align: left;">MMR014</td>
+<td style="text-align: left;">Taunggyi</td>
+<td style="text-align: left;">MMR014D001</td>
+<td style="text-align: left;">Kalaw</td>
+<td style="text-align: left;">MMR014005</td>
+<td style="text-align: left;">MMR014D001</td>
+<td style="text-align: left;">Taunggyi</td>
+<td style="text-align: left;">Kalaw</td>
+<td style="text-align: right;">41341</td>
+<td style="text-align: right;">11607</td>
+<td style="text-align: right;">25285</td>
+<td style="text-align: right;">1739</td>
+<td style="text-align: right;">16900</td>
+<td style="text-align: right;">1225</td>
+<td style="text-align: right;">1741</td>
+<td style="text-align: right;">280.7624</td>
+<td style="text-align: right;">611.6204</td>
+<td style="text-align: right;">42.06478</td>
+<td style="text-align: right;">408.7951</td>
+<td style="text-align: right;">29.63160</td>
+<td style="text-align: right;">42.113156</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.49518 20…</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section><section id="preparing-a-choropleth-map" class="level4" data-number="6.2.2"><h4 data-number="6.2.2" class="anchored" data-anchor-id="preparing-a-choropleth-map">
+<span class="header-section-number">6.2.2</span> Preparing a Choropleth Map</h4>
+<p>To have a quick look at the distribution of Radio penetration rate of Shan State at township level, a choropleth map will be prepared.</p>
+<p>The code below is used to prepare the choropleth map by using the <em>qtm()</em> function of <strong>tmap</strong> package.</p>
+<div class="cell">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">qtm</span><span class="op">(</span><span class="va">shan_sf</span>, <span class="st">"RADIO_PR"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="Hands-on_Ex06_files/figure-html/radio_pr_choropleth-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In order to reveal the distribution shown in the choropleth map above are bias to the underlying total number of households at the townships, we will create two choropleth maps, one for the total number of households (i.e.&nbsp;TT_HOUSEHOLDS.map) and one for the total number of household with Radio (RADIO.map) by using the code below.</p>
+<div class="cell">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">TT_HOUSEHOLDS.map</span> <span class="op">&lt;-</span> <span class="fu">tm_shape</span><span class="op">(</span><span class="va">shan_sf</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">tm_fill</span><span class="op">(</span>col <span class="op">=</span> <span class="st">"TT_HOUSEHOLDS"</span>,</span>
+<span>          n <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>          style <span class="op">=</span> <span class="st">"jenks"</span>,</span>
+<span>          title <span class="op">=</span> <span class="st">"Total households"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">tm_borders</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">RADIO.map</span> <span class="op">&lt;-</span> <span class="fu">tm_shape</span><span class="op">(</span><span class="va">shan_sf</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">tm_fill</span><span class="op">(</span>col <span class="op">=</span> <span class="st">"RADIO"</span>,</span>
+<span>          n <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>          style <span class="op">=</span> <span class="st">"jenks"</span>,</span>
+<span>          title <span class="op">=</span> <span class="st">"Number Radio "</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">tm_borders</span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tmap_arrange</span><span class="op">(</span><span class="va">TT_HOUSEHOLDS.map</span>, <span class="va">RADIO.map</span>,</span>
+<span>             asp<span class="op">=</span><span class="cn">NA</span>, ncol<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="Hands-on_Ex06_files/figure-html/households_radio_maps-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Notice that the choropleth maps above clearly show that townships with relatively larger number ot households are also showing relatively higher number of radio ownership.</p>
+<p>Now let us plot the choropleth maps showing the distribution of total number of households and Radio penetration rate by using the code below.</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">tm_shape</span><span class="op">(</span><span class="va">shan_sf</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">tm_polygons</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"TT_HOUSEHOLDS"</span>, <span class="st">"RADIO_PR"</span><span class="op">)</span>,</span>
+<span>                style<span class="op">=</span><span class="st">"jenks"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu">tm_facets</span><span class="op">(</span>sync <span class="op">=</span> <span class="cn">TRUE</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">tm_legend</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"right"</span>, <span class="st">"bottom"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">tm_layout</span><span class="op">(</span>outer.margins<span class="op">=</span><span class="fl">0</span>, asp<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="Hands-on_Ex06_files/figure-html/plot_choropleth_households_radio-1.png" class="img-fluid figure-img" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>At first glance, for the Distribution of total number of households and radios plot, it reveals that township with relative larger number of households also exhibit relatively higher number of radio ownership.</p>
+<p>The penetration rate plot provides more nuanced insight into radio ownership, highlighting regions where radios are more common among households, regardless of the total number of households in the region. This may suggest radio ownership rate is no sole dependent on the total population but also on socio-economic factors, or policies etc.</p>
+</div>
+</div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
