@@ -234,6 +234,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#the-analytical-question" id="toc-the-analytical-question" class="nav-link" data-scroll-target="#the-analytical-question"><span class="header-section-number">2</span> The Analytical Question</a></li>
   <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="header-section-number">3</span> The Data</a></li>
   <li><a href="#installing-and-launching-the-r-packages" id="toc-installing-and-launching-the-r-packages" class="nav-link" data-scroll-target="#installing-and-launching-the-r-packages"><span class="header-section-number">4</span> Installing and Launching the R Packages</a></li>
+  <li>
+<a href="#import-data-and-preparation" id="toc-import-data-and-preparation" class="nav-link" data-scroll-target="#import-data-and-preparation"><span class="header-section-number">5</span> Import Data and Preparation</a>
+  <ul class="collapse">
+<li><a href="#import-geospatial-shapefile" id="toc-import-geospatial-shapefile" class="nav-link" data-scroll-target="#import-geospatial-shapefile"><span class="header-section-number">5.1</span> Import Geospatial Shapefile</a></li>
+  <li><a href="#import-aspatial-csv-file" id="toc-import-aspatial-csv-file" class="nav-link" data-scroll-target="#import-aspatial-csv-file"><span class="header-section-number">5.2</span> Import Aspatial csv File</a></li>
+  <li><a href="#deriving-new-variables-using-the-dplyr-package" id="toc-deriving-new-variables-using-the-dplyr-package" class="nav-link" data-scroll-target="#deriving-new-variables-using-the-dplyr-package"><span class="header-section-number">5.3</span> Deriving New Variables Using the <strong>dplyr</strong> Package</a></li>
+  </ul>
+</li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -262,7 +270,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">September 27, 2025</p>
+      <p class="date-modified">September 29, 2025</p>
     </div>
   </div>
     
@@ -381,9 +389,423 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>               <span class="va">ggpubr</span>, <span class="va">cluster</span>, <span class="va">factoextra</span>, <span class="va">NbClust</span>,</span>
 <span>               <span class="va">heatmaply</span>, <span class="va">corrplot</span>, <span class="va">psych</span>, <span class="va">tidyverse</span>, <span class="va">GGally</span>, <span class="va">plotly</span>, <span class="va">knitr</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section><section id="import-data-and-preparation" class="level2" data-number="5"><h2 data-number="5" class="anchored" data-anchor-id="import-data-and-preparation">
+<span class="header-section-number">5</span> Import Data and Preparation</h2>
+<section id="import-geospatial-shapefile" class="level3" data-number="5.1"><h3 data-number="5.1" class="anchored" data-anchor-id="import-geospatial-shapefile">
+<span class="header-section-number">5.1</span> Import Geospatial Shapefile</h3>
+<p>Firstly, we will use <a href="https://r-spatial.github.io/sf/reference/st_read.html"><code>st_read()</code></a> of <strong>sf</strong> package to import Myanmar Township Boundary shapefile into R. The imported shapefile will be <strong>simple features</strong> Object of <strong>sf</strong>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">shan_sf</span> <span class="op">&lt;-</span> <span class="fu">st_read</span><span class="op">(</span>dsn <span class="op">=</span> <span class="st">"data/geospatial"</span>, layer <span class="op">=</span> <span class="st">"myanmar_township_boundaries"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `myanmar_township_boundaries' from data source 
+  `D:\ssinha8752\ISSS608-VAA\Hands-on_Ex\Hands-on_Ex06\data\geospatial' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 330 features and 14 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 92.17275 ymin: 9.671252 xmax: 101.1699 ymax: 28.54554
+Geodetic CRS:  WGS 84</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 4%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 5%">
+<col style="width: 3%">
+<col style="width: 6%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 16%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: right;">OBJECTID</th>
+<th style="text-align: left;">ST</th>
+<th style="text-align: left;">ST_PCODE</th>
+<th style="text-align: left;">DT</th>
+<th style="text-align: left;">DT_PCODE</th>
+<th style="text-align: left;">TS</th>
+<th style="text-align: left;">TS_PCODE</th>
+<th style="text-align: left;">ST_2</th>
+<th style="text-align: left;">LABEL2</th>
+<th style="text-align: left;">SELF_ADMIN</th>
+<th style="text-align: left;">ST_RG</th>
+<th style="text-align: left;">T_NAME_WIN</th>
+<th style="text-align: left;">T_NAME_M3</th>
+<th style="text-align: right;">AREA</th>
+<th style="text-align: left;">geometry</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">250</td>
+<td style="text-align: left;">Kachin</td>
+<td style="text-align: left;">MMR001</td>
+<td style="text-align: left;">Mohnyin</td>
+<td style="text-align: left;">MMR001D002</td>
+<td style="text-align: left;">Hpakant</td>
+<td style="text-align: left;">MMR001009</td>
+<td style="text-align: left;">Kachin State</td>
+<td style="text-align: left;">Hpakant</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">169795</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">State</td>
+<td style="text-align: left;">zm;uefU</td>
+<td style="text-align: left;">ဖားကန့်</td>
+<td style="text-align: left;">5761.2964</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.15953 26…</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">163</td>
+<td style="text-align: left;">Shan (North)</td>
+<td style="text-align: left;">MMR015</td>
+<td style="text-align: left;">Mongmit</td>
+<td style="text-align: left;">MMR015D008</td>
+<td style="text-align: left;">Mongmit</td>
+<td style="text-align: left;">MMR015017</td>
+<td style="text-align: left;">Shan State (North)</td>
+<td style="text-align: left;">Mongmit</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">61072</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">State</td>
+<td style="text-align: left;">rdk;rdwf</td>
+<td style="text-align: left;">မိုးမိတ်</td>
+<td style="text-align: left;">2703.6114</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.96001 23…</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">96</td>
+<td style="text-align: left;">Bago (East)</td>
+<td style="text-align: left;">MMR007</td>
+<td style="text-align: left;">Bago</td>
+<td style="text-align: left;">MMR007D001</td>
+<td style="text-align: left;">Waw</td>
+<td style="text-align: left;">MMR007004</td>
+<td style="text-align: left;">Bago Region (East)</td>
+<td style="text-align: left;">Waw</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">199032</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Region</td>
+<td style="text-align: left;">a0g</td>
+<td style="text-align: left;">ဝေါ</td>
+<td style="text-align: left;">952.4398</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.61505 17…</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">147</td>
+<td style="text-align: left;">Bago (West)</td>
+<td style="text-align: left;">MMR008</td>
+<td style="text-align: left;">Pyay</td>
+<td style="text-align: left;">MMR008D001</td>
+<td style="text-align: left;">Paukkhaung</td>
+<td style="text-align: left;">MMR008002</td>
+<td style="text-align: left;">Bago Region (West)</td>
+<td style="text-align: left;">Paukkhaung</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">117164</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Region</td>
+<td style="text-align: left;">aygufacgif;</td>
+<td style="text-align: left;">ပေါက်ခေါင်း</td>
+<td style="text-align: left;">1918.6734</td>
+<td style="text-align: left;">MULTIPOLYGON (((95.82708 19…</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">263</td>
+<td style="text-align: left;">Mandalay</td>
+<td style="text-align: left;">MMR010</td>
+<td style="text-align: left;">Pyinoolwin</td>
+<td style="text-align: left;">MMR010D002</td>
+<td style="text-align: left;">Mogoke</td>
+<td style="text-align: left;">MMR010011</td>
+<td style="text-align: left;">Mandalay Region</td>
+<td style="text-align: left;">Mogoke</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">191775</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Region</td>
+<td style="text-align: left;">rdk;ukwf</td>
+<td style="text-align: left;">မိုးကုတ်</td>
+<td style="text-align: left;">1178.5076</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.22371 23…</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">167</td>
+<td style="text-align: left;">Kachin</td>
+<td style="text-align: left;">MMR001</td>
+<td style="text-align: left;">Bhamo</td>
+<td style="text-align: left;">MMR001D003</td>
+<td style="text-align: left;">Shwegu</td>
+<td style="text-align: left;">MMR001011</td>
+<td style="text-align: left;">Kachin State</td>
+<td style="text-align: left;">Shwegu</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">84750</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">State</td>
+<td style="text-align: left;">a&amp;Tul</td>
+<td style="text-align: left;">ရွှေကူ</td>
+<td style="text-align: left;">3088.8291</td>
+<td style="text-align: left;">MULTIPOLYGON (((96.68573 24…</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Since our study area is the Shan state, we will examine the state list in the dataframe for the relevant state names (keys) for filtering.</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Display unique values in the "ST" column sorted in ascending order</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">shan_sf</span><span class="op">$</span><span class="va">ST</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Ayeyarwady"   "Bago (East)"  "Bago (West)"  "Chin"         "Kachin"      
+ [6] "Kayah"        "Kayin"        "Magway"       "Mandalay"     "Mon"         
+[11] "Nay Pyi Taw"  "Rakhine"      "Sagaing"      "Shan (East)"  "Shan (North)"
+[16] "Shan (South)" "Tanintharyi"  "Yangon"      </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">shan_sf</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">shan_sf</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">ST</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Shan (East)"</span>, <span class="st">"Shan (North)"</span>, <span class="st">"Shan (South)"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">shan_sf</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 55 features and 6 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 96.15107 ymin: 19.29932 xmax: 101.1699 ymax: 24.15907
+Geodetic CRS:  WGS 84
+First 10 features:
+             ST ST_PCODE       DT   DT_PCODE        TS  TS_PCODE
+1  Shan (North)   MMR015  Mongmit MMR015D008   Mongmit MMR015017
+2  Shan (South)   MMR014 Taunggyi MMR014D001   Pindaya MMR014006
+3  Shan (South)   MMR014 Taunggyi MMR014D001   Ywangan MMR014007
+4  Shan (South)   MMR014 Taunggyi MMR014D001  Pinlaung MMR014009
+5  Shan (North)   MMR015  Mongmit MMR015D008    Mabein MMR015018
+6  Shan (South)   MMR014 Taunggyi MMR014D001     Kalaw MMR014005
+7  Shan (South)   MMR014 Taunggyi MMR014D001     Pekon MMR014010
+8  Shan (South)   MMR014 Taunggyi MMR014D001  Lawksawk MMR014008
+9  Shan (North)   MMR015  Kyaukme MMR015D003 Nawnghkio MMR015013
+10 Shan (North)   MMR015  Kyaukme MMR015D003   Kyaukme MMR015012
+                         geometry
+1  MULTIPOLYGON (((96.96001 23...
+2  MULTIPOLYGON (((96.7731 21....
+3  MULTIPOLYGON (((96.78483 21...
+4  MULTIPOLYGON (((96.49518 20...
+5  MULTIPOLYGON (((96.66306 24...
+6  MULTIPOLYGON (((96.49518 20...
+7  MULTIPOLYGON (((97.14738 19...
+8  MULTIPOLYGON (((96.94981 22...
+9  MULTIPOLYGON (((96.75648 22...
+10 MULTIPOLYGON (((96.95498 22...</code></pre>
+</div>
+</div>
+<p>Then, we filter the dataframe to contain only the Shan states.</p>
+</section><section id="import-aspatial-csv-file" class="level3" data-number="5.2"><h3 data-number="5.2" class="anchored" data-anchor-id="import-aspatial-csv-file">
+<span class="header-section-number">5.2</span> Import Aspatial csv File</h3>
+<p>Next, we will import <em>Shan-ICT.csv</em> into R by using <code>read_csv()</code> of <strong>readr</strong> package. The output is R dataframe class.</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ict</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span> <span class="op">(</span><span class="st">"data/aspatial/Shan-ICT.csv"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ict</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> District Pcode     District Name      Township Pcode     Township Name     
+ Length:55          Length:55          Length:55          Length:55         
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+ Total households     Radio         Television    Land line phone 
+ Min.   : 3318    Min.   :  115   Min.   :  728   Min.   :  20.0  
+ 1st Qu.: 8711    1st Qu.: 1260   1st Qu.: 3744   1st Qu.: 266.5  
+ Median :13685    Median : 2497   Median : 6117   Median : 695.0  
+ Mean   :18369    Mean   : 4487   Mean   :10183   Mean   : 929.9  
+ 3rd Qu.:23471    3rd Qu.: 6192   3rd Qu.:13906   3rd Qu.:1082.5  
+ Max.   :82604    Max.   :30176   Max.   :62388   Max.   :6736.0  
+  Mobile phone      Computer      Internet at home
+ Min.   :  150   Min.   :  20.0   Min.   :   8.0  
+ 1st Qu.: 2037   1st Qu.: 121.0   1st Qu.:  88.0  
+ Median : 3559   Median : 244.0   Median : 316.0  
+ Mean   : 6470   Mean   : 575.5   Mean   : 760.2  
+ 3rd Qu.: 7177   3rd Qu.: 507.0   3rd Qu.: 630.5  
+ Max.   :48461   Max.   :6705.0   Max.   :9746.0  </code></pre>
+</div>
+</div>
+<p>There are a total of 11 fields and 55 observation in the dataframe.</p>
+</section><section id="deriving-new-variables-using-the-dplyr-package" class="level3" data-number="5.3"><h3 data-number="5.3" class="anchored" data-anchor-id="deriving-new-variables-using-the-dplyr-package">
+<span class="header-section-number">5.3</span> Deriving New Variables Using the <strong>dplyr</strong> Package</h3>
+<p>The values in the dataset represent the number of households, which can be biased by the total number of households in each township. Townships with more households will naturally have higher numbers of households owning items like radios or TVs.</p>
+<p>To address this bias, we will calculate the penetration rate for each ICT variable by dividing the number of households owning each item by the total number of households, then multiplying by 1000. This will normalize the data, allowing for a fair comparison between townships. Here is the code to perform this calculation:</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ict_derived</span> <span class="op">&lt;-</span> <span class="va">ict</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># feature engineering: normalize data</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    RADIO_PR <span class="op">=</span> <span class="va">Radio</span> <span class="op">/</span> <span class="va">`Total households`</span> <span class="op">*</span> <span class="fl">1000</span>,</span>
+<span>    TV_PR <span class="op">=</span> <span class="va">Television</span> <span class="op">/</span> <span class="va">`Total households`</span> <span class="op">*</span> <span class="fl">1000</span>,</span>
+<span>    LLPHONE_PR <span class="op">=</span> <span class="va">`Land line phone`</span> <span class="op">/</span> <span class="va">`Total households`</span> <span class="op">*</span> <span class="fl">1000</span>,</span>
+<span>    MPHONE_PR <span class="op">=</span> <span class="va">`Mobile phone`</span> <span class="op">/</span> <span class="va">`Total households`</span> <span class="op">*</span> <span class="fl">1000</span>,</span>
+<span>    COMPUTER_PR <span class="op">=</span> <span class="va">Computer</span> <span class="op">/</span> <span class="va">`Total households`</span> <span class="op">*</span> <span class="fl">1000</span>,</span>
+<span>    INTERNET_PR <span class="op">=</span> <span class="va">`Internet at home`</span> <span class="op">/</span> <span class="va">`Total households`</span> <span class="op">*</span> <span class="fl">1000</span></span>
+<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># improve readability of col names</span></span>
+<span>  <span class="fu">rename</span><span class="op">(</span></span>
+<span>    DT_PCODE <span class="op">=</span> <span class="va">`District Pcode`</span>, DT <span class="op">=</span> <span class="va">`District Name`</span>,</span>
+<span>    TS_PCODE <span class="op">=</span> <span class="va">`Township Pcode`</span>, TS <span class="op">=</span> <span class="va">`Township Name`</span>,</span>
+<span>    TT_HOUSEHOLDS <span class="op">=</span> <span class="va">`Total households`</span>,</span>
+<span>    RADIO <span class="op">=</span> <span class="va">Radio</span>, TV <span class="op">=</span> <span class="va">Television</span>,</span>
+<span>    LLPHONE <span class="op">=</span> <span class="va">`Land line phone`</span>, MPHONE <span class="op">=</span> <span class="va">`Mobile phone`</span>,</span>
+<span>    COMPUTER <span class="op">=</span> <span class="va">Computer</span>, INTERNET <span class="op">=</span> <span class="va">`Internet at home`</span></span>
+<span>  <span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can then review the summary statistics of the newly derived penetration rates using:</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">ict_derived</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   DT_PCODE              DT              TS_PCODE              TS           
+ Length:55          Length:55          Length:55          Length:55         
+ Class :character   Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                            
+                                                                            
+                                                                            
+ TT_HOUSEHOLDS       RADIO             TV           LLPHONE      
+ Min.   : 3318   Min.   :  115   Min.   :  728   Min.   :  20.0  
+ 1st Qu.: 8711   1st Qu.: 1260   1st Qu.: 3744   1st Qu.: 266.5  
+ Median :13685   Median : 2497   Median : 6117   Median : 695.0  
+ Mean   :18369   Mean   : 4487   Mean   :10183   Mean   : 929.9  
+ 3rd Qu.:23471   3rd Qu.: 6192   3rd Qu.:13906   3rd Qu.:1082.5  
+ Max.   :82604   Max.   :30176   Max.   :62388   Max.   :6736.0  
+     MPHONE         COMPUTER         INTERNET         RADIO_PR     
+ Min.   :  150   Min.   :  20.0   Min.   :   8.0   Min.   : 21.05  
+ 1st Qu.: 2037   1st Qu.: 121.0   1st Qu.:  88.0   1st Qu.:138.95  
+ Median : 3559   Median : 244.0   Median : 316.0   Median :210.95  
+ Mean   : 6470   Mean   : 575.5   Mean   : 760.2   Mean   :215.68  
+ 3rd Qu.: 7177   3rd Qu.: 507.0   3rd Qu.: 630.5   3rd Qu.:268.07  
+ Max.   :48461   Max.   :6705.0   Max.   :9746.0   Max.   :484.52  
+     TV_PR         LLPHONE_PR       MPHONE_PR       COMPUTER_PR    
+ Min.   :116.0   Min.   :  2.78   Min.   : 36.42   Min.   : 3.278  
+ 1st Qu.:450.2   1st Qu.: 22.84   1st Qu.:190.14   1st Qu.:11.832  
+ Median :517.2   Median : 37.59   Median :305.27   Median :18.970  
+ Mean   :509.5   Mean   : 51.09   Mean   :314.05   Mean   :24.393  
+ 3rd Qu.:606.4   3rd Qu.: 69.72   3rd Qu.:428.43   3rd Qu.:29.897  
+ Max.   :842.5   Max.   :181.49   Max.   :735.43   Max.   :92.402  
+  INTERNET_PR     
+ Min.   :  1.041  
+ 1st Qu.:  8.617  
+ Median : 22.829  
+ Mean   : 30.644  
+ 3rd Qu.: 41.281  
+ Max.   :117.985  </code></pre>
+</div>
+</div>
+<p>This process adds six new fields to the data frame: <code>RADIO_PR</code>, <code>TV_PR</code>, <code>LLPHONE_PR</code>, <code>MPHONE_PR</code>, <code>COMPUTER_PR</code>, and <code>INTERNET_PR</code>, representing the penetration rates for each ICT variable.</p>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

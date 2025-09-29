@@ -69,3 +69,87 @@ pacman::p_load(spdep, tmap, sf, ClustGeo,
                ggpubr, cluster, factoextra, NbClust,
                heatmaply, corrplot, psych, tidyverse, GGally, plotly, knitr)
 ```
+
+
+## Import Data and Preparation
+
+### Import Geospatial Shapefile
+
+Firstly, we will use [`st_read()`](https://r-spatial.github.io/sf/reference/st_read.html) of **sf** package to import Myanmar Township Boundary shapefile into R. The imported shapefile will be **simple features** Object of **sf**.
+
+```{r read_geospatial}
+shan_sf <- st_read(dsn = "data/geospatial", layer = "myanmar_township_boundaries")
+```
+
+```{r view_shan_sf}
+#| echo: false
+kable(head(shan_sf))
+```
+
+Since our study area is the Shan state, we will examine the state list in the dataframe for the relevant state names (keys) for filtering.
+
+```{r check_state_keys}
+# Display unique values in the "ST" column sorted in ascending order
+sort(unique(shan_sf$ST))
+```
+
+```{r filter_for_shan_state}
+shan_sf <-
+  shan_sf %>%
+  filter(ST %in% c("Shan (East)", "Shan (North)", "Shan (South)")) %>%
+  select(c(2:7))
+
+shan_sf
+```
+
+Then, we filter the dataframe to contain only the Shan states.
+
+### Import Aspatial csv File
+
+Next, we will import *Shan-ICT.csv* into R by using `read_csv()` of **readr** package. The output is R dataframe class.
+
+```{r read_aspatial}
+ict <- read_csv ("data/aspatial/Shan-ICT.csv")
+```
+
+```{r view_ict_stats}
+summary(ict)
+```
+
+There are a total of 11 fields and 55 observation in the dataframe.
+
+### Deriving New Variables Using the **dplyr** Package
+
+The values in the dataset represent the number of households, which can be biased by the total number of households in each township. Townships with more households will naturally have higher numbers of households owning items like radios or TVs.
+
+To address this bias, we will calculate the penetration rate for each ICT variable by dividing the number of households owning each item by the total number of households, then multiplying by 1000. This will normalize the data, allowing for a fair comparison between townships. Here is the code to perform this calculation:
+
+```{r feat_eng}
+ict_derived <- ict %>%
+  # feature engineering: normalize data
+  mutate(
+    RADIO_PR = Radio / `Total households` * 1000,
+    TV_PR = Television / `Total households` * 1000,
+    LLPHONE_PR = `Land line phone` / `Total households` * 1000,
+    MPHONE_PR = `Mobile phone` / `Total households` * 1000,
+    COMPUTER_PR = Computer / `Total households` * 1000,
+    INTERNET_PR = `Internet at home` / `Total households` * 1000
+  ) %>%
+  # improve readability of col names
+  rename(
+    DT_PCODE = `District Pcode`, DT = `District Name`,
+    TS_PCODE = `Township Pcode`, TS = `Township Name`,
+    TT_HOUSEHOLDS = `Total households`,
+    RADIO = Radio, TV = Television,
+    LLPHONE = `Land line phone`, MPHONE = `Mobile phone`,
+    COMPUTER = Computer, INTERNET = `Internet at home`
+  )
+```
+
+We can then review the summary statistics of the newly derived penetration rates using:
+
+```{r view_feat_eng_stats}
+summary(ict_derived)
+```
+
+This process adds six new fields to the data frame: `RADIO_PR`, `TV_PR`, `LLPHONE_PR`, `MPHONE_PR`, `COMPUTER_PR`, and `INTERNET_PR`, representing the penetration rates for each ICT variable.
