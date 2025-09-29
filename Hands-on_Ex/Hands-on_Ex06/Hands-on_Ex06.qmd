@@ -767,3 +767,194 @@ qtm(shan_sf_cluster, "CLUSTER")
 The choropleth map above reveals the clusters are very fragmented. The is **one of the major limitation when non-spatial clustering algorithm such as hierarchical cluster analysis method is used.**
 :::
 
+## Spatially Constrained Clustering: SKATER approach
+
+In this section, we will derive spatially constrained cluster by using [*skater()*](https://r-spatial.github.io/spdep/reference/skater.html) method of [**spdep**](https://r-spatial.github.io/spdep/index.html) package.
+
+### Converting into SpatialPolygonsDataFrame
+
+First, we need to convert `shan_sf` into SpatialPolygonsDataFrame. This is because SKATER function only support **sp** objects such as SpatialPolygonDataFrame.
+
+The code below uses [*as_Spatial()*](https://r-spatial.github.io/sf/reference/coerce-methods.html) of **sf** package to convert *shan_sf* into a SpatialPolygonDataFrame called *shan_sp*.
+
+```{r}
+shan_sp <- as_Spatial(shan_sf)
+```
+
+### Computing Neighbour List
+
+To compute the list of neighboring polygons, use the [`poly2nb()`](https://r-spatial.github.io/spdep/reference/poly2nb.html) function from the **spdep** package.
+
+```{r}
+shan.nb <- poly2nb(shan_sp)
+summary(shan.nb)
+```
+
+To visualize the neighbors on the map, you can plot the community area boundaries and the neighbor network together. Here’s how:
+
+1.  **Plot the Boundaries**: Use the `plot()` function to draw the boundaries of the spatial polygons (`shan_sf`).
+2.  **Compute Centroids**: Extract the centroids of the polygons using the `st_centroid()` function, which will serve as the nodes for the neighbor network.
+
+```{r}
+coords <- st_coordinates(
+  st_centroid(st_geometry(shan_sf)))
+```
+
+```{r plot_neighbors}
+plot(st_geometry(shan_sf),
+     border=grey(.5))
+plot(shan.nb,
+     coords,
+     col="blue",
+     add=TRUE)
+```
+
+::: callout-tip
+**Plot Order Matters**: Always plot the boundaries first, followed by the network. If the network is plotted first, some areas may be clipped because the plotting area is determined by the first plot's extent. Plotting the boundaries first ensures the entire map area is visible.
+:::
+
+### Calculating Edge Costs
+
+Next, [*nbcosts()*](https://r-spatial.github.io/spdep/reference/nbcosts.html) of **spdep** package is used to compute the cost of each edge. It is the distance between it nodes. This function compute this distance using a data.frame with observations vector in each node.
+
+The code below is used to compute the cost of each edge.
+
+```{r}
+lcosts <- nbcosts(shan.nb, shan_ict)
+```
+
+For each observation, this gives the pairwise dissimilarity between its values on the five variables and the values for the neighbouring observation (from the neighbour list). Basically, this is the notion of a generalised weight for a spatial weights matrix.
+
+Next, we will incorporate these costs into a weights object in the same way as we did in the calculation of inverse of distance weights. In other words, we convert the neighbour list to a list weights object by specifying the just computed ***lcosts*** as the weights.
+
+In order to achieve this, [*nb2listw()*](https://r-spatial.github.io/spdep/reference/nb2listw.html) of **spdep** package is used as shown in the code chunk below.
+
+Note that we specify the *style* as **B** to make sure the cost values are not row-standardised.
+
+```{r}
+shan.w <- nb2listw(shan.nb,
+                   lcosts,
+                   style="B")
+summary(shan.w)
+```
+
+### Computing Minimum Spanning Tree
+
+The minimum spanning tree is computed by mean of the [*mstree()*](https://r-spatial.github.io/spdep/reference/mstree.html) of **spdep** package as shown in the code chunk below.
+
+```{r}
+shan.mst <- mstree(shan.w)
+```
+
+After computing the MST, we can check its class and dimension by using the code below.
+
+```{r}
+class(shan.mst)
+dim(shan.mst)
+```
+
+::: callout-note
+The dimension is 54 and not 55.
+
+This is because the minimum spanning tree consists on n-1 edges (links) in order to traverse all the nodes.
+:::
+
+We can display the content of *shan.mst* by using *head()* as shown in the code below.
+
+```{r}
+head(shan.mst)
+```
+
+The plot method for the MST include a way to show the observation numbers of the nodes in addition to the edge. As before, we plot this together with the township boundaries. We can see how the initial neighbour list is simplified to just one edge connecting each of the nodes, while passing through all the nodes.
+
+```{r plot_mst}
+plot(st_geometry(shan_sf),
+                 border=gray(.5))
+plot.mst(shan.mst,
+         coords,
+         col="blue",
+         cex.lab=0.7,
+         cex.circles=0.005,
+         add=TRUE)
+```
+
+### Computing Spatially Constrained Clusters using SKATER Method
+
+The code below compute the spatially constrained cluster using [*skater()*](https://r-spatial.github.io/spdep/reference/skater.html) of **spdep** package.
+
+```{r}
+clust6 <- spdep::skater(edges = shan.mst[,1:2],
+                 data = shan_ict,
+                 method = "euclidean",
+                 ncuts = 5)
+```
+
+The `skater()` function requires three mandatory arguments:
+
+1.  **First two columns of the MST matrix**: These columns represent the edges of the Minimum Spanning Tree (MST) without the cost.
+2.  **Data matrix**: This is used to update the costs dynamically as units are grouped together.
+3.  **Number of cuts**: This is set to **one less than the desired number of clusters**. Remember, this value represents the number of cuts in the graph, not the total number of clusters.
+
+The output of `skater()` is an object of class **skater**. You can examine its contents using the following code:
+
+```{r}
+str(clust6)
+```
+
+The most interesting component of this list structure is the groups vector containing the labels of the cluster to which each observation belongs (as before, the label itself is arbitary). This is followed by a detailed summary for each of the clusters in the edges.groups list. Sum of squares measures are given as ssto for the total and ssw to show the effect of each of the cuts on the overall criterion.
+
+We can check the cluster assignment by using the code:
+
+```{r}
+ccs6 <- clust6$groups
+ccs6
+```
+
+We can find out how many observations are in each cluster by means of the table command.
+
+Parenthetially, we can also find this as the dimension of each vector in the lists contained in edges.groups. For example, the first list has node with dimension 12, which is also the number of observations in the first cluster.
+
+```{r}
+table(ccs6)
+```
+
+Lastly, we can also plot the pruned tree that shows the five clusters on top of the townshop area.
+
+```{r plot_skater_mst, fig.width=8, fig.height=6}
+plot(st_geometry(shan_sf),
+     border=gray(.5))
+plot(clust6,
+     coords,
+     cex.lab=.7,
+     groups.colors=c("red","green","blue", "brown", "pink"),
+     cex.circles=0.005,
+     add=TRUE)
+```
+
+### Visualising the Clusters in Choropleth Map
+
+The code below is used to plot the newly derived clusters by using SKATER method.
+
+```{r plot_skater_tmap}
+groups_mat <- as.matrix(clust6$groups)
+shan_sf_spatialcluster <- cbind(shan_sf_cluster, as.factor(groups_mat)) %>%
+  rename(`SP_CLUSTER`=`as.factor.groups_mat.`)
+qtm(shan_sf_spatialcluster, "SP_CLUSTER")
+```
+
+For easy comparison, it will be better to place both the hierarchical clustering and spatially constrained hierarchical clustering maps next to each other.
+
+```{r compare_clust_tmaps, fig.width=10, fig.height=6}
+hclust.map <- qtm(shan_sf_cluster,
+                  "CLUSTER") +
+  tm_borders(alpha = 0.5)
+
+shclust.map <- qtm(shan_sf_spatialcluster,
+                   "SP_CLUSTER") +
+  tm_borders(alpha = 0.5)
+
+tmap_arrange(hclust.map, shclust.map,
+             asp=NA, ncol=2)
+```
+
+
