@@ -19,15 +19,15 @@ number-offset: 1
 editor: visual
 ---
 
-# Load Packages
+## Load Packages
 
 ```{r}
 pacman::p_load(sf, tmap, tidyverse,knitr,sfdep,ggplot2)
 ```
 
-# Import Data
+## Import Data
 
-## Import mpsz19
+### Import mpsz19
 
 ```{r}
 mpsz19_sf <- read_rds("data/rds/mpsz.rds")
@@ -38,7 +38,7 @@ st_crs(mpsz19_sf)
 plot(mpsz19_sf)
 ```
 
-## Import BusStop shap file
+### Import BusStop shap file
 
 The code chunk below uses [`st_read()`](https://r-spatial.github.io/sf/reference/st_read.html) of **sf** package to import LTA Bus Stop into R. The imported shapefile will be **simple features** Object of **sf**.
 
@@ -54,7 +54,7 @@ st_crs(BusStop)
 plot(BusStop)
 ```
 
-## Import CSV File
+### Import CSV File
 
 ```{r}
 odbus <-  read_csv("data/LTADataMall/origin_destination_bus_202508.csv")
@@ -104,7 +104,7 @@ tm_shape(mpsz19_sf)+
 
 Notice that the bus stops in JB have been removed!
 
-## Derive Analytical Hexagon
+### Derive Analytical Hexagon
 
 ```{r}
 hexagon <- st_make_grid(mpsz19_sf,
@@ -118,7 +118,7 @@ hexagon
 
 The hexagon above contains only one column with polygon geometry, lacking an unique ID
 
-### Filter hexagons with bus stops
+#### Filter hexagons with bus stops
 
 The code below will return 0 or \>0. 0 means that their are bus stops within the hexagons.
 
@@ -133,7 +133,7 @@ head(hexagon)
 hexagon <- filter(hexagon,n_collisions>0)
 ```
 
-### Assign IDs to Each Hexagon
+#### Assign IDs to Each Hexagon
 
 ```{r}
 hexagon <- hexagon %>%
@@ -157,7 +157,7 @@ tm_shape(mpsz19_sf)+
   tm_legend(frame = FALSE)
 ```
 
-## Prepare Trip Generation Data
+### Prepare Trip Generation Data
 
 ```{r}
 trips <- odbus %>%
