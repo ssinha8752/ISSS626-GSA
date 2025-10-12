@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
-<title>Hands-on Exercise – ISSS626-GAA</title>
+<meta name="author" content="Shubham Sinha">
+<meta name="dcterms.date" content="2024-10-10">
+<title>7A: Calibrating Hedonic Pricing Model for Private Highrise Property with GWR Method – ISSS626-GAA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,28 +19,58 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
-
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-df479d6c4d77d0e0dfbcb5361179d7fd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-df479d6c4d77d0e0dfbcb5361179d7fd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -67,78 +96,14 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-posts .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-image','listing-date','listing-title','listing-subtitle',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-posts'] = new List('listing-posts', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="../styles.css">
+}</script><link rel="stylesheet" href="../../styles.css">
 </head>
-
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">ISSS626-GAA</span>
     </a>
   </div>
@@ -148,103 +113,103 @@ window.Quarto = {
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item dropdown ">
+<li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercises" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Hands-on Exercises</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">    
-        <li>
-    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01a.html">
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercises">
+<li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01a.html">
  <span class="dropdown-text">Exercise 1A - Geospatial Data Wrangling</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01b.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01b.html">
  <span class="dropdown-text">Exercise 1B - Choropleth Mapping</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02a.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02a.html">
  <span class="dropdown-text">Exercise 2A - 1st Order spatial point pattern analysis methods</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02b.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02b.html">
  <span class="dropdown-text">Exercise 2B - 2nd Order spatial point pattern analysis methods</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html">
  <span class="dropdown-text">Exercise 3A - Spatio-Temporal Point Patterns Analysis</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html">
  <span class="dropdown-text">Exercise 4A - Spatial Weights and Applications</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html">
  <span class="dropdown-text">Exercise 5A - Global Measures of Spatial Autocorrelation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html">
  <span class="dropdown-text">Exercise 5B - Local Measures of Spatial Autocorrelation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html">
  <span class="dropdown-text">Exercise 6A - Geographic Segmentation</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html">
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html">
  <span class="dropdown-text">Exercise 7A - Calibrating Hedonic Pricing Model</span></a>
   </li>  
     </ul>
-  </li>
+</li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercises" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">In-Class Exercises</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercises">    
-        <li>
-    <a class="dropdown-item" href="../In-class_Ex/In-class_Ex01/In-class_Ex01.html">
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercises">
+<li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex01/In-class_Ex01.html">
  <span class="dropdown-text">In-Class : Exercise 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../In-class_Ex/In-class_Ex02/In-class_Ex02.html">
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex02/In-class_Ex02.html">
  <span class="dropdown-text">In-Class : Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../In-class_Ex/In-class_Ex03/In-class_Ex03a.html">
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex03/In-class_Ex03a.html">
  <span class="dropdown-text">In-Class : Exercise 3a</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../In-class_Ex/In-class_Ex03/In-class_Ex03.html">
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex03/In-class_Ex03.html">
  <span class="dropdown-text">In-Class : Exercise 3b</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../In-class_Ex/In-class_Ex04/In-class_Ex04.html">
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex04/In-class_Ex04.html">
  <span class="dropdown-text">In-Class : Exercise 4</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../In-class_Ex/In-class_Ex05/In-class_Ex05.html">
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex05/In-class_Ex05.html">
  <span class="dropdown-text">In-Class : Exercise 5</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../In-class_Ex/In-class_Ex06/In-class_Ex06.html">
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex06/In-class_Ex06.html">
  <span class="dropdown-text">In-Class : Exercise 6</span></a>
   </li>  
     </ul>
-  </li>
+</li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercises" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Take-Home Exercises</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercises">    
-        <li>
-    <a class="dropdown-item" href="../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html">
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercises">
+<li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html">
  <span class="dropdown-text">Exercise 1 - Geospatial Analytics for Public Good</span></a>
   </li>  
     </ul>
-  </li>
+</li>
 </ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
-  <li class="nav-item">
-    <a class="nav-link" href="../index.html"> 
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -262,246 +227,188 @@ window.Quarto = {
 <span class="menu-text"></span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
+</div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
-    </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a></li>
+  <li><a href="#learning-outcome" id="toc-learning-outcome" class="nav-link" data-scroll-target="#learning-outcome"><span class="header-section-number">2</span> Learning Outcome</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="header-section-number">3</span> The Data</a></li>
+  <li><a href="#installing-and-launching-the-r-packages" id="toc-installing-and-launching-the-r-packages" class="nav-link" data-scroll-target="#installing-and-launching-the-r-packages"><span class="header-section-number">4</span> Installing and Launching the R Packages</a></li>
+  <li>
+<a href="#geospatial-data-wrangling" id="toc-geospatial-data-wrangling" class="nav-link" data-scroll-target="#geospatial-data-wrangling"><span class="header-section-number">5</span> Geospatial Data Wrangling</a>
+  <ul class="collapse">
+<li><a href="#importing-geospatial-data" id="toc-importing-geospatial-data" class="nav-link" data-scroll-target="#importing-geospatial-data"><span class="header-section-number">5.1</span> Importing Geospatial Data</a></li>
+  <li><a href="#updating-crs-information" id="toc-updating-crs-information" class="nav-link" data-scroll-target="#updating-crs-information"><span class="header-section-number">5.2</span> Updating CRS Information</a></li>
+  </ul>
+</li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Hands-on Exercise</h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">7A: Calibrating Hedonic Pricing Model for Private Highrise Property with GWR Method</h1>
 </div>
 
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta">
 
-    
-  
-    
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Shubham Sinha </p>
+          </div>
   </div>
-  
-
-
-</header>
-
-
-<div id="listing-posts" class="quarto-listing quarto-listing-container-grid">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-     <select id="listing-posts-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-posts'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-       <option value="" disabled="" selected="" hidden="">Order By</option>
-       <option value="index" data-direction="asc">Default</option>
-         <option value="listing-title" data-direction="asc">
-          Title
-        </option>
-         <option value="listing-date-sort" data-direction="asc">
-          Date - Oldest
-        </option>
-         <option value="listing-date-sort" data-direction="desc">
-          Date - Newest
-        </option>
-     </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 10, 2024</p>
     </div>
-</div>
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1758556800000" data-listing-file-modified-sort="1758871072248" data-listing-date-modified-sort="1758871072000" data-listing-reading-time-sort="40" data-listing-word-count-sort="7914">
-<a href="../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="Hands-on_Ex05\Hands-on_Ex05b_files\figure-html\unnamed-chunk-5-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 5B: Local Measures of Spatial Autocorrelation
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Sep 23, 2025
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-listing-date-sort="1758384000000" data-listing-file-modified-sort="1758833038616" data-listing-date-modified-sort="1758833038000" data-listing-reading-time-sort="22" data-listing-word-count-sort="4261">
-<a href="../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="Hands-on_Ex05\Hands-on_Ex05a_files\figure-html\unnamed-chunk-5-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 5A: Global Measures of Spatial Autocorrelation
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Sep 21, 2025
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-listing-date-sort="1728489600000" data-listing-file-modified-sort="1760277031656" data-listing-date-modified-sort="1760277031000" data-listing-reading-time-sort="3" data-listing-word-count-sort="565">
-<a href="../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-7A: Calibrating Hedonic Pricing Model for Private Highrise Property with GWR Method
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Oct 10, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="3" data-listing-date-sort="1727366400000" data-listing-file-modified-sort="1759134511918" data-listing-date-modified-sort="1759134511000" data-listing-reading-time-sort="37" data-listing-word-count-sort="7373">
-<a href="../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="Hands-on_Ex06\Hands-on_Ex06_files\figure-html\feat_eng_hist-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 6A: Geographical Segmentation with Spatially Constrained Clustering Techniques
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Sep 27, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="4" data-listing-date-sort="1726243200000" data-listing-file-modified-sort="1758372823154" data-listing-date-modified-sort="1758372823000" data-listing-reading-time-sort="20" data-listing-word-count-sort="3850">
-<a href="../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="Hands-on_Ex04\Hands-on_Ex04_files\figure-html\unnamed-chunk-10-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 4: Spatial Weights and Applications
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Sep 14, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="5" data-listing-date-sort="1725724800000" data-listing-file-modified-sort="1758811481683" data-listing-date-modified-sort="1758811481000" data-listing-reading-time-sort="5" data-listing-word-count-sort="897">
-<a href="../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="Hands-on_Ex03\Hands-on_Ex03_files\figure-html\unnamed-chunk-4-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 3 - Spatio-Temporal Point Patterns Analysis
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Sep 8, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="6" data-listing-date-sort="1725292800000" data-listing-file-modified-sort="1757855712060" data-listing-date-modified-sort="1757855712000" data-listing-reading-time-sort="9" data-listing-word-count-sort="1659">
-<a href="../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02b.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="Hands-on_Ex02\Hands-on_Ex02b_files\figure-html\unnamed-chunk-9-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 2B - Second-order Spatial Point Patterns Analysis Methods
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Sep 3, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="7" data-listing-date-sort="1725206400000" data-listing-file-modified-sort="1757855703258" data-listing-date-modified-sort="1757855703000" data-listing-reading-time-sort="13" data-listing-word-count-sort="2555">
-<a href="../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02a.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="Hands-on_Ex02\Hands-on_Ex02a_files\figure-html\unnamed-chunk-9-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 2A - First-order Spatial Point Patterns Analysis Methods
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Sep 2, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="8" data-listing-date-sort="1725033600000" data-listing-file-modified-sort="1757855637093" data-listing-date-modified-sort="1757855637000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2620">
-<a href="../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01b.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="Hands-on_Ex01\Hands-on_Ex01b_files\figure-html\unnamed-chunk-12-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 1B - Choropleth Mapping with R
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Aug 31, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="9" data-listing-date-sort="1725033600000" data-listing-file-modified-sort="1757855625313" data-listing-date-modified-sort="1757855625000" data-listing-reading-time-sort="6" data-listing-word-count-sort="1145">
-<a href="../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01a.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="Hands-on_Ex01\Hands-on_Ex01a_files\figure-html\unnamed-chunk-9-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Hands-on Exercise 1A - Geospatial Data Wrangling with R
-</h5>
-<div class="card-attribution card-text-small end">
-<div class="listing-date">
-Aug 31, 2024
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div>
+  </div>
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">October 12, 2025</p>
+    </div>
+  </div>
+    
+  </div>
+  
 
 
+</header><section id="overview" class="level2" data-number="1"><h2 data-number="1" class="anchored" data-anchor-id="overview">
+<span class="header-section-number">1</span> Overview</h2>
+<p>In this exercise, we will learn to build <a href="https://www.investopedia.com/terms/h/hedonicpricing.asp">hedonic pricing</a> models for private high-rise property using Geographically Weighted Regression (GWR) methods to account for non-stationary variables.</p>
+<p><strong>Geographically weighted regression (GWR)</strong> is a spatial statistical technique that takes non-stationary variables into consideration (e.g., climate; demographic factors; physical environment characteristics) and models the local relationships between these independent variables and an outcome of interest (also known as dependent variable).</p>
+<blockquote class="blockquote">
+<p>In this exercise, The dependent variable is the resale prices of condominium in 2015. The independent variables are divided into either structural and locational.</p>
+</blockquote>
+<p>We will be using the <a href="https://www.jstatsoft.org/article/view/v063i17"><strong>GWmodel</strong></a> package. It provides a collection of localised spatial statistical methods, namely: GW summary statistics, GW principal components analysis, GW discriminant analysis and various forms of GW regression; some of which are provided in basic and robust (outlier resistant) forms. Commonly, outputs or parameters of the GWmodel are mapped to provide a useful exploratory tool, which can often precede (and direct) a more traditional or sophisticated statistical analysis.</p>
+</section><section id="learning-outcome" class="level2" data-number="2"><h2 data-number="2" class="anchored" data-anchor-id="learning-outcome">
+<span class="header-section-number">2</span> Learning Outcome</h2>
+<ul>
+<li>Understand the basics of geographically weighted regression (GWR).</li>
+<li>Build and evaluate hedonic pricing models using GWR.</li>
+<li>Convert geospatial and aspatial data into appropriate formats for analysis.</li>
+<li>Perform exploratory data analysis (EDA) using statistical graphics.</li>
+<li>Visualize the model outputs and spatial patterns using various R packages.</li>
+<li>Assess spatial autocorrelation and other statistical properties of model residuals.</li>
+<li>Compare and interpret fixed and adaptive bandwidth GWR models.</li>
+</ul></section><section id="the-data" class="level2" data-number="3"><h2 data-number="3" class="anchored" data-anchor-id="the-data">
+<span class="header-section-number">3</span> The Data</h2>
+<p>The following 2 datasets will be used in this study:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 56%">
+<col style="width: 21%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Data Set</strong></th>
+<th><strong>Description</strong></th>
+<th><strong>Format</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>MP14_SUBZONE_WEB_PL</td>
+<td>URA Master Plan 2014’s planning subzone boundaries represented as polygon features.</td>
+<td>ESRI Shapefile</td>
+</tr>
+<tr class="even">
+<td>condo_resale_2015.csv</td>
+<td>Data on condominium resale prices in 2015, including structural and locational attributes.</td>
+<td>CSV</td>
+</tr>
+</tbody>
+</table></section><section id="installing-and-launching-the-r-packages" class="level2" data-number="4"><h2 data-number="4" class="anchored" data-anchor-id="installing-and-launching-the-r-packages">
+<span class="header-section-number">4</span> Installing and Launching the R Packages</h2>
+<p>The following R packages will be used in this exercise:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 40%">
+<col style="width: 36%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Package</strong></th>
+<th><strong>Purpose</strong></th>
+<th><strong>Use Case in Exercise</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>sf</strong></td>
+<td>Manages, processes, and manipulates vector-based geospatial data.</td>
+<td>Handling and converting geospatial data such as the URA Master Plan boundaries.</td>
+</tr>
+<tr class="even">
+<td><strong>GWmodel</strong></td>
+<td>Calibrates geographically weighted models for local spatial analysis.</td>
+<td>Building hedonic pricing models using fixed and adaptive bandwidth GWR methods.</td>
+</tr>
+<tr class="odd">
+<td><strong>olsrr</strong></td>
+<td>Performs diagnostics and builds better multiple linear regression models.</td>
+<td>Testing for multicollinearity, normality, and linearity of the regression model.</td>
+</tr>
+<tr class="even">
+<td><strong>corrplot</strong></td>
+<td>Provides visual tools to explore data correlation matrices.</td>
+<td>Visualizing relationships between independent variables in the dataset.</td>
+</tr>
+<tr class="odd">
+<td><strong>tmap</strong></td>
+<td>Creates static and interactive thematic maps using cartographic quality elements.</td>
+<td>Visualizing the geospatial distribution of condominium resale prices and other model outputs.</td>
+</tr>
+<tr class="even">
+<td><strong>tidyverse</strong></td>
+<td>A collection of packages for data science tasks such as data manipulation, visualization, and modeling.</td>
+<td>Importing CSV files, wrangling data, and performing data transformations and visualizations.</td>
+</tr>
+<tr class="odd">
+<td><strong>ggpubr</strong></td>
+<td>Enhances ‘ggplot2’ for easier ‘publication-ready’ plots.</td>
+<td>Creating small multiple histograms and scatterplots for exploratory data analysis.</td>
+</tr>
+</tbody>
+</table>
+<p>To install and load these packages, use the following code:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">pacman</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pacman/man/p_load.html">p_load</a></span><span class="op">(</span><span class="va">olsrr</span>, <span class="va">corrplot</span>, <span class="va">ggpubr</span>, <span class="va">sf</span>, <span class="va">spdep</span>, <span class="va">GWmodel</span>, <span class="va">tmap</span>, <span class="va">tidyverse</span>, <span class="va">gtsummary</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="geospatial-data-wrangling" class="level2" data-number="5"><h2 data-number="5" class="anchored" data-anchor-id="geospatial-data-wrangling">
+<span class="header-section-number">5</span> Geospatial Data Wrangling</h2>
+<section id="importing-geospatial-data" class="level3" data-number="5.1"><h3 data-number="5.1" class="anchored" data-anchor-id="importing-geospatial-data">
+<span class="header-section-number">5.1</span> Importing Geospatial Data</h3>
+<p>To import MP_SUBZONE_WEB_PL shapefile:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mpsz</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span>dsn <span class="op">=</span> <span class="st">"data/geospatial"</span>, layer <span class="op">=</span> <span class="st">"MP14_SUBZONE_WEB_PL"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `MP14_SUBZONE_WEB_PL' from data source 
+  `D:\ssinha8752\ISSS608-VAA\Hands-on_Ex\Hands-on_Ex07\data\geospatial' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 323 features and 15 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 2667.538 ymin: 15748.72 xmax: 56396.44 ymax: 50256.33
+Projected CRS: SVY21</code></pre>
+</div>
+</div>
+<p>The output above shows that the R object used to contain the imported MP14_SUBZONE_WEB_PL shapefile is called <em>mpsz</em> and it is a simple feature object. The geometry type is <em>multipolygon</em>. It is also important to note that <strong>mpsz simple feature object does not have EPSG information</strong>.</p>
+</section><section id="updating-crs-information" class="level3" data-number="5.2"><h3 data-number="5.2" class="anchored" data-anchor-id="updating-crs-information">
+<span class="header-section-number">5.2</span> Updating CRS Information</h3>
 
 
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -919,7 +826,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-
 
 
 
