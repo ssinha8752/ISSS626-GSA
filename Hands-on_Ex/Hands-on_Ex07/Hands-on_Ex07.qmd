@@ -81,3 +81,111 @@ mpsz = st_read(dsn = "data/geospatial", layer = "MP14_SUBZONE_WEB_PL")
 The output above shows that the R object used to contain the imported MP14_SUBZONE_WEB_PL shapefile is called *mpsz* and it is a simple feature object. The geometry type is *multipolygon*. It is also important to note that **mpsz simple feature object does not have EPSG information**.
 
 ### Updating CRS Information
+
+The code below updates the newly imported *mpsz* with the correct ESPG code (i.e. 3414)
+
+```{r}
+mpsz_svy21 <- st_transform(mpsz, 3414)
+st_crs(mpsz_svy21)
+```
+
+Notice that the EPSG: is indicated as *3414* now.
+
+### Revealing the Extent of mpsz_svy21
+
+To reveal the extent of *mpsz_svy21*:
+
+```{r}
+st_bbox(mpsz_svy21) #view extent
+```
+
+## Aspatial Data Wrangling
+
+### Importing Aspatial Data
+
+The *condo_resale_2015* is in csv file format. The codes chunk below uses `read_csv()` function of **readr** package to import *condo_resale_2015* into R as a tibble data frame called *condo_resale*.
+
+```{r}
+condo_resale = read_csv("data/aspatial/Condo_resale_2015.csv")
+glimpse(condo_resale)
+```
+
+To display summary statistics of *condo_resale*:
+
+```{r}
+summary(condo_resale)
+```
+
+### Converting an Aspatial Data Frame to an sf Object
+
+In this step, we will:
+
+-   Use the `st_as_sf()` function from the **sf** package to convert the aspatial data frame into a spatial (sf) object.
+-   Apply `st_transform()` to reproject the coordinates from the WGS 84 coordinate system (CRS: 4326) to SVY21 (CRS: 3414), commonly used in Singapore.
+
+```{r}
+condo_resale.sf <- st_as_sf(condo_resale,
+                            coords = c("LONGITUDE", "LATITUDE"),
+                            crs = 4326) %>%
+  st_transform(crs = 3414)
+
+head(condo_resale.sf)
+```
+
+-   The resulting output is a point-based feature data frame.
+
+## Exploratory Data Analysis
+
+In the section, we will use statistical graphics functions of `ggplot2` package to perform EDA.
+
+### EDA using Statistical Graphics
+
+### 6.1.1 Plot Distribution
+
+To plot the distribution of *SELLING_PRICE* by using histograms:
+
+```{r selling_price_hist, fig.width=12, fig.height=8}
+ggplot(data=condo_resale.sf, aes(x=`SELLING_PRICE`)) +
+  geom_histogram(bins=20, color="black", fill="light blue")
+```
+
+::: callout-note
+**Observations:**
+
+-   A right skewed distribution.
+-   This means that more condominium units were transacted at relative lower prices.
+-   Statistically, the skewed distribution **can be normalised by using log transformation**.
+:::
+
+```{r log_selling_price_hist, fig.width=12, fig.height=8}
+condo_resale.sf <- condo_resale.sf %>%
+  mutate(`LOG_SELLING_PRICE` = log(SELLING_PRICE))
+
+ggplot(data=condo_resale.sf, aes(x=`LOG_SELLING_PRICE`)) +
+  geom_histogram(bins=20, color="black", fill="light blue")
+```
+
+Notice that the distribution is relatively **less skewed after the transformation.**
+
+### Multiple Histogram Plots for Variable Distribution
+
+In this section, we will create multiple histograms (also known as a trellis plot or small multiples) to visualize the distribution of several variables. We will use the `ggarrange()` function from the [**ggpubr**](https://cran.r-project.org/web/packages/ggpubr/index.html) package to organize these histograms into a 3-column by 4-row grid layout.
+
+```{r, trellis_condo_resale, fig.width=12, fig.height=8}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+# List of variables to plot
+variables <- c("AREA_SQM", "AGE", "PROX_CBD", "PROX_CHILDCARE", 
+               "PROX_ELDERLYCARE", "PROX_URA_GROWTH_AREA", 
+               "PROX_HAWKER_MARKET", "PROX_KINDERGARTEN", 
+               "PROX_MRT", "PROX_PARK", "PROX_PRIMARY_SCH", 
+               "PROX_TOP_PRIMARY_SCH")
+
+histograms <- lapply(variables, function(var) {
+  ggplot(condo_resale.sf, aes_string(x = var)) + 
+    geom_histogram(bins = 20, color = "black", fill = "lightblue")
+})
+
+ggarrange(plotlist = histograms, ncol = 3, nrow = 4)
+```
