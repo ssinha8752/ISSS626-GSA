@@ -1,5 +1,5 @@
 ---
-title: "7A: Calibrating Hedonic Pricing Model for Private Highrise Property with GWR Method"
+title: "Hands-on Exercise 7A: Calibrating Hedonic Pricing Model for Private Highrise Property with GWR Method"
 # draft: true
 date: "October 10, 2024"
 date-modified: "last-modified"
@@ -275,4 +275,189 @@ Matrix reorder is very important for mining the hiden structure and patter in th
 **Observations:**
 
 -   From the matrix, we observe that **Freehold** and **LEASE_99YEAR** are highly correlated, so only **Freehold** will be included in the model.
+:::
+
+
+### Building the Multiple Linear Regression Model
+
+We now build a hedonic pricing model using multiple linear regression. The model predicts *SELLING_PRICE* based on several property characteristics.
+
+```{r}
+condo.mlr <- lm(SELLING_PRICE ~ AREA_SQM + AGE + 
+                  PROX_CBD + PROX_CHILDCARE + PROX_ELDERLYCARE +
+                  PROX_URA_GROWTH_AREA + PROX_HAWKER_MARKET + 
+                  PROX_KINDERGARTEN + PROX_MRT + PROX_PARK + 
+                  PROX_PRIMARY_SCH + PROX_TOP_PRIMARY_SCH + 
+                  PROX_SHOPPING_MALL + PROX_SUPERMARKET + 
+                  PROX_BUS_STOP + NO_Of_UNITS + FAMILY_FRIENDLY + FREEHOLD, 
+                data = condo_resale.sf)
+summary(condo.mlr)
+```
+
+::: callout-note
+**Observations:**
+
+-   **Significant predictors**:
+    -   *AREA_SQM* (positive): Larger units have higher selling prices.
+    -   *AGE* (negative): Older units tend to sell for less.
+    -   *PROX_CBD* (negative): Proximity to the central business district reduces selling prices.
+    -   *PROX_PARK* (positive): Proximity to parks increases resale prices.
+    -   *FREEHOLD* (positive): Freehold properties sell for more than leasehold properties.
+-   **Non-significant predictors** (p \> 0.05):
+    -   *PROX_HAWKER_MARKET*, *PROX_TOP_PRIMARY_SCH*, *PROX_SUPERMARKET* show weak or no significant relationship with *SELLING_PRICE*.
+:::
+
+### Revising the Hedonic Pricing Model
+
+After reviewing the initial model, we will now remove non-significant variables to improve the model. The revised multiple linear regression model is calibrated as follows:
+
+```{r}
+condo.mlr1 <- lm(formula = SELLING_PRICE ~ AREA_SQM + AGE + 
+                   PROX_CBD + PROX_CHILDCARE + PROX_ELDERLYCARE +
+                   PROX_URA_GROWTH_AREA + PROX_MRT + PROX_PARK + 
+                   PROX_PRIMARY_SCH + PROX_SHOPPING_MALL + PROX_BUS_STOP +
+                   NO_Of_UNITS + FAMILY_FRIENDLY + FREEHOLD, 
+                 data = condo_resale.sf)
+ols_regress(condo.mlr1)
+```
+
+### Publication-Ready Table with `gtsummary`
+
+The **gtsummary** package provides an elegant way to create publication-ready regression tables. The following code generates a formatted regression report:
+
+```{r}
+tbl_regression(condo.mlr1, intercept = TRUE)
+```
+
+You can further enhance the report by adding model statistics using `add_glance_table()` or `add_glance_source_note()`:
+
+```{r}
+#| eval: false
+tbl_regression(condo.mlr1, intercept = TRUE) %>%
+  add_glance_source_note(
+    label = list(sigma ~ "\U03C3"),
+    include = c(r.squared, adj.r.squared, AIC, statistic, p.value, sigma))
+```
+
+#### Checking for Multicollinearity
+
+We can check for multicollinearity using the **olsrr** package’s `ols_vif_tol()` function:
+
+```{r}
+ols_vif_tol(condo.mlr1)
+```
+
+::: callout-note
+**Observations:**
+
+Since the VIF values are all below 10, there is no indication of multicollinearity among the independent variables.
+:::
+
+
+#### Test for Non-Linearity
+
+In multiple linear regression, it is important for us to test the assumption that linearity and additivity of the relationship between dependent and independent variables.
+
+To test the linearity assumption, we use the `ols_plot_resid_fit()` function.
+
+```{r resid_fit}
+ols_plot_resid_fit(condo.mlr1)
+```
+
+::: callout-note
+**Observations:**
+
+Most points are scattered around the 0 line, hence we can safely conclude that the relationships between the dependent variable and independent variables are linear.
+:::
+
+#### Test for Normality Assumption
+
+We can assess the normality of residuals with a histogram:
+
+```{r, resid_hist}
+ols_plot_resid_hist(condo.mlr1)
+```
+
+The residuals appear normally distributed. For a formal test, we can use `ols_test_normality()`:
+
+```{r}
+ols_test_normality(condo.mlr1)
+```
+
+::: callout-note
+**Observations:**
+
+The summary table above reveals that the p-values of the four tests are way smaller than the alpha value of 0.05. Hence we will reject the null hypothesis and infer that there is statistical evidence that the residual are not normally distributed.
+:::
+
+#### Testing for Spatial Autocorrelation
+
+Since the hedonic model involves geographically referenced data, it is important to visualize the residuals and test for spatial autocorrelation.
+
+First, we export the residuals from the hedonic pricing model into a data frame.
+
+```{r}
+mlr.output <- as.data.frame(condo.mlr1$residuals)
+```
+
+Next, we join the residuals with the *condo_resale.sf* spatial data frame:
+
+```{r}
+condo_resale.res.sf <- cbind(condo_resale.sf, condo.mlr1$residuals) %>%
+  rename(MLR_RES = condo.mlr1.residuals)
+```
+
+We convert the *condo_resale.res.sf* from an sf object to a **SpatialPointsDataFrame** for use with the **spdep** package:
+
+```{r}
+condo_resale.sp <- as_Spatial(condo_resale.res.sf)
+condo_resale.sp
+```
+
+Using **tmap**, we visualize the spatial distribution of the residuals:
+
+```{r}
+tmap_mode("view")
+
+tm_shape(mpsz_svy21) +
+  tm_polygons(alpha = 0.4) +
+tm_shape(condo_resale.res.sf) +  
+  tm_dots(col = "MLR_RES", alpha = 0.6, style = "quantile") +
+  tm_view(set.zoom.limits = c(11, 14))
+
+tmap_mode("plot")
+```
+
+::: callout-note
+**Observations:**
+
+The figure above reveal that there is sign of spatial autocorrelation.
+:::
+
+To formally test for spatial autocorrelation using **Moran's I Test**, we first compute a distance-based weight matrix:
+
+```{r}
+nb <- dnearneigh(coordinates(condo_resale.sp), 0, 1500, longlat = FALSE)
+summary(nb)
+```
+
+Convert the neighbor list into spatial weights:
+
+```{r}
+nb_lw <- nb2listw(nb, style = 'W')
+summary(nb_lw)
+```
+
+Finally, perform Moran's I test on the model residuals:
+
+```{r}
+lm.morantest(condo.mlr1, nb_lw)
+```
+
+
+::: callout-note
+**Observations:**
+
+-   **P-value**: The p-value is extremely small (\< 0.05), leading us to reject the null hypothesis that residuals are randomly distributed.
+-   **Observed Moran’s I**: The value of **0.1424418** (greater than 0) indicates that residuals show a clustered pattern, confirming the presence of spatial autocorrelation.
 :::
