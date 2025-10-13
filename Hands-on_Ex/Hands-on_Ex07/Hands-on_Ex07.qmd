@@ -189,3 +189,90 @@ histograms <- lapply(variables, function(var) {
 
 ggarrange(plotlist = histograms, ncol = 3, nrow = 4)
 ```
+
+
+### Drawing a Statistical Point Map
+
+In this section, we will visualize the geospatial distribution of condominium resale prices in Singapore.
+
+-   The map will be prepared by using tmap package.
+    -   `tmap_mode("view")` to use the interactive mode of tmap
+-   Then, create an interactive point symbol map
+    -   `tm_dots()` is used instead of `tm_bubbles()`
+    -   `set.zoom.limits` argument of `tm_view()` sets the minimum and maximum zoom level to 11 and 14 respectively.
+-   Lastly, `tmap_mode("plot")` to display plot mode
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code"
+
+tmap_mode("view")
+
+tm_shape(mpsz_svy21)+
+  tm_polygons() +
+tm_shape(condo_resale.sf) +  
+  tm_dots(col = "SELLING_PRICE",
+          alpha = 0.6,
+          style="quantile") +
+  tm_view(set.zoom.limits = c(11,14))
+
+tmap_mode("plot")
+```
+
+## Hedonic Pricing Model in R
+
+In this section, we will build a hedonic pricing model for condominium resale units using the `lm()` function from base R.
+
+### Simple Linear Regression
+
+We start by modeling *SELLING_PRICE* as the dependent variable and *AREA_SQM* as the independent variable.
+
+```{r}
+condo.slr <- lm(SELLING_PRICE ~ AREA_SQM, data = condo_resale.sf)
+summary(condo.slr)
+```
+
+::: callout-note
+**Observations:**
+
+-   The model equation is:\
+    **SELLING_PRICE = -258121.1 + 14719 \* AREA_SQM**
+-   **R-squared**: 0.4518, indicating the model explains 45% of the variation in resale prices.
+-   **P-value**: The very small p-value (\< 0.0001) indicates strong evidence to reject the null hypothesis, suggesting the model is a good fit.
+-   **Coefficients**: Both the intercept and slope have p-values \< 0.001, confirming that the parameters are significant predictors.
+:::
+
+To visualize the fit, we can plot the data and the regression line:
+
+```{r linear_regression}
+ggplot(data = condo_resale.sf, aes(x = AREA_SQM, y = SELLING_PRICE)) +
+  geom_point() +
+  geom_smooth(method = lm)
+```
+
+This scatterplot with a fitted regression line highlights some high-price outliers in the dataset.
+
+### Multiple Linear Regression
+
+#### Checking for Multicollinearity
+
+Before building a multiple regression model, it is essential to ensure that the independent variables are not highly correlated, as this can lead to **multicollinearity**, which compromises the model's quality.
+
+A correlation matrix is useful for visualizing relationships between variables. In this case, we use the [**corrplot**](https://cran.r-project.org/web/packages/corrplot/vignettes/corrplot-intro.html) package to plot a correlation matrix for the independent variables.
+
+```{r}
+#| fig-width: 12
+#| fig-height: 10
+corrplot(cor(condo_resale[, 5:23]), diag = FALSE, order = "AOE",
+         tl.pos = "td", tl.cex = 0.5, method = "number", type = "upper")
+```
+
+::: callout-tip
+Matrix reorder is very important for mining the hiden structure and patter in the matrix. There are four methods in corrplot (parameter order), named "AOE", "FPC", "hclust", "alphabet". In the code chunk above, AOE order is used. It orders the variables by using the *angular order of the eigenvectors* method suggested by [Michael Friendly](https://www.datavis.ca/papers/corrgram.pdf).
+:::
+
+::: callout-note
+**Observations:**
+
+-   From the matrix, we observe that **Freehold** and **LEASE_99YEAR** are highly correlated, so only **Freehold** will be included in the model.
+:::
