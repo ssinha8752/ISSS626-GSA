@@ -44,7 +44,7 @@ We will be using the [**GWmodel**](https://www.jstatsoft.org/article/view/v063i1
 The following 2 datasets will be used in this study:
 
 | **Data Set** | **Description** | **Format** |
-|----------------|-----------------------------------------|----------------|
+|------------------------|------------------------|------------------------|
 | MP14_SUBZONE_WEB_PL | URA Master Plan 2014's planning subzone boundaries represented as polygon features. | ESRI Shapefile |
 | condo_resale_2015.csv | Data on condominium resale prices in 2015, including structural and locational attributes. | CSV |
 
@@ -53,7 +53,7 @@ The following 2 datasets will be used in this study:
 The following R packages will be used in this exercise:
 
 | **Package** | **Purpose** | **Use Case in Exercise** |
-|-----------------|-----------------------------|--------------------------|
+|------------------------|------------------------|------------------------|
 | **sf** | Manages, processes, and manipulates vector-based geospatial data. | Handling and converting geospatial data such as the URA Master Plan boundaries. |
 | **GWmodel** | Calibrates geographically weighted models for local spatial analysis. | Building hedonic pricing models using fixed and adaptive bandwidth GWR methods. |
 | **olsrr** | Performs diagnostics and builds better multiple linear regression models. | Testing for multicollinearity, normality, and linearity of the regression model. |
@@ -190,7 +190,6 @@ histograms <- lapply(variables, function(var) {
 ggarrange(plotlist = histograms, ncol = 3, nrow = 4)
 ```
 
-
 ### Drawing a Statistical Point Map
 
 In this section, we will visualize the geospatial distribution of condominium resale prices in Singapore.
@@ -277,7 +276,6 @@ Matrix reorder is very important for mining the hiden structure and patter in th
 -   From the matrix, we observe that **Freehold** and **LEASE_99YEAR** are highly correlated, so only **Freehold** will be included in the model.
 :::
 
-
 ### Building the Multiple Linear Regression Model
 
 We now build a hedonic pricing model using multiple linear regression. The model predicts *SELLING_PRICE* based on several property characteristics.
@@ -318,6 +316,10 @@ condo.mlr1 <- lm(formula = SELLING_PRICE ~ AREA_SQM + AGE +
                    PROX_PRIMARY_SCH + PROX_SHOPPING_MALL + PROX_BUS_STOP +
                    NO_Of_UNITS + FAMILY_FRIENDLY + FREEHOLD, 
                  data = condo_resale.sf)
+summary(condo.mlr1)
+```
+
+```{r}
 ols_regress(condo.mlr1)
 ```
 
@@ -332,7 +334,6 @@ tbl_regression(condo.mlr1, intercept = TRUE)
 You can further enhance the report by adding model statistics using `add_glance_table()` or `add_glance_source_note()`:
 
 ```{r}
-#| eval: false
 tbl_regression(condo.mlr1, intercept = TRUE) %>%
   add_glance_source_note(
     label = list(sigma ~ "\U03C3"),
@@ -341,7 +342,21 @@ tbl_regression(condo.mlr1, intercept = TRUE) %>%
 
 #### Checking for Multicollinearity
 
+In the code chunk below, the check_collinearity() of performance package is used to test if there are sign of multicollinearity.
+
+```{r}
+library(performance)
+```
+
+```{r}
+check_collinearity(condo.mlr1)
+```
+
 We can check for multicollinearity using the **olsrr** package’s `ols_vif_tol()` function:
+
+```{r}
+library(olsrr)
+```
 
 ```{r}
 ols_vif_tol(condo.mlr1)
@@ -352,7 +367,6 @@ ols_vif_tol(condo.mlr1)
 
 Since the VIF values are all below 10, there is no indication of multicollinearity among the independent variables.
 :::
-
 
 #### Test for Non-Linearity
 
@@ -371,6 +385,28 @@ Most points are scattered around the 0 line, hence we can safely conclude that t
 :::
 
 #### Test for Normality Assumption
+
+In the code chunk below, check_normality() of performance package is used to perform normality assumption test on condo.mlr1 model.
+
+```{r}
+check_normality(condo.mlr1)
+```
+
+Instead of showing the test statistic, plot() of see package can be used to plot a the output of check_normality() for visual inspection as shown below.
+
+```{r}
+plot(check_normality(condo.mlr1), 
+     type = "qq")
+```
+
+Q-Q plot above below shows that majority of the data points are felt along the zero line.
+
+Another way to check for normality assumption visual is by using check_model() of performance package as shown in the code chunk below.
+
+```{r}
+check_model(condo.mlr1,
+            check= "normality")
+```
 
 We can assess the normality of residuals with a histogram:
 
@@ -417,14 +453,33 @@ condo_resale.sp
 Using **tmap**, we visualize the spatial distribution of the residuals:
 
 ```{r}
+library(tmap)
 tmap_mode("view")
+```
 
+```{r}
+library(RColorBrewer)
 tm_shape(mpsz_svy21) +
-  tm_polygons(alpha = 0.4) +
+  tm_polygons(fill_alpha = 0.4) +
 tm_shape(condo_resale.res.sf) +  
-  tm_dots(col = "MLR_RES", alpha = 0.6, style = "quantile") +
-  tm_view(set.zoom.limits = c(11, 14))
+  tm_dots(
+    fill = "MLR_RES",
+    size = 0.7,
+    col = "black",
+    fill.scale = tm_scale(
+      n = 10,
+      values = rev(
+        brewer.pal(11, "RdBu")),
+      style = "quantile",
+      midpoint = NA),
+    fill.legend = tm_legend(title = "Residuals")
+  ) + 
+  tm_title("LM Residuals (Quantile Classification)") +
+  tm_layout(legend.outside = TRUE) +
+  tm_view(set_zoom_limits = c(11,14))
+```
 
+```{r}
 tmap_mode("plot")
 ```
 
@@ -434,26 +489,39 @@ tmap_mode("plot")
 The figure above reveal that there is sign of spatial autocorrelation.
 :::
 
-To formally test for spatial autocorrelation using **Moran's I Test**, we first compute a distance-based weight matrix:
+The figure above reveal that there is sign of spatial autocorrelation.
+
+To proof that our observation is indeed true, Global Moran’s I test will be performed
+
+First, we will compute the distance-based weight matrix by using st_dist_band() function of sfdep.
 
 ```{r}
-nb <- dnearneigh(coordinates(condo_resale.sp), 0, 1500, longlat = FALSE)
-summary(nb)
+library(sfdep)
+condo_resale.res.sf <- condo_resale.res.sf %>% 
+  mutate(
+    nb = st_dist_band(
+      st_geometry(geometry), 
+                 upper = 1500),
+    wt = st_weights(
+      nb, style = "W"),
+    .before = 1) 
 ```
 
-Convert the neighbor list into spatial weights:
+Next, global_moran_perm() of sfdep package will be used to perform Moran’s I test for residual spatial autocorrelation
 
 ```{r}
-nb_lw <- nb2listw(nb, style = 'W')
-summary(nb_lw)
+set.seed(1234)
+global_moran_perm(
+  condo_resale.res.sf$MLR_RES, 
+  nb = condo_resale.res.sf$nb, 
+  wt = condo_resale.res.sf$wt,
+  alternative = "two.sided", 
+  nsim = 499)
 ```
 
-Finally, perform Moran's I test on the model residuals:
+The Global Moran’s I test for residual spatial autocorrelation shows that it’s p-value is less than 0.00000000000000022 which is less than the alpha value of 0.05. Hence, we will reject the null hypothesis that the residuals are randomly distributed.
 
-```{r}
-lm.morantest(condo.mlr1, nb_lw)
-```
-
+Since the Observed Global Moran I = 0.14389 which is greater than 0, we can infer than the residuals resemble cluster distribution.
 
 ::: callout-note
 **Observations:**
@@ -461,3 +529,176 @@ lm.morantest(condo.mlr1, nb_lw)
 -   **P-value**: The p-value is extremely small (\< 0.05), leading us to reject the null hypothesis that residuals are randomly distributed.
 -   **Observed Moran’s I**: The value of **0.1424418** (greater than 0) indicates that residuals show a clustered pattern, confirming the presence of spatial autocorrelation.
 :::
+
+## Building Hedonic Pricing Models using GWmodel
+
+In this section, we will model hedonic pricing using both fixed and adaptive bandwidth schemes.
+
+### Building Fixed Bandwidth GWR Model
+
+#### Computing Fixed Bandwidth
+
+We use the `bw.gwr()` function from the **GWModel** package to determine the optimal fixed bandwidth for the model.
+
+Setting `adaptive = FALSE` ensures that we are calculating a fixed bandwidth. There are two possible approaches for determining the stopping rule: **CV cross-validation** and **AICc**. In this case, we use the cross-validation approach (`approach = "CV"`).
+
+```{r}
+bw.fixed <- bw.gwr(formula = SELLING_PRICE ~ AREA_SQM + AGE + PROX_CBD + 
+                     PROX_CHILDCARE + PROX_ELDERLYCARE + PROX_URA_GROWTH_AREA + 
+                     PROX_MRT + PROX_PARK + PROX_PRIMARY_SCH + 
+                     PROX_SHOPPING_MALL + PROX_BUS_STOP + NO_Of_UNITS + 
+                     FAMILY_FRIENDLY + FREEHOLD, 
+                   data = condo_resale.sp, 
+                   approach = "CV", 
+                   kernel = "gaussian", 
+                   adaptive = FALSE, 
+                   longlat = FALSE)
+```
+
+The recommended bandwidth is **971.34 meters**.
+
+::: callout-note
+**Quiz Answer:**\
+The bandwidth is in meters because the model is using projected coordinates, SVY21, where distances are measured in meters.
+:::
+
+#### GWModel Method - Fixed Bandwidth
+
+We can now calibrate the GWR model using a fixed bandwidth and a Gaussian kernel with the following code:
+
+```{r}
+gwr.fixed <- gwr.basic(formula = SELLING_PRICE ~ AREA_SQM + AGE + PROX_CBD + 
+                         PROX_CHILDCARE + PROX_ELDERLYCARE + PROX_URA_GROWTH_AREA + 
+                         PROX_MRT + PROX_PARK + PROX_PRIMARY_SCH + 
+                         PROX_SHOPPING_MALL + PROX_BUS_STOP + NO_Of_UNITS + 
+                         FAMILY_FRIENDLY + FREEHOLD, 
+                       data = condo_resale.sp, 
+                       bw = bw.fixed, 
+                       kernel = 'gaussian', 
+                       longlat = FALSE)
+gwr.fixed
+```
+
+::: callout-note
+**Observations:**
+
+The **AICc** for this fixed bandwidth GWR model is **42263.61**, which is lower than the global multiple linear regression model (AICc = 42967.1), indicating a better fit.
+:::
+
+### Building Adaptive Bandwidth GWR Model
+
+#### Computing the Adaptive Bandwidth
+
+To compute the adaptive bandwidth, we set `adaptive = TRUE` in the `bw.gwr()` function:
+
+```{r}
+bw.adaptive <- bw.gwr(formula = SELLING_PRICE ~ AREA_SQM + AGE + 
+                        PROX_CBD + PROX_CHILDCARE + PROX_ELDERLYCARE + 
+                        PROX_URA_GROWTH_AREA + PROX_MRT + PROX_PARK + 
+                        PROX_PRIMARY_SCH + PROX_SHOPPING_MALL + PROX_BUS_STOP + 
+                        NO_Of_UNITS + FAMILY_FRIENDLY + FREEHOLD, 
+                      data = condo_resale.sp, 
+                      approach = "CV", 
+                      kernel = "gaussian", 
+                      adaptive = TRUE, 
+                      longlat = FALSE)
+```
+
+::: callout-note
+**Observations:**
+
+The result suggests using **30 data points** for the adaptive bandwidth.
+:::
+
+#### Constructing the Adaptive Bandwidth GWR Model
+
+We can now calibrate the GWR model with the adaptive bandwidth:
+
+```{r}
+gwr.adaptive <- gwr.basic(formula = SELLING_PRICE ~ AREA_SQM + AGE + 
+                            PROX_CBD + PROX_CHILDCARE + PROX_ELDERLYCARE + 
+                            PROX_URA_GROWTH_AREA + PROX_MRT + PROX_PARK + 
+                            PROX_PRIMARY_SCH + PROX_SHOPPING_MALL + PROX_BUS_STOP + 
+                            NO_Of_UNITS + FAMILY_FRIENDLY + FREEHOLD, 
+                          data = condo_resale.sp, 
+                          bw = bw.adaptive, 
+                          kernel = 'gaussian', 
+                          adaptive = TRUE, 
+                          longlat = FALSE)
+gwr.adaptive
+```
+
+::: callout-note
+**Observations:**
+
+The **AICc** for the adaptive bandwidth GWR model is **41982.22**, which is even lower than the fixed bandwidth GWR model (AICc = 42263.61), indicating an improved model fit.
+:::
+
+### Visualizing GWR Output
+
+The output from GWR includes fields for observed and predicted values, residuals, local R², condition numbers, and explanatory variable coefficients:
+
+-   **Condition Number**: Identifies areas with strong local collinearity. Values over 30 may indicate unreliable results.
+-   **Local R²**: Indicates how well the local model fits the observed values (ranges between 0.0 and 1.0). Mapping this can reveal where the model predicts well or poorly.
+-   **Predicted Values**: The estimated y values (fitted) by GWR.
+-   **Residuals**: Difference between observed and predicted values. Standardized residuals should have a mean of zero and a standard deviation of 1.
+-   **Coefficient Standard Error**: Measures the reliability of coefficient estimates. Smaller standard errors relative to coefficients indicate greater confidence in estimates.
+
+These fields are stored in the **SDF** object from the GWR output, which is a `SpatialPointsDataFrame` or `SpatialPolygonsDataFrame`.
+
+### Converting SDF to sf Data Frame
+
+We first convert the **SDF** into an **sf** data frame for visualization:
+
+```{r}
+condo_resale.sf.adaptive <- st_as_sf(gwr.adaptive$SDF) %>%
+  st_transform(crs = 3414)
+```
+
+```{r}
+glimpse(condo_resale.sf.adaptive)
+```
+
+```{r}
+summary(gwr.adaptive$SDF$yhat)
+```
+
+### Visualizing Local R2
+
+The following code creates an interactive map showing local R2 values:
+
+```{r}
+tmap_mode("view")
+
+tm_shape(mpsz_svy21) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(condo_resale.sf.adaptive) +  
+  tm_dots(col = "Local_R2", border.col = "gray60", border.lwd = 1) +
+  tm_view(set.zoom.limits = c(11, 14))
+
+tmap_mode("plot")
+```
+
+### Visualizing Coefficient Estimates
+
+We can visualize the standard errors and t-values of the `AREA_SQM` coefficient using the code below:
+
+```{r}
+tmap_mode("view")
+
+AREA_SQM_SE <- tm_shape(mpsz_svy21) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(condo_resale.sf.adaptive) +  
+  tm_dots(col = "AREA_SQM_SE", border.col = "gray60", border.lwd = 1) +
+  tm_view(set.zoom.limits = c(11, 14))
+
+AREA_SQM_TV <- tm_shape(mpsz_svy21) +
+  tm_polygons(alpha = 0.1) +
+tm_shape(condo_resale.sf.adaptive) +  
+  tm_dots(col = "AREA_SQM_TV", border.col = "gray60", border.lwd = 1) +
+  tm_view(set.zoom.limits = c(11, 14))
+
+tmap_arrange(AREA_SQM_SE, AREA_SQM_TV, asp = 1, ncol = 2, sync = TRUE)
+
+tmap_mode("plot")
+```
