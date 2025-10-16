@@ -1,0 +1,45 @@
+---
+title: "Take-home Exercise 2 : Uncovering Spatial and Spatio-Temporal Patterns of Bus Passenger Demand in Singapore Using Advanced Geospatial Analytics"
+author: "Shubham Sinha"
+date: "October 12, 2025"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  message: false
+  freeze: true
+format: 
+  html:
+    code-fold: false
+    code-summary: "code chunk"
+    number-sections: true
+    number-depth: 4
+---
+
+## Overview
+
+This project moves beyond traditional mapping to conduct a deep, statistical investigation into Singapore's urban mobility patterns. By analyzing large-scale bus tap-on data, it aims to identify not just where passenger demand is concentrated, but how these demands form significant spatial clusters and how they evolve throughout the day and week.
+
+The analysis is structured in three progressive phases:
+
+- **Foundation**: Aggregating passenger trip data into a hexagonal Traffic Analysis Zone (TAZ) system and creating foundational maps to visualize general patterns.
+
+- **Spatial Clustering**: Applying Local Measures of Spatial Autocorrelation (LMSA) to pinpoint statistically significant hotspots, cold spots, and spatial outliers of passenger demand for different time periods.
+
+- **Temporal Trend Analysis**: Using Emerging Hot Spot Analysis (EHSA) to classify how these clusters are changing over time—identifying areas of intensifying, diminishing, or sporadic demand.
+
+The ultimate goal is to transform raw location data into actionable intelligence for urban and transport planners, providing a evidence-based framework for optimizing bus services, managing congestion, and planning for a sustainable urban future.
+
+## Objective
+
+**Data Preparation and Exploratory Visualization** - To establish a foundational geospatial analysis framework by creating a standardized hexagonal grid, aggregating origin-based passenger volume data for three critical time intervals, and producing choropleth visualizations to identify initial spatial travel patterns.
+
+**Local Spatial Autocorrelation (LMSA) Analysis** - To identify and map statistically significant spatial clusters and outliers of passenger demand by applying Local Moran’s I, Local Geary’s C, and Getis-Ord Gi* statistics to reveal hotspots, cold spots, and anomalous areas.
+
+**Emerging Hot Spot Analysis (EHSA)** - To analyze the evolution of passenger demand clusters over time by constructing a space-time cube, applying the Mann-Kendall trend test to local Gi* values, and categorizing areas into dynamic trend patterns (e.g., Intensifying, Diminishing) to reveal how travel patterns are changing across different neighborhoods.
+
+**Synthesis and Planning Implications** - To synthesize findings from the spatial and spatio-temporal analyses into actionable insights for urban mobility planning, identifying specific neighborhoods and trends that require policy intervention, service optimization, or further investigation.
+
+## The Data
+
+The following datasets will be used in this exercise:
