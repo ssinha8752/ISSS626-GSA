@@ -48,6 +48,8 @@ website:
         menu:
         - text: "Exercise 1 - Geospatial Analytics for Public Good"
           href: "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html"
+        - text: "Exercise 2 - Bus Passenger Demand in Singapore"
+          href: "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html"
 
     right:
       - href: index.qmd
