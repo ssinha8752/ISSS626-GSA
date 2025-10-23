@@ -283,10 +283,6 @@ hexagon <- st_make_grid(mpsz,
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 # Hexagon creation
 cat("Hexagonal Traffic Analysis Zones created:\n")
 cat("• Total hexagons generated:", nrow(hexagon), "\n")
@@ -446,10 +442,6 @@ trips <- odbus %>%
   mutate(BUS_STOP_N = as.character(BUS_STOP_N))  # Use character for reliable joining
 ```
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 # Validate data cleaning
 cat("Passenger Trip Data Preparation:\n")
 cat("• Total trip records:", nrow(trips), "\n")
@@ -475,10 +467,6 @@ bs_hex <- st_intersection(BusStop, hexagon) %>%
   select(BUS_STOP_N, HEX_ID)
 ```
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 # CRITICAL VALIDATION CHECKS
 cat("Bus Stop to Hexagon Mapping Validation:\n")
 ```
@@ -489,10 +477,6 @@ mapped_bus_stops <- nrow(bs_hex)
 coverage_rate <- round(mapped_bus_stops / original_bus_stops * 100, 1)
 ```
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 cat("• Original bus stops:", original_bus_stops, "\n")
 cat("• Successfully mapped:", mapped_bus_stops, "\n")
 cat("• Mapping coverage:", coverage_rate, "%\n")
@@ -525,10 +509,6 @@ bus_stops_per_hexagon <- bs_hex %>%
   count(HEX_ID, name = "bus_stop_count")
 ```
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 cat("• Bus stops per hexagon - Mean:", round(mean(bus_stops_per_hexagon$bus_stop_count), 1), "\n")
 cat("• Bus stops per hexagon - Range:", min(bus_stops_per_hexagon$bus_stop_count), 
     "to", max(bus_stops_per_hexagon$bus_stop_count), "\n")
@@ -570,10 +550,6 @@ unique_stops_after <- n_distinct(trips$BUS_STOP_N)
 total_trips_after <- sum(trips$TRIPS)
 ```
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 cat("• Trip records before join:", format(trips_before, big.mark = ","), "\n")
 cat("• Trip records after join: ", format(trips_after, big.mark = ","), "\n")
 cat("• Records retained: ", round(trips_after/trips_before * 100, 1), "%\n")
@@ -591,10 +567,6 @@ cat("• Trip volume retained: ", round(total_trips_after/total_trips_before * 1
 hexagons_with_trips <- n_distinct(trips$HEX_ID)
 ```
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 cat("• Hexagons with trip data:", hexagons_with_trips, "/ 826 (", 
     round(hexagons_with_trips/826 * 100, 1), "% coverage)\n")
 
@@ -623,10 +595,6 @@ trips_per_hexagon <- trips %>%
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 cat("\nTrip Distribution Summary:\n")
 cat("• Average trips per hexagon:", round(mean(trips_per_hexagon$total_trips), 0), "\n")
 cat("• Maximum trips in single hexagon:", max(trips_per_hexagon$total_trips), "\n")
@@ -652,9 +620,6 @@ hexagon_trips <- trips %>%
   mutate(HEX_ID = factor(HEX_ID, levels = unique(HEX_ID)))  # Proper ordering for plots
 ```
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
 
 # Validation of aggregation
 cat("Hexagon-Level Trip Aggregation Results:\n")
@@ -720,9 +685,6 @@ trip_plot +
 WThe exploratory analysis begins by examining the fundamental distribution of passenger trips across Singapore's hexagonal traffic analysis zones. This initial investigation reveals critical insights into the spatial concentration patterns of urban mobility demand. Rather than analyzing raw trip counts, the focus shifts to understanding how passenger volumes are distributed across the urban landscape and identifying the most significant temporal patterns for detailed spatial analysis.
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
 
 cat("• Total records:", nrow(trips), "\n")
 cat("• Date range:", min(trips$YEAR_MONTH), "to", max(trips$YEAR_MONTH), "\n")
@@ -746,9 +708,6 @@ time_summary <- trips %>%
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
 
 cat("• Peak hour definitions based on assignment:\n")
 cat("  - Weekday AM Peak: 6:00-9:00 (Hours 6,7,8,9)\n")
@@ -778,9 +737,6 @@ AM_weekday <- trips %>%
   arrange(desc(AM_TRIPS))
 ```
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
 
 # Validation and Summary
 cat("Weekday Morning Peak (6-9 AM) Analysis:\n")
@@ -819,9 +775,6 @@ am_plot
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
 
 # Optional: Highlight top performers
 cat("\nMorning Peak Insights:\n")
@@ -870,9 +823,6 @@ PM_weekday <- trips %>%
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
 
 # Validation and Comparative Analysis
 cat("Weekday Afternoon Peak (5-8 PM) Analysis:\n")
@@ -927,10 +877,6 @@ pm_plot
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 
 # PM Peak Insights
 cat("\nAfternoon Peak Insights:\n")
@@ -985,9 +931,7 @@ weekend <- trips %>%
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
 
 # Validation and Comparative Analysis
 cat("Weekend/Holiday (11AM-8PM) Analysis:\n")
@@ -1038,9 +982,6 @@ weekend_plot
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
 
 # Weekend Insights
 cat("\nWeekend/Holiday Insights:\n")
@@ -1060,9 +1001,7 @@ cat("• Spatial coverage:", wkd_coverage, "% of hexagons have weekend trips\n")
 :::
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
 
 # Optional: Identify weekend-specific activity patterns
 if(exists("AM_weekday") && exists("PM_weekday") && exists("weekend")) {
@@ -1097,12 +1036,6 @@ if(exists("AM_weekday") && exists("PM_weekday") && exists("weekend")) {
 Below data are sorted using Hex ID (instead of sorted number of trips) to plot different peak periods. We will use this data to join back to hexagon, so we can plot the passenger volumne in the thematic maps with hexagons.
 
 ```{r}
-#| fig-width: 16
-#| fig-height: 14
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 # CLEAR SUMMARY: Trip Volume Overview
 cat("PASSENGER TRIP VOLUME SUMMARY\n")
 
@@ -1227,9 +1160,7 @@ combined_plot <- am_plot + pm_plot + weekend_plot +
 combined_plot
 ```
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
 # KEY INSIGHTS SUMMARY
 cat("\n KEY INSIGHTS FROM PARALLEL VISUALIZATION:\n")
 cat("• PATTERN COMPARISON: Direct visual comparison of trip distributions\n")
@@ -1351,14 +1282,7 @@ The parallel visualization reveals consistent spatial hierarchies across all per
 ## Spatial Data Integration: Joining Trip Volumes with Hexagon Geometry
 
 ```{r}
-#| fig-width: 16
-#| fig-height: 14
-#| echo: true
-#| output: asis
-#| code-fold: true
-
 # COMPREHENSIVE SPATIAL DATA JOIN FOR ALL TIME PERIODS
-
 
 # Record pre-join status
 original_hexagons <- nrow(hexagon)
@@ -1386,9 +1310,6 @@ hexagon_trips <- hexagon %>%
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
 
 # COMPREHENSIVE VALIDATION
 cat("JOIN VALIDATION RESULTS:\n")
@@ -1423,9 +1344,9 @@ if (!join_successful) {
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 
 # Data summary
 cat(" TRIP VOLUME SUMMARY IN SPATIAL DATA:\n")
@@ -1447,9 +1368,9 @@ hexagon_trips %>%
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 # Quick spatial verification
 cat("\n️ SPATIAL INTEGRITY CHECK:\n")
 cat("• Bounding box:", paste(round(st_bbox(hexagon_trips), 1), collapse = ", "), "\n")
@@ -1471,9 +1392,9 @@ hexagon_pm <- hexagon_pm %>%
   mutate(PM_TRIPS_SQRT = sqrt(PM_TRIPS))
 ```
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 
 cat(" PM Peak Trip Summary:\n")
 cat("• Total PM trips:", format(sum(hexagon_pm$PM_TRIPS), big.mark = ","), "\n")
@@ -1573,9 +1494,9 @@ comparative_maps
 
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 
 cat(" THEMATIC MAPPING COMPLETE\n")
 cat("• Created 3 comparative static maps\n")
@@ -1647,9 +1568,9 @@ hexagon_trips <- hexagon_trips %>%
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 cat("• Hexagon area statistics:\n")
 cat("  - Minimum area:", round(min(hexagon_trips$hex_area), 1), "m²\n")
 cat("  - Maximum area:", round(max(hexagon_trips$hex_area), 1), "m²\n")
@@ -1732,10 +1653,10 @@ knn_weights <- hexagon_trips %>%
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
+
+
 #| code-fold: true
-cat("✅ KNN WEIGHTS VALIDATION:\n")
+cat("KNN WEIGHTS VALIDATION:\n")
 cat("• K value: 6 neighbors (appropriate for hexagons)\n")
 cat("• Average KNN neighbors:", round(mean(knn_weights$knn_n_neighbors), 2), "\n")
 cat("• Minimum KNN neighbors:", min(knn_weights$knn_n_neighbors), "\n")
@@ -1802,9 +1723,9 @@ if(nrow(islands) == 0) {
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 cat("FINAL SPATIAL WEIGHTS SELECTED:\n")
 cat("• Method:", ifelse(exists("lisa_weights") && "knn_neighbors" %in% names(lisa_weights), "KNN", "Queen Contiguity"), "\n")
 cat("• Hexagons in analysis:", nrow(lisa_weights), "\n")
@@ -1853,9 +1774,9 @@ listw_knn <- nb2listw(nb_list, glist = weights_list, style = "W")
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 
 cat(" SPATIAL WEIGHTS VALIDATED:\n")
 cat("• Total hexagons:", nrow(knn_weights), "\n")
@@ -1902,9 +1823,9 @@ lisa_results <- knn_weights %>%
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 
 # Validation statistics
 cat("\n LOCAL MORAN'S I VALIDATION:\n")
@@ -2035,9 +1956,9 @@ cat("Weekend:  I =", round(global_wkd$estimate[1], 4),
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 # Interpretation
 cat("\n LISA CLUSTER INTERPRETATION:\n")
 cat("• High-High: Transportation hubs & activity centers\n")
@@ -2099,9 +2020,9 @@ listw_knn <- nb2listw(nb_list, glist = weights_list, style = "W")
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 cat("SPATIAL WEIGHTS CREATED:\n")
 cat("• Total hexagons:", nrow(gi_weights), "\n")
 cat("• All hexagons have 6 neighbors: TRUE\n")
@@ -2248,9 +2169,9 @@ print(comparison_summary)
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 # Statistical significance analysis
 cat("\n GI* STATISTICAL SIGNIFICANCE ANALYSIS:\n")
 cat("• Confidence level: 95% (Z-score ≥ 1.96 for hotspots, ≤ -1.96 for coldspots)\n")
@@ -2303,9 +2224,9 @@ print(wkd_hotspots)
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 cat("• Hotspot detection completed for all time periods\n")
 cat("• Statistical significance validated (95% confidence)\n")
 cat("• Top performing zones identified\n")
@@ -2400,6 +2321,7 @@ Emerging Hot Spot Analysis transforms static spatial patterns into dynamic tempo
 ```{r}
 #| fig-width: 14
 #| fig-height: 12
+#| warning: false
 
 
 # Load required package for Mann-Kendall test
@@ -2494,7 +2416,7 @@ ehsa_trends_clean <- mk_data %>%
   summarise(
     # Mann-Kendall test with error handling
     mk_result = tryCatch({
-      list(MannKendall(gi_value))
+      list(suppressWarnings(MannKendall(gi_value)))
     }, error = function(e) {
       list(NULL)
     }),
@@ -2686,9 +2608,9 @@ significant_percent <- round(significant_zones / total_zones * 100, 1)
 ```
 
 ```{r}
-#| echo: true
-#| output: asis
-#| code-fold: true
+
+
+
 cat(" OVERVIEW:\n")
 cat("• Total zones analyzed:", total_zones, "\n")
 cat("• Zones with significant spatio-temporal patterns:", significant_zones, "(", significant_percent, "%)\n\n")
@@ -2903,7 +2825,7 @@ This exercise transformed Singapore's bus mobility patterns into actionable inte
 
 **Dynamic Trend Patterns:** EHSA revealed 61 sporadic hotspots showing time-specific demand concentrations and 23 historical hotspots with established but non-intensifying patterns. No statistically significant diminishing hotspots were detected, indicating overall network stability, while the absence of coldspots demonstrates positive spatial equity in service coverage.
 
-##Recommendations
+### Recommendations
 **Strategic Infrastructure Investment:** Prioritize capacity enhancements in the 50 persistent hotspot zones, particularly H0110, H0117, and H0308 which demonstrate consistent high demand across all periods. These zones represent optimal locations for bus interchange improvements, real-time passenger information systems, and integrated multi-modal connections.
 
 **Temporal Service Optimization:** Implement differentiated service strategies based on period-specific patterns—high-frequency express services from residential hotspots during AM peaks, flexible routing for diverse evening destinations during PM peaks, and leisure-oriented service adjustments for weekend hotspots. The 61 sporadic hotspots particularly benefit from demand-responsive scheduling.
@@ -2914,7 +2836,7 @@ This exercise transformed Singapore's bus mobility patterns into actionable inte
 
 **Monitoring and Adaptation:** Implement continuous monitoring of the 23 historical hotspots and 61 sporadic hotspots to detect emerging patterns. The absence of diminishing hotspots suggests current service levels are generally appropriate, but evolving urban development may create new demand concentrations requiring proactive response.
 
-##Conclusion
+### Conclusion
 Singapore's bus network demonstrates remarkable spatial organization with demand systematically clustering around specific activity centers that maintain their importance across temporal variations. The strong statistical evidence of spatial autocorrelation confirms that passenger movements follow predictable patterns rather than random distribution, enabling sophisticated service planning. The alignment between identified hotspots and existing urban infrastructure validates current planning approaches while revealing opportunities for enhanced integration.
 
 The temporal evolution patterns highlight Singapore's transformation between work-oriented and leisure-oriented urban environments, requiring service strategies that adapt to these distinct mobility behaviors. The comprehensive spatial statistical framework developed in this analysis provides transportation planners with robust evidence for optimizing service delivery, infrastructure investment, and network integration.
