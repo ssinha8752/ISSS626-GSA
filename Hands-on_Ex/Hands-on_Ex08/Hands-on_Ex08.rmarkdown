@@ -16,6 +16,8 @@ format:
     number-depth: 4
 ---
 
+
+
 ## Overview
 
 Predictive modelling uses statistical or machine learning techniques to forecast future events based on known data (predictors and outcomes). In **geospatial predictive modelling**, the goal is to understand and predict **how** events occur by incorporating their spatial patterns into the modelling process.
@@ -65,10 +67,14 @@ There are 8 packages used in this exercise.
 
 We load the following packages into R environment.
 
+
+
 ```{r}
 pacman::p_load(sf, spdep, GWmodel, SpatialML, 
                tmap, rsample, Metrics, tidyverse)
 ```
+
+
 
 
 ## Preparing Data
@@ -77,6 +83,8 @@ pacman::p_load(sf, spdep, GWmodel, SpatialML,
 ### Reading data file to rds
 
 We first read the input data sets that is saved in `simple feature` data frame.
+
+
 
 ```{r}
 mdata <- read_rds("data/rawdata/mdata.rds")
@@ -91,9 +99,13 @@ glimpse(mdata)
 ```
 
 
+
+
 ### Data Sampling
 
 We split the entire data into 65% training and 35% test by using `initial_split()` of **rsample** package, which belongs to **tigymodels** ecosystem. Then we extract the training set and test set from a data split object created by functions `initial_split()`.
+
+
 
 ```{r}
 set.seed(1234)
@@ -102,15 +114,23 @@ train_data <- training(resale_split)
 test_data <- testing(resale_split)
 ```
 
+
+
 We save both files on the disk. 
+
+
 ```{r}
 write_rds(train_data, "data/model/train_data.rds")
 write_rds(test_data, "data/model/test_data.rds")
 ```
 
+
+
 ### Computing Correlation Matrix
 
 Before loading predictor into a predictive model, let's plot the correlation matrix to check if there is any sign of multicolinearity.
+
+
 
 ```{r, fig.width=14, fig.height=10}
 mdata_nogeo <- st_drop_geometry(mdata)
@@ -123,11 +143,15 @@ corrplot::corrplot(cor(mdata_nogeo[, 2:17]),
                    type = "upper") #show only the upper triangle/full/lower
 ```
 
+
+
 There is no sign of multicolinearity since all correlation values are below **0.8**.
 
 ## Retriving the Stored Data
 
 We load the saved data into R.
+
+
 
 ```{r}
 train_data <- read_rds("data/model/train_data.rds")
@@ -136,9 +160,13 @@ test_data <- read_rds("data/model/test_data.rds")
 
 
 
+
+
 ## Building a Non-spatial Multiple Linear Regression
 
 A multiple regression model is built as a base line model.
+
+
 
 ```{r}
 #| eval: false
@@ -152,12 +180,18 @@ price_mlr <- lm(resale_price ~ floor_area_sqm +                   # target ~ ind
                 data=train_data)
 summary(price_mlr)
 ```
+
+
 The regression summary report indicates that the model slightly underestimates HDB resale prices, as shown by the residual median of –1,930. However, the R2 value of 0.7373 suggests that the model explains approximately 74% of the variation in HDB resale prices since 2017, which exhibits good predictive performance overall.
+
+
 
 ```{r}
 #| eval: false
 write_rds(price_mlr, "data/model/price_mlr.rds" ) 
 ```
+
+
 
 ## gwr Predictive Method
 
@@ -166,12 +200,16 @@ Next we build and calibrate geographically weighted regression model to preidict
 Somehow error occurred in the later step `Computing Predicted Values of the Test Data` suggests that we need to convert the data to spatial objects first. 
 Convert the training and test data into `SpatialPointDateFrame` for use in GWR:
 
+
+
 ```{r}
 train_data_sp <- as(train_data, "Spatial")
 test_data_sp <- as(test_data, "Spatial")
 train_data_sp
 test_data_sp
 ```
+
+
 
 
 
@@ -185,6 +223,8 @@ We use the `bw.gwr()` function from the **GWmodel** package to determine the opt
 
 
 The code chunk below computes and saves the optimal bandwidth. The search can be time consuming and computationally intensive.
+
+
 
 ```{r}
 #| eval: false
@@ -208,11 +248,15 @@ bw_adaptive <- bw.gwr(
 write_rds(bw_adaptive, "data/model/bw_adaptive.rds")
 ```
 
+
+
 After a few couple of teas, we've found optimal bandwidth is 40 neighour points. 
 
 ### Constructing the Adaptive Bandwidth GWR Model
 
 We first re-load the data into R.
+
+
 
 ```{r}
 bw_adaptive <- read_rds("data/model/bw_adaptive.rds")
@@ -223,7 +267,11 @@ bw_adaptive
 ```
 
 
+
+
 Then we build the GWR-based hedonic pricing model using adaptive bandwidth and Gaussian kernel. Same reason as the previous step, we save a copy of the `gwrm` file.
+
+
 
 ```{r}
 #| eval: false
@@ -247,9 +295,13 @@ write_rds(gwr_adaptive,
 
 
 
+
+
 ### Retrieve gwr Output Object
 
 We re-load the saved `gwrm` object and retrieve the report of model output.
+
+
 
 ```{r}
 gwr_adaptive <- read_rds("data/model/gwr_adaptive.rds")
@@ -259,10 +311,14 @@ gwr_adaptive <- read_rds("data/model/gwr_adaptive.rds")
 gwr_adaptive
 ```
 
+
+
 The report reads that R2 value has increased from 0.7373 to 0.9677 indicating model's fit has substantially proved and information loss has decresed as AICc down from 257320.3 to 238871.8.
 
 
 ### Computing Adaptive Bandwidth for the Test Data
+
+
 
 ```{r}
 #| eval: false
@@ -283,10 +339,14 @@ gwr_bw_test_adaptive <- bw.gwr(
 write_rds(gwr_bw_test_adaptive, 
           "data/model/gwr_bw_test_adaptive.rds")
 ```
+
+
 After a bit of scrolling, cross-validation determines the optimal adaptive bandwidth is **25** for the test set.
 
 ###  Computing Predicted Values of the Test Data
 We still encountered an error `inv(): matrix is singular` when computing the predictions.
+
+
 
 ```{r}
 #| eval: false
@@ -310,6 +370,8 @@ write_rds(gwr_pred,
 ```
 
 
+
+
 ## Calibrating Random Forest Model
 
 Next we calibrate the model by using random forest function from [ranger](https://cran.r-project.org/web/packages/ranger/index.html) package.
@@ -318,11 +380,12 @@ Next we calibrate the model by using random forest function from [ranger](https:
 
 First we calculate x,y coordinates matrix for whole dataset, and training and test sets, and save them on the disk.
 
+
+
 ```{r}
 train_data <- read_rds("data/model/train_data.rds")
 test_data <- read_rds("data/model/test_data.rds")
 ```
-
 
 ```{r}
 coords <- st_coordinates(mdata)
@@ -335,9 +398,13 @@ coords_train <- write_rds(coords_train, "data/geospatial/coords_train.rds" )
 coords_test <- write_rds(coords_test, "data/geospatial/coords_test.rds" )
 ```
 
+
+
 ### Dropping Geometry Field
 
 The geometry column should be removed since it is not required for the upcoming analysis. The code chunk below uses `st_drop_geometry()` function from the **sf** package to drop the `geometry`.
+
+
 
 ```{r}
 train_data_nogeom <- train_data %>% st_drop_geometry()
@@ -345,7 +412,11 @@ test_data_nogeom <- test_data %>% st_drop_geometry()
 ```
 
 
+
+
 ###  Calibrating a Non-spatial Random Forest Model
+
+
 
 
 ```{r}
@@ -365,13 +436,19 @@ rf <- ranger(
 
 rf
 ```
+
+
 The Ranger result shows our R2 value is 0.9496 that is much higher than non-spatial regression model.
+
+
 
 
 ```{r}
 #| eval: false
 write_rds(rf, "data/model/rf.rds")
 ```
+
+
 
 
 ## Calibrating Geographical Weighted Random Forest Model
@@ -382,6 +459,8 @@ Next we `grf()` of [SpatialML](https://cran.r-project.org/web/packages/ranger/in
 ### Calibrating Using Training Data
 
 We apply `grf()` of [SpatialML](https://cran.r-project.org/web/packages/ranger/index.html) package to calibrate model on training data. 
+
+
 
 ```{r}
 #| eval: false
@@ -400,18 +479,28 @@ gwRF_adaptive <- grf(
   kernel="adaptive",
   coords=coords_train)
 ```
+
+
 R2 on the training set is 0.9515.
 
 We again save the new model on training data.
+
+
 ```{r}
 #| eval: false
 write_rds(gwRF_adaptive, "data/model/gwRF_adaptive.rds")
 ```
+
+
 Then we retrieve the model for next steps.
+
+
 
 ```{r}
 gwRF_adaptive <- read_rds("data/model/gwRF_adaptive.rds")
 ```
+
+
 
 
 
@@ -422,15 +511,21 @@ gwRF_adaptive <- read_rds("data/model/gwRF_adaptive.rds")
 We use `cbind()` to combine `test_data` and `coords_test` and remove the `geometry`.
 
 
+
+
 ```{r}
 #| eval: false
 test_data_nogeom <- cbind(test_data, coords_test)%>%
   st_drop_geometry()
 ```
+
+
   
 #### Predicting with Test Data
 
 We use `predict.grf()` of **SpatialML** package to predict the resale price using `gwPF_adaptive` model on the test data.
+
+
 
 ```{r}
 #| eval: false
@@ -447,9 +542,13 @@ gwRF_pred <- predict.grf(gwRF_adaptive,
 GRF_pred <- write_rds(gwRF_pred, "data/model/GRF_pred.rds")
 ```
 
+
+
 #### Converting the Predicting Output into a data.frame
 
 We reload the saved predicting output (generated from `predict.grf()` in the previous step) back to R and convert it into a data frame for further study since the original output is in `numeric` format.
+
+
 
 ```{r}
 GRF_pred <- read_rds("data/model/GRF_pred.rds")
@@ -461,7 +560,11 @@ glimpse(GRF_pred_df)
 ```
 
 
+
+
 To compare the actual and predicted, we combine the with `GRF_pred_df` and select required columns: `resale_price`in `test_data` and `GRF_pred` the column where predicting outputs are in `GRF_pred_df` into a new data frame called `test_data_p` and save it on the disk.
+
+
 
 ```{r}
 test_data_p <- cbind(test_data, GRF_pred_df) %>%
@@ -472,13 +575,19 @@ write_rds(test_data_p,"data/model/test_data_p.rds")
 ```
 
 
+
+
 #### Calculating Root Mean Square Error
 
 To measure the difference between actual and predicted in the regression model, we use `rmse()` of **Metrics** package to compute the Root Mean Square Error (RMSE). The RMSE is 28160.87 for this GWR model.
 
+
+
 ```{r}
 rmse(test_data_p$resale_price, test_data_p$GRF_pred)
 ```
+
+
 
 
 #### Visualising the Predicted Values
@@ -494,11 +603,15 @@ For the reference line, we use `geom_abline()` to create a 45-degree line in the
 5: longdash
 6: twodash
 
+
+
 ```{r}
 ggplot(data = test_data_p, aes(x= GRF_pred, y = resale_price)) +
   geom_point() +
  geom_abline(slope = 1, intercept = 0, color = "red", linetype = 1, size = 0.8)
 ```
+
+
 
 The general rule for evaluating model performance is that the closer the scatter points are to the diagonal line, the better the model predicts. In addition, potential outliers can be identified from the scatterplot if required, for example when points deviate significantly from the diagonal line.
 

@@ -28,6 +28,8 @@ website:
           href: "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html"
         - text: "Exercise 7A - Calibrating Hedonic Pricing Model"
           href: "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html"
+        - text: "Exercise 8A - Geographically Weighted Predictive Models"
+          href: "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html"
       - text: "In-Class Exercises"
         menu:
         - text: "In-Class : Exercise 1"
