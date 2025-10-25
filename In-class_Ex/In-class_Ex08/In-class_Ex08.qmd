@@ -257,7 +257,7 @@ We will use *initial_split()* of **rsample** package. `rsample` is a package fro
 #| eval: False
 set.seed(1234)
 resale_split <- initial_split(mdata,
-                              prop = 6.5/10,)
+                              prop = 6.67/10,)
 train_data <- training(resale_split)
 test_data <- testing(resale_split)
 ```
