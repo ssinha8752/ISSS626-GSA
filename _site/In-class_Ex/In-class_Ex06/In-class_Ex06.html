@@ -228,6 +228,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html">
  <span class="dropdown-text">Exercise 2 - Bus Passenger Demand in Singapore</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html">
+ <span class="dropdown-text">Exercise 3 - Modelling Spatial Heterogeneity in HDB Resale Prices via GWR</span></a>
+  </li>  
     </ul>
 </li>
 </ul>
@@ -269,10 +273,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#import-mpsz19" id="toc-import-mpsz19" class="nav-link" data-scroll-target="#import-mpsz19"><span class="header-section-number">2.1</span> Import mpsz19</a></li>
   <li><a href="#import-busstop-shap-file" id="toc-import-busstop-shap-file" class="nav-link" data-scroll-target="#import-busstop-shap-file"><span class="header-section-number">2.2</span> Import BusStop shap file</a></li>
   <li><a href="#import-csv-file" id="toc-import-csv-file" class="nav-link" data-scroll-target="#import-csv-file"><span class="header-section-number">2.3</span> Import CSV File</a></li>
-  <li><a href="#derive-analytical-hexagon" id="toc-derive-analytical-hexagon" class="nav-link" data-scroll-target="#derive-analytical-hexagon"><span class="header-section-number">2.4</span> Derive Analytical Hexagon</a></li>
-  <li><a href="#prepare-trip-generation-data" id="toc-prepare-trip-generation-data" class="nav-link" data-scroll-target="#prepare-trip-generation-data"><span class="header-section-number">2.5</span> Prepare Trip Generation Data</a></li>
   </ul>
 </li>
+  <li>
+<a href="#derive-analytical-hexagon" id="toc-derive-analytical-hexagon" class="nav-link" data-scroll-target="#derive-analytical-hexagon"><span class="header-section-number">3</span> Derive Analytical Hexagon</a>
+  <ul class="collapse">
+<li><a href="#filter-hexagons-with-bus-stops" id="toc-filter-hexagons-with-bus-stops" class="nav-link" data-scroll-target="#filter-hexagons-with-bus-stops"><span class="header-section-number">3.1</span> Filter hexagons with bus stops</a></li>
+  <li><a href="#assign-ids-to-each-hexagon" id="toc-assign-ids-to-each-hexagon" class="nav-link" data-scroll-target="#assign-ids-to-each-hexagon"><span class="header-section-number">3.2</span> Assign IDs to Each Hexagon</a></li>
+  </ul>
+</li>
+  <li><a href="#prepare-trip-generation-data" id="toc-prepare-trip-generation-data" class="nav-link" data-scroll-target="#prepare-trip-generation-data"><span class="header-section-number">4</span> Prepare Trip Generation Data</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -301,7 +311,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">October 9, 2025</p>
+      <p class="date-modified">November 12, 2025</p>
     </div>
   </div>
     
@@ -531,8 +541,8 @@ Important
 </div>
 </div>
 <p>Notice that the bus stops in JB have been removed!</p>
-</section><section id="derive-analytical-hexagon" class="level3" data-number="2.4"><h3 data-number="2.4" class="anchored" data-anchor-id="derive-analytical-hexagon">
-<span class="header-section-number">2.4</span> Derive Analytical Hexagon</h3>
+</section></section><section id="derive-analytical-hexagon" class="level2" data-number="3"><h2 data-number="3" class="anchored" data-anchor-id="derive-analytical-hexagon">
+<span class="header-section-number">3</span> Derive Analytical Hexagon</h2>
 <div class="cell">
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hexagon</span> <span class="op">&lt;-</span> <span class="fu">st_make_grid</span><span class="op">(</span><span class="va">mpsz19_sf</span>,</span>
 <span>                        cellsize <span class="op">=</span> <span class="fl">700</span>, <span class="co"># the radius is 700, for take-home 2 should be 375m</span></span>
@@ -562,8 +572,8 @@ First 10 features:
 </div>
 </div>
 <p>The hexagon above contains only one column with polygon geometry, lacking an unique ID</p>
-<section id="filter-hexagons-with-bus-stops" class="level4" data-number="2.4.1"><h4 data-number="2.4.1" class="anchored" data-anchor-id="filter-hexagons-with-bus-stops">
-<span class="header-section-number">2.4.1</span> Filter hexagons with bus stops</h4>
+<section id="filter-hexagons-with-bus-stops" class="level3" data-number="3.1"><h3 data-number="3.1" class="anchored" data-anchor-id="filter-hexagons-with-bus-stops">
+<span class="header-section-number">3.1</span> Filter hexagons with bus stops</h3>
 <p>The code below will return 0 or &gt;0. 0 means that their are bus stops within the hexagons.</p>
 <div class="cell">
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hexagon</span><span class="op">$</span><span class="va">n_collisions</span> <span class="op">&lt;-</span></span>
@@ -588,8 +598,8 @@ Projected CRS: SVY21 / Singapore TM
 <div class="cell">
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hexagon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">hexagon</span>,<span class="va">n_collisions</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="assign-ids-to-each-hexagon" class="level4" data-number="2.4.2"><h4 data-number="2.4.2" class="anchored" data-anchor-id="assign-ids-to-each-hexagon">
-<span class="header-section-number">2.4.2</span> Assign IDs to Each Hexagon</h4>
+</section><section id="assign-ids-to-each-hexagon" class="level3" data-number="3.2"><h3 data-number="3.2" class="anchored" data-anchor-id="assign-ids-to-each-hexagon">
+<span class="header-section-number">3.2</span> Assign IDs to Each Hexagon</h3>
 <div class="cell">
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hexagon</span> <span class="op">&lt;-</span> <span class="va">hexagon</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span>,<span class="op">-</span><span class="va">n_collisions</span><span class="op">)</span> <span class="co"># "-" means drop the n_collisions column</span></span>
@@ -650,8 +660,8 @@ Projected CRS: SVY21 / Singapore TM
 </div>
 </div>
 </div>
-</section></section><section id="prepare-trip-generation-data" class="level3" data-number="2.5"><h3 data-number="2.5" class="anchored" data-anchor-id="prepare-trip-generation-data">
-<span class="header-section-number">2.5</span> Prepare Trip Generation Data</h3>
+</section></section><section id="prepare-trip-generation-data" class="level2" data-number="4"><h2 data-number="4" class="anchored" data-anchor-id="prepare-trip-generation-data">
+<span class="header-section-number">4</span> Prepare Trip Generation Data</h2>
 <div class="cell">
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">trips</span> <span class="op">&lt;-</span> <span class="va">odbus</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">ORIGIN_PT_CODE</span>,<span class="va">DAY_TYPE</span>,<span class="va">TIME_PER_HOUR</span>,<span class="va">TOTAL_TRIPS</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -820,7 +830,7 @@ Projected CRS: SVY21 / Singapore TM
 </div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

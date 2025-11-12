@@ -1,0 +1,48 @@
+---
+title: "Take-home Exercise 3 - Modelling Spatial Heterogeneity in HDB Resale Prices via GWR"
+author: "Shubham Sinha"
+date: "November 12, 2025"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  message: false
+  freeze: true
+format: 
+  html:
+    code-fold: false
+    code-summary: "code chunk"
+    number-sections: true
+    number-depth: 4
+---
+
+## Overview
+
+Housing represents one of the most significant forms of wealth in Singapore, and the resale market for Housing and Development Board (HDB) flats plays a vital role in determining household mobility and affordability. The resale price of an HDB flat is influenced by many factors: both structural (e.g., floor area, lease balance, floor level) and locational (e.g., accessibility to public transport, proximity to schools, etc).
+
+Traditional regression models such as Ordinary Least Squares (OLS) have been widely used to explain variations in housing prices. However, housing transactions are inherently spatial, as nearby units often share similar price due to spatial dependence or location effects. As a result, OLS models may lead to biased or inefficient estimates. To overcome this limitation, this exercise employs Geographically Weighted Regression (GWR) to model HDB resale prices in a spatially explicit manner.
+
+## Objective
+
+This study aims to calibrate a spatially explicit explanatory model to uncover the determinants of 4-room HDB resale flat prices in Singapore for the period January to September 2025. Moving beyond global averages, the analysis employs Geographically Weighted Regression (GWR) to investigate how the influence of key factors changes across the urban landscape. Specifically, this research seeks to address three core questions:
+
+- Which structural attributes and locational amenities exert a statistically significant influence on 4-room HDB resale prices?
+
+- In what ways do the magnitudes and significances of these relationships exhibit spatial non-stationarity, varying across Singapore's planning regions?
+
+- To what extent does the geographically weighted modelling framework improve explanatory power and model fit over a traditional, aspatial Ordinary Least Squares (OLS) benchmark?
+
+## Installing and Loading the R packages
+
+The packages that we will use for this study are outlined below:
+
+| R Package | Description |
+|------------------------------------|------------------------------------|
+| **sf** | A package that provides [**simple features access**](https://en.wikipedia.org/wiki/Simple_Features) for R. |
+| **spdep** | Creates spatial weights matrices and to test for and model spatial autocorrelation in geographical data, like Moran's I and Geary's C and Local Moran's I and Getis-Ord G. |
+| **tidyverse** | Includes the core packages like ggplot2, dplyr, readr, purrr, tibble, lubridate, etc. |
+| **sfdep** | Builds on the great shoulders of **spdep** package for spatial dependence. sfdep creates an sf and tidyverse friendly interface to the package as well as introduces new functionality that is not present in spdep. |
+| **h3** | H3 is a geospatial indexing system using a hexagonal grid that can be (approximately) subdivided into finer and finer hexagonal grids, combining the benefits of a hexagonal grid with [S2](https://code.google.com/archive/p/s2-geometry-library/)'s hierarchical subdivisions. |
+| **knitr** | Color maps designed to improve graph readability for readers with common forms of color blindness and/or color vision deficiency. |
+| **tmap** | geographical maps in which spatial data distributions are visualized. This package offers a flexible, layer-based, and easy to use approach to create thematic maps, such as choropleths and bubble maps. |
+| **patchwork** |  |

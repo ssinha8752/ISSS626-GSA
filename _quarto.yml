@@ -60,6 +60,8 @@ website:
           href: "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html"
         - text: "Exercise 2 - Bus Passenger Demand in Singapore"
           href: "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html"
+        - text: "Exercise 3 - Modelling Spatial Heterogeneity in HDB Resale Prices via GWR"
+          href: "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html"
 
     right:
       - href: index.qmd

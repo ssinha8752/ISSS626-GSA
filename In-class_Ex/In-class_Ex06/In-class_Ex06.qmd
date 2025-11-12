@@ -104,7 +104,7 @@ tm_shape(mpsz19_sf)+
 
 Notice that the bus stops in JB have been removed!
 
-### Derive Analytical Hexagon
+## Derive Analytical Hexagon
 
 ```{r}
 hexagon <- st_make_grid(mpsz19_sf,
@@ -118,7 +118,7 @@ hexagon
 
 The hexagon above contains only one column with polygon geometry, lacking an unique ID
 
-#### Filter hexagons with bus stops
+### Filter hexagons with bus stops
 
 The code below will return 0 or \>0. 0 means that their are bus stops within the hexagons.
 
@@ -133,7 +133,7 @@ head(hexagon)
 hexagon <- filter(hexagon,n_collisions>0)
 ```
 
-#### Assign IDs to Each Hexagon
+### Assign IDs to Each Hexagon
 
 ```{r}
 hexagon <- hexagon %>%
@@ -157,7 +157,7 @@ tm_shape(mpsz19_sf)+
   tm_legend(frame = FALSE)
 ```
 
-### Prepare Trip Generation Data
+## Prepare Trip Generation Data
 
 ```{r}
 trips <- odbus %>%
