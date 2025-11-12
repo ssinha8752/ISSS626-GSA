@@ -1,44 +1,5 @@
 [
   {
-    "listing": "/Take-home_Ex/index.html",
-    "items": [
-      "/Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html",
-      "/Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html"
-    ]
-  },
-  {
-    "listing": "/In-class_Ex/index.html",
-    "items": [
-      "/In-class_Ex/In-class_Ex09/In-class_Ex09.html",
-      "/In-class_Ex/In-class_Ex08/In-class_Ex08.html",
-      "/In-class_Ex/In-class_Ex06/In-class_Ex06.html",
-      "/In-class_Ex/In-class_Ex05/In-class_Ex05.html",
-      "/In-class_Ex/In-class_Ex04/In-class_Ex04.html",
-      "/In-class_Ex/In-class_Ex03/In-class_Ex03.html",
-      "/In-class_Ex/In-class_Ex03/In-class_Ex03a.html",
-      "/In-class_Ex/In-class_Ex02/In-class_Ex02.html",
-      "/In-class_Ex/In-class_Ex01/In-class_Ex01.html",
-      "/In-class_Ex/In-class_Ex07/In-class_Ex07.html"
-    ]
-  },
-  {
-    "listing": "/Hands-on_Ex/index.html",
-    "items": [
-      "/Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html",
-      "/Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html",
-      "/Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html",
-      "/Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html",
-      "/Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html",
-      "/Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html",
-      "/Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html",
-      "/Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html",
-      "/Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02b.html",
-      "/Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02a.html",
-      "/Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01b.html",
-      "/Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01a.html"
-    ]
-  },
-  {
     "listing": "/index.html",
     "items": [
       "/Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html",
@@ -65,6 +26,45 @@
       "/In-class_Ex/In-class_Ex07/In-class_Ex07.html",
       "/Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html",
       "/Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html"
+    ]
+  },
+  {
+    "listing": "/In-class_Ex/index.html",
+    "items": [
+      "/In-class_Ex/In-class_Ex09/In-class_Ex09.html",
+      "/In-class_Ex/In-class_Ex08/In-class_Ex08.html",
+      "/In-class_Ex/In-class_Ex06/In-class_Ex06.html",
+      "/In-class_Ex/In-class_Ex05/In-class_Ex05.html",
+      "/In-class_Ex/In-class_Ex04/In-class_Ex04.html",
+      "/In-class_Ex/In-class_Ex03/In-class_Ex03.html",
+      "/In-class_Ex/In-class_Ex03/In-class_Ex03a.html",
+      "/In-class_Ex/In-class_Ex02/In-class_Ex02.html",
+      "/In-class_Ex/In-class_Ex01/In-class_Ex01.html",
+      "/In-class_Ex/In-class_Ex07/In-class_Ex07.html"
+    ]
+  },
+  {
+    "listing": "/Take-home_Ex/index.html",
+    "items": [
+      "/Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html",
+      "/Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html"
+    ]
+  },
+  {
+    "listing": "/Hands-on_Ex/index.html",
+    "items": [
+      "/Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09.html",
+      "/Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08.html",
+      "/Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05b.html",
+      "/Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05a.html",
+      "/Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html",
+      "/Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html",
+      "/Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04.html",
+      "/Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03.html",
+      "/Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02b.html",
+      "/Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02a.html",
+      "/Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01b.html",
+      "/Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01a.html"
     ]
   }
 ]
