@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -190,6 +224,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex09/In-class_Ex09.html">
  <span class="dropdown-text">In-Class : Exercise 9</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex10/In-class_Ex10.html">
+ <span class="dropdown-text">In-Class : Exercise 10</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -249,7 +287,11 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">1</span> Overview</a></li>
   <li><a href="#objective" id="toc-objective" class="nav-link" data-scroll-target="#objective"><span class="header-section-number">2</span> Objective</a></li>
-  <li><a href="#installing-and-loading-the-r-packages" id="toc-installing-and-loading-the-r-packages" class="nav-link" data-scroll-target="#installing-and-loading-the-r-packages"><span class="header-section-number">3</span> Installing and Loading the R packages</a></li>
+  <li><a href="#dataset" id="toc-dataset" class="nav-link" data-scroll-target="#dataset"><span class="header-section-number">3</span> Dataset</a>
+  <ul class="collapse">
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="header-section-number">3.1</span> The Data</a></li>
+  </ul></li>
+  <li><a href="#installing-and-loading-the-r-packages" id="toc-installing-and-loading-the-r-packages" class="nav-link" data-scroll-target="#installing-and-loading-the-r-packages"><span class="header-section-number">4</span> Installing and Loading the R packages</a></li>
   </ul>
 </nav>
     </div>
@@ -282,7 +324,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">November 12, 2025</p>
+      <p class="date-modified">November 13, 2025</p>
     </div>
   </div>
     
@@ -307,51 +349,196 @@ ul.task-list li input[type="checkbox"] {
 <li><p>To what extent does the geographically weighted modelling framework improve explanatory power and model fit over a traditional, aspatial Ordinary Least Squares (OLS) benchmark?</p></li>
 </ul>
 </section>
-<section id="installing-and-loading-the-r-packages" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="installing-and-loading-the-r-packages"><span class="header-section-number">3</span> Installing and Loading the R packages</h2>
+<section id="dataset" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="dataset"><span class="header-section-number">3</span> Dataset</h2>
+<section id="the-data" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="the-data"><span class="header-section-number">3.1</span> The Data</h3>
+<p>The study integrates both <strong>aspatial</strong> and <strong>geospatial</strong> datasets to model HDB resale prices in Singapore.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Dataset</th>
+<th>Description</th>
+<th>Format</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>HDB Resale Prices</strong></td>
+<td>Resale flat prices based on registration date from Jan 2017 onwards</td>
+<td>CSV</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="even">
+<td><strong>Singapore Master Plan 2019</strong></td>
+<td>URA 2019 Master Plan Planning Subzone boundary data</td>
+<td>KML</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Bus Stop Locations</strong></td>
+<td>Land Transport Authority bus stop locations across Singapore</td>
+<td>SHP</td>
+<td><a href="https://datamall.lta.gov.sg">LTA DataMall</a></td>
+</tr>
+<tr class="even">
+<td><strong>MRT/LRT Station Exits</strong></td>
+<td>Locations of all MRT and LRT station exits in Singapore</td>
+<td>KML</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Hawker Centres</strong></td>
+<td>Directory of hawker centres managed by National Environment Agency</td>
+<td>KML</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="even">
+<td><strong>Supermarkets</strong></td>
+<td>Locations of supermarkets regulated by Singapore Food Agency</td>
+<td>KML</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Park Facilities</strong></td>
+<td>Representative locations of facilities in parks under National Parks Board</td>
+<td>GEOJSON</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="even">
+<td><strong>Eldercare Services</strong></td>
+<td>Directory of eldercare services provided by Ministry of Health</td>
+<td>KML</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Childcare Centres</strong></td>
+<td>Locations of licensed childcare centers in Singapore</td>
+<td>KML</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="even">
+<td><strong>Kindergartens</strong></td>
+<td>Locations of registered kindergartens in Singapore</td>
+<td>KML</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Primary Schools</strong></td>
+<td>List of all primary schools in Singapore from Ministry of Education</td>
+<td>CSV</td>
+<td><a href="https://www.moe.gov.sg">MOE</a></td>
+</tr>
+<tr class="even">
+<td><strong>Shopping Malls</strong></td>
+<td>Comprehensive list of shopping malls in Singapore with coordinates</td>
+<td>CSV</td>
+<td><a href="https://en.wikipedia.org/wiki/List_of_shopping_malls_in_Singapore">Wikipedia</a></td>
+</tr>
+<tr class="odd">
+<td><strong>CHAS Clinics</strong></td>
+<td>Locations of Community Health Assist Scheme clinics</td>
+<td>KML</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="even">
+<td><strong>Community Clubs</strong></td>
+<td>Locations of People’s Association community clubs</td>
+<td>KML</td>
+<td><a href="https://data.gov.sg">data.gov.sg</a></td>
+</tr>
+<tr class="odd">
+<td><strong>Sports Facilities</strong></td>
+<td>ActiveSG sports centers, gyms, swimming pools, and stadiums</td>
+<td>CSV</td>
+<td><a href="https://www.myactivesg.com">ActiveSG</a></td>
+</tr>
+<tr class="even">
+<td><strong>Hospitals</strong></td>
+<td>List of general hospitals in Singapore</td>
+<td>CSV</td>
+<td><a href="https://en.wikipedia.org/wiki/List_of_hospitals_in_Singapore">Wikipedia</a></td>
+</tr>
+<tr class="odd">
+<td><strong>HDB HIP/MUP Status</strong></td>
+<td>Manual compilation of Home Improvement Programme and Main Upgrading Programme status for HDB blocks</td>
+<td>CSV</td>
+<td><a href="https://www.hdb.gov.sg">HDB Portal</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="installing-and-loading-the-r-packages" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="installing-and-loading-the-r-packages"><span class="header-section-number">4</span> Installing and Loading the R packages</h2>
 <p>The packages that we will use for this study are outlined below:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>R Package</th>
+<th>Package</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>sf</strong></td>
-<td>A package that provides <a href="https://en.wikipedia.org/wiki/Simple_Features"><strong>simple features access</strong></a> for R.</td>
+<td><a href="https://r-spatial.github.io/sf/"><strong>sf</strong></a></td>
+<td>Provides functions to manage, process, and manipulate <strong>Simple Features</strong>, a formal geospatial data standard for storing and accessing spatial geometries like points, lines, and polygons.</td>
 </tr>
 <tr class="even">
-<td><strong>spdep</strong></td>
-<td>Creates spatial weights matrices and to test for and model spatial autocorrelation in geographical data, like Moran’s I and Geary’s C and Local Moran’s I and Getis-Ord G.</td>
+<td><a href="https://www.tidyverse.org/"><strong>tidyverse</strong></a></td>
+<td>A collection of packages for data science tasks such as importing, tidying, wrangling, and visualizing data.</td>
 </tr>
 <tr class="odd">
-<td><strong>tidyverse</strong></td>
-<td>Includes the core packages like ggplot2, dplyr, readr, purrr, tibble, lubridate, etc.</td>
+<td><a href="https://cran.r-project.org/web/packages/tmap/"><strong>tmap</strong></a></td>
+<td>Enables cartographic-quality static maps and interactive maps using the <a href="https://leafletjs.com/">leaflet</a> API.</td>
 </tr>
 <tr class="even">
-<td><strong>sfdep</strong></td>
-<td>Builds on the great shoulders of <strong>spdep</strong> package for spatial dependence. sfdep creates an sf and tidyverse friendly interface to the package as well as introduces new functionality that is not present in spdep.</td>
+<td><a href="https://cran.r-project.org/web/packages/GWmodel/index.html"><strong>GWmodel</strong></a></td>
+<td>Provides tools for calibrating geographically weighted models, including Geographically Weighted Regression (GWR).</td>
 </tr>
 <tr class="odd">
-<td><strong>h3</strong></td>
-<td>H3 is a geospatial indexing system using a hexagonal grid that can be (approximately) subdivided into finer and finer hexagonal grids, combining the benefits of a hexagonal grid with <a href="https://code.google.com/archive/p/s2-geometry-library/">S2</a>’s hierarchical subdivisions.</td>
+<td><a href="https://olsrr.rsquaredacademy.com/"><strong>olsrr</strong></a></td>
+<td>Facilitates building OLS regression models and performing diagnostic tests.</td>
 </tr>
 <tr class="even">
-<td><strong>knitr</strong></td>
-<td>Color maps designed to improve graph readability for readers with common forms of color blindness and/or color vision deficiency.</td>
+<td><a href="https://ggplot2.tidyverse.org/"><strong>ggplot2</strong></a></td>
+<td>A powerful graphics system for creating elegant plots based on the Grammar of Graphics.</td>
 </tr>
 <tr class="odd">
-<td><strong>tmap</strong></td>
-<td>geographical maps in which spatial data distributions are visualized. This package offers a flexible, layer-based, and easy to use approach to create thematic maps, such as choropleths and bubble maps.</td>
+<td><a href="https://cran.r-project.org/web/packages/spdep/index.html"><strong>spdep</strong></a></td>
+<td>Offers functions to create spatial weights matrices from polygon contiguities and test for spatial autocorrelation.</td>
 </tr>
 <tr class="even">
-<td><strong>patchwork</strong></td>
-<td></td>
+<td><a href="https://www.danieldsjoberg.com/gtsummary/index.html"><strong>gtsummary</strong></a></td>
+<td>Creates publication-ready summary tables for regression models with elegant and flexible formatting.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://sfdep.r-spatial.org/"><strong>sfdep</strong></a></td>
+<td>Builds on <code>spdep</code> with a tidyverse-friendly interface, list-columns, and enhanced spatial dependence analysis tools.</td>
+</tr>
+<tr class="even">
+<td><a href="https://httr.r-lib.org/"><strong>httr</strong></a></td>
+<td>Provides tools for working with HTTP requests, useful for accessing web APIs like OneMap SG for geocoding.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://cran.r-project.org/web/packages/jsonlite/index.html"><strong>jsonlite</strong></a></td>
+<td>A fast and flexible JSON parser and generator optimized for statistical and web data.</td>
+</tr>
+<tr class="even">
+<td><a href="https://cran.r-project.org/web/packages/corrplot/index.html"><strong>corrplot</strong></a></td>
+<td>Enables visual exploration of correlation matrices using various plotting methods.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://easystats.github.io/performance/"><strong>performance</strong></a></td>
+<td>Offers comprehensive tools for assessing regression model performance, including R², RMSE, and diagnostics.</td>
 </tr>
 </tbody>
 </table>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, sf, tmap, GWmodel, olsrr, ggplot2, spdep, gtsummary, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>               sfdep, httr, jsonlite, corrplot, performance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section>
